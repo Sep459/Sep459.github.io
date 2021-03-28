@@ -1430,6 +1430,11 @@ pre code {
   border: 1px solid #eee;
   max-width: 120px;
   padding: 2px;
+  border-radius: 50%;
+  transition: transform 1s ease-out;
+}
+.site-author-image:hover {
+  transform: rotateZ(360deg);
 }
 .site-author-name {
   color: var(--text-color);
@@ -2970,4 +2975,25 @@ mark.search-keyword {
   .pagination {
     margin-bottom: 10px;
   }
+}
+body {
+  background: url("https://w.wallhaven.cc/full/vg/wallhaven-vgrkql.jpg");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: 50% 50%;
+  background-size: cover;
+  -webkit-background-size: cover;
+  -o-background-size: cover;
+  -moz-background-size: cover;
+  -ms-background-size: cover;
+/*这是设置底部文字, 看个人需要修改*/
+}
+body #footer > div > div {
+  color: #de5e5e;
+}
+.main-inner {
+  background: rgba(0,0,0,0.75);
+  padding: 3.5em;
+  opacity: 1;
+  border-radius: 1em;
 }
