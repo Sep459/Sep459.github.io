@@ -86,8 +86,10 @@
   <entry>
     <title>Film Review</title>
     <url>/2021/03/25/Flim%20Review/</url>
-    <content><![CDATA[<h1 id="电影影评"><a href="#电影影评" class="headerlink" title="电影影评"></a>电影影评</h1><h2 id="1-爱情类电影"><a href="#1-爱情类电影" class="headerlink" title="1.爱情类电影"></a>1.爱情类电影</h2><h3 id="1-1真爱至上"><a href="#1-1真爱至上" class="headerlink" title="1.1真爱至上"></a>1.1真爱至上</h3><span id="more"></span>  
-<h3 id="1-2再次出发之纽约遇见你"><a href="#1-2再次出发之纽约遇见你" class="headerlink" title="1.2再次出发之纽约遇见你"></a>1.2再次出发之纽约遇见你</h3><h2 id="2-动画类电影"><a href="#2-动画类电影" class="headerlink" title="2.动画类电影"></a>2.动画类电影</h2><h2 id="3-喜剧类电影"><a href="#3-喜剧类电影" class="headerlink" title="3.喜剧类电影"></a>3.喜剧类电影</h2><h2 id="4-励志类电影"><a href="#4-励志类电影" class="headerlink" title="4.励志类电影"></a>4.励志类电影</h2><h2 id="5-其他类电影"><a href="#5-其他类电影" class="headerlink" title="5.其他类电影"></a>5.其他类电影</h2>]]></content>
+    <content><![CDATA[<h1 id="电影影评"><a href="#电影影评" class="headerlink" title="电影影评"></a>电影影评</h1><h2 id="1-爱情类电影"><a href="#1-爱情类电影" class="headerlink" title="1.爱情类电影"></a>1.爱情类电影</h2><h3 id="1-1真爱至上"><a href="#1-1真爱至上" class="headerlink" title="1.1真爱至上"></a>1.1真爱至上</h3><p>  <img src="/images/loveactually1.jpeg" alt="真爱至上"></p>
+<span id="more"></span>  
+<h3 id="1-2再次出发之纽约遇见你"><a href="#1-2再次出发之纽约遇见你" class="headerlink" title="1.2再次出发之纽约遇见你"></a>1.2再次出发之纽约遇见你</h3><p>  <img src="/images/Startagain.jpg" alt="Start Again"></p>
+<h2 id="2-动画类电影"><a href="#2-动画类电影" class="headerlink" title="2.动画类电影"></a>2.动画类电影</h2><h2 id="3-喜剧类电影"><a href="#3-喜剧类电影" class="headerlink" title="3.喜剧类电影"></a>3.喜剧类电影</h2><h2 id="4-励志类电影"><a href="#4-励志类电影" class="headerlink" title="4.励志类电影"></a>4.励志类电影</h2><h2 id="5-其他类电影"><a href="#5-其他类电影" class="headerlink" title="5.其他类电影"></a>5.其他类电影</h2>]]></content>
       <categories>
         <category>电影</category>
       </categories>
@@ -217,6 +219,30 @@
         <tag>自学</tag>
         <tag>Python</tag>
         <tag>编程</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>模拟电路</title>
+    <url>/2021/03/25/%E6%A8%A1%E6%8B%9F%E7%94%B5%E8%B7%AF/</url>
+    <content><![CDATA[<h2 id="二极管"><a href="#二极管" class="headerlink" title="二极管"></a>二极管</h2><h2 id="场效应三极管"><a href="#场效应三极管" class="headerlink" title="场效应三极管"></a>场效应三极管</h2>]]></content>
+      <categories>
+        <category>笔记</category>
+      </categories>
+      <tags>
+        <tag>笔记</tag>
+        <tag>电路</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>数值计算方法</title>
+    <url>/2021/03/25/%E8%AE%A1%E7%AE%97%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[<h2 id="误差分析"><a href="#误差分析" class="headerlink" title="误差分析"></a>误差分析</h2><h2 id="插值拟合"><a href="#插值拟合" class="headerlink" title="插值拟合"></a>插值拟合</h2><h2 id="复化积分"><a href="#复化积分" class="headerlink" title="复化积分"></a>复化积分</h2>]]></content>
+      <categories>
+        <category>笔记</category>
+      </categories>
+      <tags>
+        <tag>笔记</tag>
+        <tag>数学</tag>
       </tags>
   </entry>
 </search>
