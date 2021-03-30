@@ -17,42 +17,10 @@
   --btn-default-hover-bg: #222;
   --btn-default-hover-color: #fff;
   --btn-default-hover-border-color: #222;
-  --highlight-background: #f0f0f0;
-  --highlight-foreground: #444;
-  --highlight-gutter-background: #dedede;
-  --highlight-gutter-foreground: #555;
-}
-@media (prefers-color-scheme: dark) {
-  :root {
-    --body-bg-color: #282828;
-    --content-bg-color: #333;
-    --card-bg-color: #555;
-    --text-color: #ccc;
-    --blockquote-color: #bbb;
-    --link-color: #ccc;
-    --link-hover-color: #eee;
-    --brand-color: #ddd;
-    --brand-hover-color: #ddd;
-    --table-row-odd-bg-color: #282828;
-    --table-row-hover-bg-color: #363636;
-    --menu-item-bg-color: #555;
-    --btn-default-bg: #222;
-    --btn-default-color: #ccc;
-    --btn-default-border-color: #555;
-    --btn-default-hover-bg: #666;
-    --btn-default-hover-color: #ccc;
-    --btn-default-hover-border-color: #666;
-    --highlight-background: #1d1f21;
-    --highlight-foreground: #c5c8c6;
-    --highlight-gutter-background: #2d2f31;
-    --highlight-gutter-foreground: #b4b7b5;
-  }
-  img {
-    opacity: 0.75;
-  }
-  img:hover {
-    opacity: 0.9;
-  }
+  --highlight-background: #282b2e;
+  --highlight-foreground: #a9b7c6;
+  --highlight-gutter-background: #34393d;
+  --highlight-gutter-foreground: #9ca9b6;
 }
 html {
   line-height: 1.15; /* 1 */
@@ -392,172 +360,62 @@ td {
   transform: rotate(-45deg);
 }
 /*
-
-Original highlight.js style (c) Ivan Sagalaev <maniac@softwaremaniacs.org>
-
+Date: 24 Fev 2015
+Author: Pedro Oliveira <kanytu@gmail . com>
 */
 
 .hljs {
+  color: #a9b7c6;
+  background: #282b2e;
   display: block;
   overflow-x: auto;
   padding: 0.5em;
-  background: #F0F0F0;
 }
 
-
-/* Base color: saturation 0; */
-
-.hljs,
-.hljs-subst {
-  color: #444;
-}
-
-.hljs-comment {
-  color: #888888;
+.hljs-number,
+.hljs-literal,
+.hljs-symbol,
+.hljs-bullet {
+  color: #6897BB;
 }
 
 .hljs-keyword,
-.hljs-attribute,
 .hljs-selector-tag,
-.hljs-meta-keyword,
-.hljs-doctag,
-.hljs-name {
-  font-weight: bold;
-}
-
-
-/* User color: hue: 0 */
-
-.hljs-type,
-.hljs-string,
-.hljs-number,
-.hljs-selector-id,
-.hljs-selector-class,
-.hljs-quote,
-.hljs-template-tag,
 .hljs-deletion {
-  color: #880000;
+  color: #cc7832;
 }
 
-.hljs-title,
-.hljs-section {
-  color: #880000;
-  font-weight: bold;
-}
-
-.hljs-regexp,
-.hljs-symbol,
 .hljs-variable,
 .hljs-template-variable,
-.hljs-link,
-.hljs-selector-attr,
-.hljs-selector-pseudo {
-  color: #BC6060;
+.hljs-link {
+  color: #629755;
 }
 
-
-/* Language color: hue: 90; */
-
-.hljs-literal {
-  color: #78A960;
-}
-
-.hljs-built_in,
-.hljs-bullet,
-.hljs-code,
-.hljs-addition {
-  color: #397300;
-}
-
-
-/* Meta color: hue: 200 */
-
-.hljs-meta {
-  color: #1f7199;
-}
-
-.hljs-meta-string {
-  color: #4d99bf;
-}
-
-
-/* Misc effects */
-
-.hljs-emphasis {
-  font-style: italic;
-}
-
-.hljs-strong {
-  font-weight: bold;
-}
-
-@media (prefers-color-scheme: dark) {
-/* Tomorrow Night Theme */
-/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
-/* Original theme - https://github.com/chriskempson/tomorrow-theme */
-/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
-
-/* Tomorrow Comment */
 .hljs-comment,
 .hljs-quote {
-  color: #969896;
+  color: #808080;
 }
 
-/* Tomorrow Red */
-.hljs-variable,
-.hljs-template-variable,
-.hljs-tag,
+.hljs-meta {
+  color: #bbb529;
+}
+
+.hljs-string,
+.hljs-attribute,
+.hljs-addition {
+  color: #6A8759;
+}
+
+.hljs-section,
+.hljs-title,
+.hljs-type {
+  color: #ffc66d;
+}
+
 .hljs-name,
 .hljs-selector-id,
-.hljs-selector-class,
-.hljs-regexp,
-.hljs-deletion {
-  color: #cc6666;
-}
-
-/* Tomorrow Orange */
-.hljs-number,
-.hljs-built_in,
-.hljs-builtin-name,
-.hljs-literal,
-.hljs-type,
-.hljs-params,
-.hljs-meta,
-.hljs-link {
-  color: #de935f;
-}
-
-/* Tomorrow Yellow */
-.hljs-attribute {
-  color: #f0c674;
-}
-
-/* Tomorrow Green */
-.hljs-string,
-.hljs-symbol,
-.hljs-bullet,
-.hljs-addition {
-  color: #b5bd68;
-}
-
-/* Tomorrow Blue */
-.hljs-title,
-.hljs-section {
-  color: #81a2be;
-}
-
-/* Tomorrow Purple */
-.hljs-keyword,
-.hljs-selector-tag {
-  color: #b294bb;
-}
-
-.hljs {
-  display: block;
-  overflow-x: auto;
-  background: #1d1f21;
-  color: #c5c8c6;
-  padding: 0.5em;
+.hljs-selector-class {
+  color: #e8bf6a;
 }
 
 .hljs-emphasis {
@@ -568,7 +426,6 @@ Original highlight.js style (c) Ivan Sagalaev <maniac@softwaremaniacs.org>
   font-weight: bold;
 }
 
-}
 code,
 kbd,
 figure.highlight,
@@ -1408,6 +1265,35 @@ pre code {
 .use-motion .menu-item {
   visibility: hidden;
 }
+.book-mark-link {
+  border-bottom: 0;
+  position: fixed;
+  top: -10px;
+  transition: top 0.3s;
+  right: 30px;
+}
+@media (max-width: 991px) {
+  .book-mark-link {
+    right: 20px;
+  }
+}
+@media (max-width: 991px) {
+  .book-mark-link {
+    display: none;
+  }
+}
+.book-mark-link::before {
+  color: rgba(34, 34, 34, 0.75);
+  font-size: 32px;
+  line-height: 1;
+  content: '\f02e';
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+}
+.book-mark-link:hover,
+.book-mark-link-fixed {
+  top: -2px;
+}
 .sidebar-inner {
   color: #999;
   padding: 18px 10px;
@@ -1795,9 +1681,6 @@ pre code {
 .back-to-top {
   font-size: 12px;
 }
-.back-to-top span {
-  display: none;
-}
 .back-to-top {
   bottom: -100px;
   box-sizing: border-box;
@@ -1810,7 +1693,6 @@ pre code {
   position: fixed;
   z-index: 1300;
   right: 30px;
-  width: 24px;
 }
 @media (max-width: 991px) {
   .back-to-top {
@@ -2571,52 +2453,6 @@ ul.breadcrumb li:last-child {
   border-bottom-color: #111;
   color: #111;
 }
-@media (prefers-color-scheme: dark) {
-  .tag-cloud-0 {
-    border-bottom-color: #555;
-    color: #555;
-  }
-  .tag-cloud-1 {
-    border-bottom-color: #646464;
-    color: #646464;
-  }
-  .tag-cloud-2 {
-    border-bottom-color: #737373;
-    color: #737373;
-  }
-  .tag-cloud-3 {
-    border-bottom-color: #828282;
-    color: #828282;
-  }
-  .tag-cloud-4 {
-    border-bottom-color: #929292;
-    color: #929292;
-  }
-  .tag-cloud-5 {
-    border-bottom-color: #a1a1a1;
-    color: #a1a1a1;
-  }
-  .tag-cloud-6 {
-    border-bottom-color: #b0b0b0;
-    color: #b0b0b0;
-  }
-  .tag-cloud-7 {
-    border-bottom-color: #c0c0c0;
-    color: #c0c0c0;
-  }
-  .tag-cloud-8 {
-    border-bottom-color: #cfcfcf;
-    color: #cfcfcf;
-  }
-  .tag-cloud-9 {
-    border-bottom-color: #dedede;
-    color: #dedede;
-  }
-  .tag-cloud-10 {
-    border-bottom-color: #eee;
-    color: #eee;
-  }
-}
 .search-active {
   overflow: hidden;
 }
@@ -3000,6 +2836,91 @@ body #footer > div > div {
 .post-body {
   color: #fff;
 }
+.posts-expand .post-eof {
+  margin: 4em auto 4em;
+  background: #fff;
+}
+.post-body h2,
+h3,
+h4,
+h5,
+h6 {
+  border-left: 0.4em solid #2780e3;
+  padding-left: 1em;
+}
+.post {
+  width: 100%;
+  margin-top: 1em;
+  margin-bottom: 3em;
+  padding: 1em;
+  -webkit-box-shadow: 0 0 0.5em rgba(202,203,203,0.5);
+}
+.site-subtitle {
+  font-size: 1em;
+  color: #fff;
+}
+.site-title {
+  font-size: 2em;
+  font-weight: bold;
+}
+.post {
+  margin-top: 60px;
+  margin-bottom: 60px;
+  padding: 25px;
+  -webkit-box-shadow: 0 0 5px rgba(202,203,203,0.5);
+  -moz-box-shadow: 0 0 5px rgba(202,203,204,0.5);
+}
+.site-nav-toggle {
+  top: 0;
+  transform: translateY(78%);
+}
+element.style {
+  background-color: #43413f;
+  color: #fff;
+}
+.btn:hover {
+  border-color: #fff;
+  color: #222;
+  background: #fff;
+}
+.posts-expand ..posts-expand .post-body h2,
+h3,
+h4,
+h5,
+h6 {
+  border-left: 0.4em solid #657b83;
+  padding-left: 1em;
+}
+body {
+  color: #fff;
+  font-size: 1em;
+}
+.posts-expand .post-meta {
+  margin: 0.3em 0 0.6em 0;
+  color: #dadada rk;
+  font-family: 'Lato', "PingFang SC", "Microsoft YaHei", sans-serif;
+  font-size: 1.2em;
+  text-align: center;
+}
+a,
+span.exturl {
+  overflow-wrap: break-word;
+  overflow-wrap: break-word;
+  overflow-wrap: break-word;
+  background-color: transparent;
+  color: #dadada rk;
+  text-decoration: none;
+  outline: none;
+  border-bottom: 1px solid #949494;
+  cursor: pointer;
+}
+.menu .menu-item a {
+  color: #000;
+}
+.menu .menu-item a:hover {
+  color: #ff4500;
+  border-bottom-color: #ff4500;
+}
 .menu .menu-item .badge {
   display: inline-block;
   padding: 0.1em 0.4em;
@@ -3038,7 +2959,7 @@ body #footer > div > div {
 }
 ::-moz-selection {
   background: #808080;
-  color: #f7f7f7;
+  color: #dadada rk;
 }
 .brand {
   background: transparent;
@@ -3046,15 +2967,6 @@ body #footer > div > div {
 .site-author-name {
   font-family: 'Comic Sans MS', sans-serif;
   font-size: 1.5em;
-}
-* {
-  cursor: url("/img/鼠标_正常.ico"), auto !important;
-}
-:active {
-  cursor: url("/img/鼠标_按下.ico"), auto !important;
-}
-:link {
-  cursor: url("/img/鼠标_手.ico"), auto !important;
 }
 .local-search-popup {
   display: none;
@@ -3082,4 +2994,12 @@ margin-left
   background-color: rgba(34,34,34,0.75);
   border-radius: 0.5em;
   box-shadow: 0px 0px 0.1em 0px rgba(0,0,0,0.35);
+}
+.post-nav-item a {
+  position: relative;
+  display: block;
+  line-height: 2em;
+  font-size: 1em;
+  color: #fff;
+  border-bottom: none;
 }

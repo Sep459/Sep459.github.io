@@ -5,10 +5,7 @@
     <url>/2021/03/23/Attack%20On%20Titan/</url>
     <content><![CDATA[<img src="https://w.wallhaven.cc/full/39/wallhaven-39e89v.png" alt="进击的巨人" style="zoom:20%;" />
 
-<blockquote class="blockquote-center">
-<p>多文件编译；管理外部依赖；模块化代码，便以结果等</p>
 
-</blockquote>
 
 <h2 id="致两千年前的你"><a href="#致两千年前的你" class="headerlink" title="致两千年前的你"></a>致两千年前的你</h2><p>2000年前，一个名为艾尔迪亚的部落存在于这个世界的某个大陆上，和许多其他的部落一样，该部落实行奴隶制，将俘获的其他部落的战俘割掉舌头，当作自己部落的奴隶，这个部落的首领，叫初代弗里茨王，1900多年后他的后代是帕拉迪岛的实际控制者——雷斯家族。<span id="more"></span><br>弗里茨王的奴隶中，有一个小女孩，叫做尤弥尔，这个尤弥尔也是个被割了舌头的奴隶，某天，在尤弥尔正围观一对男女，心脏扑通直跳，就和其他奴隶一起被抓了起来，原来，围栏里有一头特立独行的猪向往自由，顺着开着的门跑了，弗里茨王很生气，要求奴隶供出到底谁把猪栏的门打开，把猪给放跑了，如果没人承认，那么所有的奴隶都要被挖掉一只眼睛，然后，十三个奴隶把手齐齐的指向了尤弥尔（13是作者的幸运数字，以后会多次出现，比如，埃尔文·史密斯团长就是调查兵团第十三任团长，包括每任巨人能力持有者的寿命也是13年），于是，可怜的尤弥尔不得不承认她放走了猪，她被放逐了，弗里茨王嘲讽的说，“你，自由了。”<br>随后部落开始了人猎，尤弥尔在前面逃跑，后面的人骑着马，带着猎狗，朝她射箭，尤弥尔流出了血泪，生死之际，尤弥尔发现了一个树洞，她跳了进去，却不曾想里面竟然是冰冷的地下水，刺骨的冷水刺激着尤弥尔的皮肤，就在此刻，一种神秘的史前生物靠近了她，这边是巨人力量的来源——怪诞虫。<br>尤弥尔因此获得了巨人之力，后来的传说是，尤弥尔与大地恶魔做了交易，自此，尤弥尔被称作始祖尤弥尔。<br>尤弥尔获得了巨人之力后，并没有选择复仇，或者说，她从小就被灌输了奴隶的思想，她甚至不知道复仇是一个什么概念，于是她又回到了艾尔迪亚部落，再次成为了一个奴隶，因为尤弥尔拥有了巨人之力，弗里茨凭此带领部落迅速的开疆扩土，铺路建桥，征服了很多敌对部落，期间，弗里茨王破格赐给了尤弥尔姓氏，并和她生下了三个女儿， 玛丽亚，罗塞，希纳，也就是后来帕拉迪岛上的三道巨人之墙的名字。<br>在尤弥尔的帮助下，艾尔迪亚无人能敌，其中臣服于它的武力下的部落里，就有马莱，某天，马莱人假装来和弗里茨王谈判，实际却是刺杀，在马莱人掷出了飞茅后，尤弥尔挺身而出，替弗里茨王挡下了这致命一击，弗里茨却王丝毫不为所动，还冷冷的说，“站起来干活啊，尤弥尔，我知道这是杀不了你的。”然而尤弥尔却没有响应弗里茨王的话，她真的死了。</p>
 <blockquote>
@@ -88,130 +85,138 @@
   </entry>
   <entry>
     <title>Film Review</title>
-    <url>/2021/03/25/Github+Pytouch/</url>
-    <content><![CDATA[<h2 id="1-Markdown-com-cn-简介"><a href="#1-Markdown-com-cn-简介" class="headerlink" title="1 Markdown.com.cn 简介"></a>1 Markdown.com.cn 简介</h2><ul>
-<li>支持自定义样式的 Markdown 编辑器</li>
-<li>支持微信公众号、知乎和稀土掘金</li>
-<li>点击右上方对应图标，一键复制到各平台<br>，<a href="https://www.bilibili.com/video/BV16W411t7mq?p=18&spm_id_from=pageDriver">你是《未来世界的幸存者》么？</a><h2 id="2-Markdown语法教程"><a href="#2-Markdown语法教程" class="headerlink" title="2 Markdown语法教程"></a>2 Markdown语法教程</h2></li>
-</ul>
-<h3 id="2-1-标题"><a href="#2-1-标题" class="headerlink" title="2.1 标题"></a>2.1 标题</h3><p>不同数量的<code>#</code>可以完成不同的标题，如下：</p>
-<span id="more"></span>
-<h3 id="2-2-字体"><a href="#2-2-字体" class="headerlink" title="2.2 字体"></a>2.2 字体</h3><p>粗体、斜体、粗体和斜体，删除线，需要在文字前后加不同的标记符号。如下：</p>
-<p><strong>这个是粗体</strong></p>
-<p><em>这个是斜体</em></p>
-<p><em><strong>这个是粗体加斜体</strong></em></p>
-<p>~这里想用删除线~~</p>
-<p>注：如果想给字体换颜色、字体或者居中显示，需要使用内嵌HTML来实现。</p>
-<h3 id="2-3-无序列表"><a href="#2-3-无序列表" class="headerlink" title="2.3 无序列表"></a>2.3 无序列表</h3><p>无序列表的使用，在符号<code>-</code>后加空格使用。如下：</p>
-<ul>
-<li>无序列表 1</li>
-<li>无序列表 2</li>
-<li>无序列表 3</li>
-</ul>
-]]></content>
-      <categories>
-        <category>前端</category>
-      </categories>
-      <tags>
-        <tag>导航</tag>
-        <tag>心得</tag>
-        <tag>观后感</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Film Review</title>
     <url>/2021/03/25/Flim%20Review/</url>
-    <content><![CDATA[<h2 id="1-Markdown-com-cn-简介"><a href="#1-Markdown-com-cn-简介" class="headerlink" title="1 Markdown.com.cn 简介"></a>1 Markdown.com.cn 简介</h2><ul>
-<li>支持自定义样式的 Markdown 编辑器</li>
-<li>支持微信公众号、知乎和稀土掘金</li>
-<li>点击右上方对应图标，一键复制到各平台<br>，<a href="https://www.bilibili.com/video/BV16W411t7mq?p=18&spm_id_from=pageDriver">你是《未来世界的幸存者》么？</a><h2 id="2-Markdown语法教程"><a href="#2-Markdown语法教程" class="headerlink" title="2 Markdown语法教程"></a>2 Markdown语法教程</h2></li>
-</ul>
-<h3 id="2-1-标题"><a href="#2-1-标题" class="headerlink" title="2.1 标题"></a>2.1 标题</h3><p>不同数量的<code>#</code>可以完成不同的标题，如下：</p>
-<span id="more"></span>
-<h3 id="2-2-字体"><a href="#2-2-字体" class="headerlink" title="2.2 字体"></a>2.2 字体</h3><p>粗体、斜体、粗体和斜体，删除线，需要在文字前后加不同的标记符号。如下：</p>
-<p><strong>这个是粗体</strong></p>
-<p><em>这个是斜体</em></p>
-<p><em><strong>这个是粗体加斜体</strong></em></p>
-<p>~这里想用删除线~~</p>
-<p>注：如果想给字体换颜色、字体或者居中显示，需要使用内嵌HTML来实现。</p>
-<h3 id="2-3-无序列表"><a href="#2-3-无序列表" class="headerlink" title="2.3 无序列表"></a>2.3 无序列表</h3><p>无序列表的使用，在符号<code>-</code>后加空格使用。如下：</p>
-<ul>
-<li>无序列表 1</li>
-<li>无序列表 2</li>
-<li>无序列表 3</li>
-</ul>
-]]></content>
+    <content><![CDATA[<h1 id="电影影评"><a href="#电影影评" class="headerlink" title="电影影评"></a>电影影评</h1><h2 id="1-爱情类电影"><a href="#1-爱情类电影" class="headerlink" title="1.爱情类电影"></a>1.爱情类电影</h2><h3 id="1-1真爱至上"><a href="#1-1真爱至上" class="headerlink" title="1.1真爱至上"></a>1.1真爱至上</h3><span id="more"></span>  
+<h3 id="1-2再次出发之纽约遇见你"><a href="#1-2再次出发之纽约遇见你" class="headerlink" title="1.2再次出发之纽约遇见你"></a>1.2再次出发之纽约遇见你</h3><h2 id="2-动画类电影"><a href="#2-动画类电影" class="headerlink" title="2.动画类电影"></a>2.动画类电影</h2><h2 id="3-喜剧类电影"><a href="#3-喜剧类电影" class="headerlink" title="3.喜剧类电影"></a>3.喜剧类电影</h2><h2 id="4-励志类电影"><a href="#4-励志类电影" class="headerlink" title="4.励志类电影"></a>4.励志类电影</h2><h2 id="5-其他类电影"><a href="#5-其他类电影" class="headerlink" title="5.其他类电影"></a>5.其他类电影</h2>]]></content>
       <categories>
-        <category>前端</category>
+        <category>电影</category>
       </categories>
       <tags>
-        <tag>导航</tag>
+        <tag>电影</tag>
         <tag>心得</tag>
         <tag>观后感</tag>
       </tags>
   </entry>
   <entry>
-    <title>Film Review</title>
-    <url>/2021/03/25/C#%E7%88%AC%E8%99%AB/</url>
-    <content><![CDATA[<h2 id="1-Markdown-com-cn-简介"><a href="#1-Markdown-com-cn-简介" class="headerlink" title="1 Markdown.com.cn 简介"></a>1 Markdown.com.cn 简介</h2><ul>
-<li>支持自定义样式的 Markdown 编辑器</li>
-<li>支持微信公众号、知乎和稀土掘金</li>
-<li>点击右上方对应图标，一键复制到各平台<br>，<a href="https://www.bilibili.com/video/BV16W411t7mq?p=18&spm_id_from=pageDriver">你是《未来世界的幸存者》么？</a><h2 id="2-Markdown语法教程"><a href="#2-Markdown语法教程" class="headerlink" title="2 Markdown语法教程"></a>2 Markdown语法教程</h2></li>
-</ul>
-<h3 id="2-1-标题"><a href="#2-1-标题" class="headerlink" title="2.1 标题"></a>2.1 标题</h3><p>不同数量的<code>#</code>可以完成不同的标题，如下：</p>
-<span id="more"></span>
-<h3 id="2-2-字体"><a href="#2-2-字体" class="headerlink" title="2.2 字体"></a>2.2 字体</h3><p>粗体、斜体、粗体和斜体，删除线，需要在文字前后加不同的标记符号。如下：</p>
-<p><strong>这个是粗体</strong></p>
-<p><em>这个是斜体</em></p>
-<p><em><strong>这个是粗体加斜体</strong></em></p>
-<p>~这里想用删除线~~</p>
+    <title>MarkDown笔记</title>
+    <url>/2021/03/25/MarkDown%E7%AC%94%E8%AE%B0/</url>
+    <content><![CDATA[<blockquote class="blockquote-center">
+<p>MarkDown基本语法以及进阶使用笔记</p>
+
+</blockquote>
+
+<p>目录：  [TOC]  </p>
+<p>页面跳转：<a href="#jump_8">页面跳转</a></p>
+<p>斜体： <em>Chrome</em><br>加粗： <strong>Chrome</strong><br>斜体加粗： <em><strong>Chrome</strong></em>  </p>
+<p>标题：不同数量的<code>#</code>可以完成不同的标题，<code>#</code>一级标题，<code>##</code>二级标题</p>
+<span id="more"></span>  
+<p><code>阅读全文</code></p>
+<blockquote>
+<p>在前面加上‘&gt;’代表引用</p>
+</blockquote>
+<blockquote>
 <p>注：如果想给字体换颜色、字体或者居中显示，需要使用内嵌HTML来实现。</p>
+</blockquote>
 <h3 id="2-3-无序列表"><a href="#2-3-无序列表" class="headerlink" title="2.3 无序列表"></a>2.3 无序列表</h3><p>无序列表的使用，在符号<code>-</code>后加空格使用。如下：</p>
 <ul>
 <li>无序列表 1</li>
 <li>无序列表 2</li>
 <li>无序列表 3</li>
 </ul>
+<p>如果要控制列表的层级，则需要在符号<code>-</code>前使用空格。如下：</p>
+<ul>
+<li>无序列表 1</li>
+<li>无序列表 2<ul>
+<li>无序列表 2.1</li>
+<li>无序列表 2.2</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-4-有序列表"><a href="#2-4-有序列表" class="headerlink" title="2.4 有序列表"></a>2.4 有序列表</h3><p>有序列表的使用，在数字及符号<code>.</code>后加空格后输入内容，如下：</p>
+<ol>
+<li>有序列表 1</li>
+<li>有序列表 2</li>
+<li>有序列表 3</li>
+</ol>
+<h3 id="2-5-引用"><a href="#2-5-引用" class="headerlink" title="2.5 引用"></a>2.5 引用</h3><p>引用的格式是在符号<code>&gt;</code>后面书写文字。如下：</p>
+<blockquote>
+<p>读一本好书，就是在和高尚的人谈话。 ——歌德</p>
+</blockquote>
+<blockquote>
+<p>雇用制度对工人不利，但工人根本无力摆脱这个制度。 ——阮一峰</p>
+</blockquote>
+<h3 id="2-7-链接"><a href="#2-7-链接" class="headerlink" title="2.7 链接"></a>2.7 链接</h3><p>Hexo+Next主题配置请跳转至视频，<a href="https://www.bilibili.com/video/BV16W411t7mq?p=18&spm_id_from=pageDriver">HEXO+Next主题配置详解</a></p>
+<h3 id="2-8-图片"><a href="#2-8-图片" class="headerlink" title="2.8 图片"></a>2.8 图片</h3><p>插入图片，格式如下：</p>
+<p><img src="https://w.wallhaven.cc/full/39/wallhaven-39e89v.png" alt="进击的巨人"></p>
+<p>支持 jpg、png、gif、svg 等图片格式</p>
+<h3 id="2-9-分割线"><a href="#2-9-分割线" class="headerlink" title="2.9 分割线"></a>2.9 分割线</h3><p>可以在一行中用三个以上的减号来建立一个分隔线，同时需要在分隔线的上面空一行。如下：</p>
+<hr>
+<h3 id="2-10-表格"><a href="#2-10-表格" class="headerlink" title="2.10 表格"></a>2.10 表格</h3><p>可以使用冒号来定义表格的对齐方式，如下：</p>
+<table>
+<thead>
+<tr>
+<th align="left">姓名</th>
+<th align="center">年龄</th>
+<th align="right">工作</th>
+<th align="left">性别</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">张三</td>
+<td align="center">18</td>
+<td align="right">员工</td>
+<td align="left">男</td>
+</tr>
+<tr>
+<td align="left">李四</td>
+<td align="center">20</td>
+<td align="right">员工</td>
+<td align="left">男</td>
+</tr>
+<tr>
+<td align="left">王五</td>
+<td align="center">22</td>
+<td align="right">员工</td>
+<td align="left">男</td>
+</tr>
+</tbody></table>
+<p>##特殊语法</p>
+<h3 id="3-2-代码块"><a href="#3-2-代码块" class="headerlink" title="3.2 代码块"></a>3.2 代码块</h3><p>如果在一个行内需要引用代码，只要用反引号引起来就好，如下：</p>
+<p>Use the <code>printf()</code> function.</p>
+<p>在需要高亮的代码块的前一行及后一行使用三个反引号，同时<strong>第一行反引号后面表示代码块所使用的语言</strong>，如下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// FileName: HelloWorld.java</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloWorld</span> </span>&#123;</span><br><span class="line">  <span class="comment">// Java 入口程序，程序从此入口</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;Hello,World!&quot;</span>); <span class="comment">// 向控制台打印一条语句</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>支持以下语言种类：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torchvision</span><br><span class="line"><span class="keyword">from</span> torch.utils <span class="keyword">import</span> data</span><br><span class="line"><span class="keyword">from</span> torchvision <span class="keyword">import</span> transforms</span><br><span class="line"><span class="keyword">from</span> d2l <span class="keyword">import</span> torch <span class="keyword">as</span> d2l</span><br><span class="line"></span><br><span class="line">d2l.use_svg_display()</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_fashion_mnist_labels</span>(<span class="params">labels</span>):</span>  <span class="comment">#@save</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;返回Fashion-MNIST数据集的文本标签。&quot;&quot;&quot;</span></span><br><span class="line">    text_labels = [</span><br><span class="line">        <span class="string">&#x27;t-shirt&#x27;</span>, <span class="string">&#x27;trouser&#x27;</span>, <span class="string">&#x27;pullover&#x27;</span>, <span class="string">&#x27;dress&#x27;</span>, <span class="string">&#x27;coat&#x27;</span>, <span class="string">&#x27;sandal&#x27;</span>, <span class="string">&#x27;shirt&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;sneaker&#x27;</span>, <span class="string">&#x27;bag&#x27;</span>, <span class="string">&#x27;ankle boot&#x27;</span>]</span><br><span class="line">    <span class="keyword">return</span> [text_labels[<span class="built_in">int</span>(i)] <span class="keyword">for</span> i <span class="keyword">in</span> labels]</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-5-注音符号"><a href="#3-5-注音符号" class="headerlink" title="3.5 注音符号"></a>3.5 注音符号</h3><p>Markdown Nice 这么好用，简直是{喜大普奔|hē hē hē hē}呀！</p>
 ]]></content>
       <categories>
-        <category>前端</category>
+        <category>笔记</category>
       </categories>
       <tags>
-        <tag>导航</tag>
-        <tag>心得</tag>
-        <tag>观后感</tag>
+        <tag>MarkDown</tag>
+        <tag>笔记</tag>
+        <tag>自学</tag>
       </tags>
   </entry>
   <entry>
-    <title>Film Review</title>
-    <url>/2021/03/25/Python%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/</url>
-    <content><![CDATA[<h2 id="1-Markdown-com-cn-简介"><a href="#1-Markdown-com-cn-简介" class="headerlink" title="1 Markdown.com.cn 简介"></a>1 Markdown.com.cn 简介</h2><ul>
-<li>支持自定义样式的 Markdown 编辑器</li>
-<li>支持微信公众号、知乎和稀土掘金</li>
-<li>点击右上方对应图标，一键复制到各平台<br>，<a href="https://www.bilibili.com/video/BV16W411t7mq?p=18&spm_id_from=pageDriver">你是《未来世界的幸存者》么？</a><h2 id="2-Markdown语法教程"><a href="#2-Markdown语法教程" class="headerlink" title="2 Markdown语法教程"></a>2 Markdown语法教程</h2></li>
-</ul>
-<h3 id="2-1-标题"><a href="#2-1-标题" class="headerlink" title="2.1 标题"></a>2.1 标题</h3><p>不同数量的<code>#</code>可以完成不同的标题，如下：</p>
-<span id="more"></span>
-<h3 id="2-2-字体"><a href="#2-2-字体" class="headerlink" title="2.2 字体"></a>2.2 字体</h3><p>粗体、斜体、粗体和斜体，删除线，需要在文字前后加不同的标记符号。如下：</p>
-<p><strong>这个是粗体</strong></p>
-<p><em>这个是斜体</em></p>
-<p><em><strong>这个是粗体加斜体</strong></em></p>
-<p>~这里想用删除线~~</p>
-<p>注：如果想给字体换颜色、字体或者居中显示，需要使用内嵌HTML来实现。</p>
-<h3 id="2-3-无序列表"><a href="#2-3-无序列表" class="headerlink" title="2.3 无序列表"></a>2.3 无序列表</h3><p>无序列表的使用，在符号<code>-</code>后加空格使用。如下：</p>
-<ul>
-<li>无序列表 1</li>
-<li>无序列表 2</li>
-<li>无序列表 3</li>
-</ul>
-]]></content>
+    <title>Python编写实例</title>
+    <url>/2021/03/25/Python%E7%BC%96%E5%86%99%E5%AE%9E%E4%BE%8B/</url>
+    <content><![CDATA[<h2 id="1-Simpson自适应步长"><a href="#1-Simpson自适应步长" class="headerlink" title="1.Simpson自适应步长"></a>1.Simpson自适应步长</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> math <span class="keyword">as</span> m</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> math <span class="keyword">as</span> m</span><br></pre></td></tr></table></figure>
+<span id="more"></span>  
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">a = -<span class="number">4</span></span><br><span class="line">b = <span class="number">4</span></span><br><span class="line">h = b-a</span><br><span class="line">n = <span class="number">1</span></span><br><span class="line">s1 = h/<span class="number">6</span>*(var(a)+<span class="number">4</span>*var((a+b)/<span class="number">2</span>)+var(b))</span><br><span class="line">s = <span class="number">0</span></span><br><span class="line">s2 = <span class="number">0</span></span><br><span class="line">n = n*<span class="number">2</span></span><br><span class="line">h = h/<span class="number">2</span></span><br><span class="line"><span class="keyword">for</span> k <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">    s2 += h/<span class="number">6</span>*(var(a + (k * h)) + <span class="number">4</span> * var((a + k * h) + <span class="number">0.5</span> * h) + var(a + k * h + h))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;|s2-s1|=&quot;</span>, <span class="built_in">abs</span>(s2-s1))</span><br><span class="line">count = <span class="number">2</span></span><br><span class="line"><span class="keyword">while</span> <span class="built_in">abs</span>(s2-s1) &gt; <span class="number">0.000001</span>:</span><br><span class="line">    h = h/<span class="number">2</span></span><br><span class="line">    n = n*<span class="number">2</span></span><br><span class="line">    s1 = s2</span><br><span class="line">    s2 = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> k <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">        s2 += h/<span class="number">6</span>*(var(a + (k * h)) + <span class="number">4</span> * var((a + k * h) + <span class="number">0.5</span> * h) + var(a + k * h + h))</span><br><span class="line">    <span class="built_in">print</span>(s2-s1,n)</span><br><span class="line">answer = m.atan(<span class="number">4</span>)-m.atan(-<span class="number">4</span>)</span><br><span class="line"><span class="built_in">print</span>(answer-s2)</span><br><span class="line"><span class="built_in">print</span>(s2)</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-最小二乘法矩阵求解"><a href="#2-最小二乘法矩阵求解" class="headerlink" title="2.最小二乘法矩阵求解"></a>2.最小二乘法矩阵求解</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">n = <span class="number">1</span></span><br><span class="line">x = [<span class="number">0</span>, <span class="number">0.15</span>, <span class="number">0.31</span>, <span class="number">0.5</span>, <span class="number">0.6</span>, <span class="number">0.75</span>]</span><br><span class="line">y = [<span class="number">1.0</span>, <span class="number">1.004</span>, <span class="number">1.031</span>, <span class="number">1.117</span>, <span class="number">1.223</span>, <span class="number">1.422</span>]</span><br><span class="line"></span><br><span class="line">b = [<span class="number">0</span>]*(n*<span class="number">2</span>+<span class="number">1</span>)</span><br><span class="line">c = [<span class="number">0</span>]*(n+<span class="number">1</span>)</span><br><span class="line"><span class="keyword">for</span> k <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">2</span>*n+<span class="number">1</span>):</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(x)):</span><br><span class="line">        b[k] += x[i]**k</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> k <span class="keyword">in</span> <span class="built_in">range</span>(n+<span class="number">1</span>):</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(x)):</span><br><span class="line">        c[k] += y[i]*(x[i]**k)</span><br><span class="line"></span><br><span class="line">B1 = [<span class="number">0</span>]*(n+<span class="number">1</span>)</span><br><span class="line">B2 = [<span class="number">0</span>]*(n+<span class="number">1</span>)     </span><br><span class="line">B = [B1, B2]</span><br><span class="line"><span class="string">&#x27;此处B1,B2.....B(n+1)与n的数量有关，后期修正</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">for i in range(n+1):</span></span><br><span class="line"><span class="string">    for j in range(n+1):</span></span><br><span class="line"><span class="string">        B[i][j] = b[i+j]</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">c = np.transpose(c)</span></span><br><span class="line"><span class="string">a = np.linalg.solve(B, c)</span></span><br><span class="line"><span class="string">print(a)                          &#x27;</span>B*a=c</span><br></pre></td></tr></table></figure>]]></content>
       <categories>
-        <category>前端</category>
+        <category>笔记</category>
       </categories>
       <tags>
-        <tag>导航</tag>
-        <tag>心得</tag>
-        <tag>观后感</tag>
+        <tag>自学</tag>
+        <tag>Python</tag>
+        <tag>编程</tag>
       </tags>
   </entry>
 </search>
