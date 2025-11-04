@@ -29,7 +29,7 @@ body = template.format("\n".join(item_htmls))
 
 # === 4. 生成 Markdown 输出 ===
 md_header = """---
-title: 相册 Gallery
+title: 照片墙
 date: 2025-11-04
 layout: page
 comments: false
