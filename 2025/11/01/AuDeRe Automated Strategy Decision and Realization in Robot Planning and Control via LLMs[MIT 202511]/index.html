@@ -14,10 +14,11 @@
 
 
 <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":{"enable":true,"caption":false},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta name="description" content="AuDeRe: Automated Strategy Decision and Realization in Robot Planning and Control via LLMs[MIT 202511]摘要现有的大多数基于 LLM 的机器人研究，要么直接预测轨迹关键点（waypoints），要么在固定的工具集成框架内调用 LLM，从而限制了针对不同任务探索与配置最优解决方案的灵活性。 在本研究中">
@@ -39,7 +40,7 @@
 <meta property="og:image" content="http://example.com/images/a18.jpg">
 <meta property="og:image" content="http://example.com/images/a19.jpg">
 <meta property="article:published_time" content="2025-11-01T00:23:42.000Z">
-<meta property="article:modified_time" content="2025-11-04T11:34:42.114Z">
+<meta property="article:modified_time" content="2025-11-04T13:57:43.295Z">
 <meta property="article:author" content="Daniel Hu">
 <meta property="article:tag" content="thesis">
 <meta property="article:tag" content="VLM">
@@ -151,12 +152,17 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">7</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">8</span></a>
 
   </li>
         <li class="menu-item menu-item-schedule">
 
     <a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>日程表</a>
+
+  </li>
+        <li class="menu-item menu-item-gallery">
+
+    <a href="/gallery/" rel="section"><i class="fa fa-camera fa-fw"></i>gallery</a>
 
   </li>
       <li class="menu-item menu-item-search">
@@ -246,7 +252,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2025-11-04 19:34:42" itemprop="dateModified" datetime="2025-11-04T19:34:42+08:00">2025-11-04</time>
+                <time title="修改时间：2025-11-04 21:57:43" itemprop="dateModified" datetime="2025-11-04T21:57:43+08:00">2025-11-04</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -258,7 +264,14 @@
                 </span>
             </span>
 
-          <br>
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
             <span class="post-meta-item" title="本文字数">
               <span class="post-meta-item-icon">
                 <i class="far fa-file-word"></i>
@@ -292,7 +305,7 @@
 <ul>
 <li>对比的评价指标：成功率，任务完成度，平均迭代query次数，基于迭代的成功率，不同的误差类别的详细分析。</li>
 </ul>
-<img src="/images/a9.jpg" alt="图片" style="zoom:100%;" />
+<img src="/images/a9.jpg" alt="" style="zoom:100%;" />
 
 <p>Contribution：</p>
 <ul>
@@ -301,12 +314,12 @@
 <li>引入了迭代反馈机制，依据performance实现re-prompting。<span id="more"></span> </li>
 </ul>
 <p>任务描述：给定一个自然语言描述的任务，该任务包含了机器人动态，参考轨迹，初始状态，目标区域，环境约束，目标是LLM选择合适的规划和控制算法$A^\Tau\in A,其中A={A_1,A_2,…,A_N}$是一系列API。</p>
-<img src="/images/a10.jpg" alt="图片" style="zoom:100%;" />
+<img src="/images/a10.jpg" alt="" style="zoom:100%;" />
 
 <blockquote>
 <p>remark:实际上LLM去调用API不是很简单的事情。要理解API参数以及实现的功能等。理清任务与API的关系。</p>
 </blockquote>
-<img src="/images/a11.png" alt="图片" style="zoom:80%;" />
+<img src="/images/a11.png" alt="" style="zoom:80%;" />
 
 <p>API包含了一系列，从底层的轨迹跟踪，状态空间离散化到高层的规划都可以实现。总共设计了8个独立的API接口。并且通过模块化设计，具有很好的推广性以及通用性。</p>
 <p>• A⋆ 搜索（astar）[10]：基于图的最优路径规划方法，通过启发式搜索高效地在<strong>离散状态空间</strong>和<strong>障碍物环境</strong>中导航。</p>
@@ -322,18 +335,18 @@
 <ul>
 <li>询问使用的API</li>
 </ul>
-<img src="/images/a12.jpg" alt="图片" style="zoom:80%;" />
+<img src="/images/a12.jpg" alt="" style="zoom:80%;" />
 
 <ul>
 <li><p>梳理问题的求解步骤以及后续的python实现</p>
-<img src="/images/a13.jpg" alt="图片" style="zoom:80%;" /></li>
+<img src="/images/a13.jpg" alt="" style="zoom:80%;" /></li>
 <li><p>如果代码失败了，round+1重复咨询。</p>
 </li>
 </ul>
-<img src="/images/a14.jpg" alt="图片" style="zoom:80%;" />
+<img src="/images/a14.jpg" alt="" style="zoom:80%;" />
 
 <h3 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h3><p>考虑五个规划和控制场景，难度逐渐提升。每个场景随机初始化，实验100次得到评价指标。跟踪过程中，mpc被调用，c场景调用了rrt，d场景调用A*以及rrt。所有实验都使用GPT-4o LLM进行推理。最大的迭代次数被限定在6次。</p>
-<img src="/images/a15.jpg" alt="图片" style="zoom:100%;" />
+<img src="/images/a15.jpg" alt="" style="zoom:100%;" />
 
 <p>对比试验</p>
 <ul>
@@ -355,16 +368,16 @@
 </li>
 </ul>
 <p>左侧是三个模型的成功率，右侧是平均查询次数，<span style="color:green; font-weight:bold;">本文的方法</span>还是占优势的。困难问题其他两个方法很难成功</p>
-<img src="/images/a16.jpg" alt="图片" style="zoom:100%;" />
+<img src="/images/a16.jpg" alt="" style="zoom:100%;" />
 
 <p>相同的query次数，本文方法成功率高一些</p>
-<img src="/images/a17.jpg" alt="图片" style="zoom:100%;" />
+<img src="/images/a17.jpg" alt="" style="zoom:100%;" />
 
 <p>三个模型不同的失败情况占比。本文方法大部分情况成功，task failure 也比较低。</p>
-<img src="/images/a18.jpg" alt="图片" style="zoom:100%;" />
+<img src="/images/a18.jpg" alt="" style="zoom:100%;" />
 
 <h4 id="消融实验"><a href="#消融实验" class="headerlink" title="消融实验"></a>消融实验</h4><p>第一个是比较temperature的影响（温度影响模型输出的随机性）。温度低，输出结果更加deterministic，反之更加具有随机性。发现温度升高，成功率下降，并且query次数增加。</p>
-<img src="/images/a19.jpg" alt="图片" style="zoom:100%;" />
+<img src="/images/a19.jpg" alt="" style="zoom:100%;" />
 
 <p>​    另外还比较了不同的gpt系列对于成功率影响，但是没有很细致的结论。模型并不是越大越好，大模型成功率可能更低而且推理耗时。最后还比较了，只提供一个API信息和直接提供所有API信息的比较结果，发现只提供一个API效果反而更好一点。</p>
 
@@ -373,6 +386,23 @@
     
     
     
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Daniel Hu
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://example.com/2025/11/01/AuDeRe%20Automated%20Strategy%20Decision%20and%20Realization%20in%20Robot%20Planning%20and%20Control%20via%20LLMs[MIT%20202511]/" title="AuDeRe-Automated Strategy Decision and Realization in Robot Planning and Control via LLMs[MIT 202511]">http://example.com/2025/11/01/AuDeRe Automated Strategy Decision and Realization in Robot Planning and Control via LLMs[MIT 202511]/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
 
       <footer class="post-footer">
           
@@ -469,7 +499,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-count">8</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -487,6 +517,9 @@
       </div>
   </nav>
 </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
 
 
 
@@ -525,12 +558,44 @@
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">1:52</span>
+    <span title="站点阅读时长">1:53</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
   </div>
 
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共109.3k字</span>
+  <span class="post-meta-divider">|</span>
+  本站总访问量<span id="busuanzi_value_site_pv"></span>次
+  <span class="post-meta-divider">|</span>
+  本站访客数<span id="busuanzi_value_site_uv"></span>人次
+  <span class="post-meta-divider">|</span>
+  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+</div>
+
         
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
 
 
 
@@ -545,6 +610,8 @@
 
   
   <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
 
