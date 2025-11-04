@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/s5.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/s5.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="AuDeRe: Automated Strategy Decision and Realization in Robot Planning and Control via LLMs[MIT 202511]摘要现有的大多数基于 LLM 的机器人研究，要么直接预测轨迹关键点（waypoints），要么在固定的工具集成框架内调用 LLM，从而限制了针对不同任务探索与配置最优解决方案的灵活性。 在本研究中">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AuDeRe-Automated Strategy Decision and Realization in Robot Planning and Control via LLMs[MIT 202511]">
+<meta property="og:url" content="http://example.com/2025/11/01/AuDeRe%20Automated%20Strategy%20Decision%20and%20Realization%20in%20Robot%20Planning%20and%20Control%20via%20LLMs[MIT%20202511]/index.html">
+<meta property="og:site_name" content="Sep_459&#39;s Blog">
+<meta property="og:description" content="AuDeRe: Automated Strategy Decision and Realization in Robot Planning and Control via LLMs[MIT 202511]摘要现有的大多数基于 LLM 的机器人研究，要么直接预测轨迹关键点（waypoints），要么在固定的工具集成框架内调用 LLM，从而限制了针对不同任务探索与配置最优解决方案的灵活性。 在本研究中">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/a9.jpg">
+<meta property="og:image" content="http://example.com/images/a10.jpg">
+<meta property="og:image" content="http://example.com/images/a11.png">
+<meta property="og:image" content="http://example.com/images/a12.jpg">
+<meta property="og:image" content="http://example.com/images/a13.jpg">
+<meta property="og:image" content="http://example.com/images/a14.jpg">
+<meta property="og:image" content="http://example.com/images/a15.jpg">
+<meta property="og:image" content="http://example.com/images/a16.jpg">
+<meta property="og:image" content="http://example.com/images/a17.jpg">
+<meta property="og:image" content="http://example.com/images/a18.jpg">
+<meta property="og:image" content="http://example.com/images/a19.jpg">
+<meta property="article:published_time" content="2025-11-01T00:23:42.000Z">
+<meta property="article:modified_time" content="2025-11-04T11:34:42.114Z">
+<meta property="article:author" content="Daniel Hu">
+<meta property="article:tag" content="thesis">
+<meta property="article:tag" content="VLM">
+<meta property="article:tag" content="Note">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/a9.jpg">
+
+<link rel="canonical" href="http://example.com/2025/11/01/AuDeRe%20Automated%20Strategy%20Decision%20and%20Realization%20in%20Robot%20Planning%20and%20Control%20via%20LLMs[MIT%20202511]/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>AuDeRe-Automated Strategy Decision and Realization in Robot Planning and Control via LLMs[MIT 202511] | Sep_459's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Sep_459's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Welcome to my website</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">5</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">3</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">7</span></a>
+
+  </li>
+        <li class="menu-item menu-item-schedule">
+
+    <a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>日程表</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/11/01/AuDeRe%20Automated%20Strategy%20Decision%20and%20Realization%20in%20Robot%20Planning%20and%20Control%20via%20LLMs[MIT%20202511]/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/headpotrait.jpg">
+      <meta itemprop="name" content="Daniel Hu">
+      <meta itemprop="description" content="Share Notes & Life">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sep_459's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          AuDeRe-Automated Strategy Decision and Realization in Robot Planning and Control via LLMs[MIT 202511]
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2025-11-01 08:23:42" itemprop="dateCreated datePublished" datetime="2025-11-01T08:23:42+08:00">2025-11-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-11-04 19:34:42" itemprop="dateModified" datetime="2025-11-04T19:34:42+08:00">2025-11-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="AuDeRe-Automated-Strategy-Decision-and-Realization-in-Robot-Planning-and-Control-via-LLMs-MIT-202511"><a href="#AuDeRe-Automated-Strategy-Decision-and-Realization-in-Robot-Planning-and-Control-via-LLMs-MIT-202511" class="headerlink" title="AuDeRe: Automated Strategy Decision and Realization in Robot Planning and Control via LLMs[MIT 202511]"></a>AuDeRe: Automated Strategy Decision and Realization in Robot Planning and Control via LLMs[MIT 202511]</h2><h3 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h3><p>现有的大多数基于 LLM 的机器人研究，要么直接预测轨迹关键点（waypoints），要么在固定的工具集成框架内调用 LLM，从而限制了针对不同任务探索与配置最优解决方案的灵活性。</p>
+<p>在本研究中，提出了一个框架，利用 LLM 根据<strong>任务描述、环境约束以及系统动力学特性</strong>，自动选择合适的<strong>规划与控制策略</strong>。随后，这些策略通过调用底层的通用规划与控制 API 得以执行。</p>
+<p>实验对比简单的轨迹工作，带有时空约束的规划，迷宫导航以及。</p>
+<p>使用prompt，模型自动选择规划以及控制策略，避免了手动调整以及专家知识。</p>
+<h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>模型并不直接生成轨迹或者code，LLM<strong>对任务需求、环境约束以及机器人动力学进行推理分析</strong>，并据此<strong>选择并调用相应的、功能完备的规划与控制应用编程接口（APIs）</strong>，以实现最契合当前任务特性的控制与执行过程。</p>
+<p>作为对比，LLM-predict以及LLM-code直接输出轨迹以及code。</p>
+<ul>
+<li>对比的评价指标：成功率，任务完成度，平均迭代query次数，基于迭代的成功率，不同的误差类别的详细分析。</li>
+</ul>
+<img src="/images/a9.jpg" alt="图片" style="zoom:100%;" />
+
+<p>Contribution：</p>
+<ul>
+<li>不直接生成轨迹或者代码，而是利用LLM选择合适的API进行调用，考虑环境约束以及任务细节等。</li>
+<li>不是将LLM融合到某一个算法框架single fixed tool，而是让LLM自主的根据内容，实现automated stategy selection。</li>
+<li>引入了迭代反馈机制，依据performance实现re-prompting。<span id="more"></span> </li>
+</ul>
+<p>任务描述：给定一个自然语言描述的任务，该任务包含了机器人动态，参考轨迹，初始状态，目标区域，环境约束，目标是LLM选择合适的规划和控制算法$A^\Tau\in A,其中A={A_1,A_2,…,A_N}$是一系列API。</p>
+<img src="/images/a10.jpg" alt="图片" style="zoom:100%;" />
+
+<blockquote>
+<p>remark:实际上LLM去调用API不是很简单的事情。要理解API参数以及实现的功能等。理清任务与API的关系。</p>
+</blockquote>
+<img src="/images/a11.png" alt="图片" style="zoom:80%;" />
+
+<p>API包含了一系列，从底层的轨迹跟踪，状态空间离散化到高层的规划都可以实现。总共设计了8个独立的API接口。并且通过模块化设计，具有很好的推广性以及通用性。</p>
+<p>• A⋆ 搜索（astar）[10]：基于图的最优路径规划方法，通过启发式搜索高效地在<strong>离散状态空间</strong>和<strong>障碍物环境</strong>中导航。</p>
+<p>• <strong>交叉熵方法（CEM）[24]<strong>：系统性地探索工作空间，选择性能较优的样本，并通过迭代更新搜索分布逐步</strong>收敛至高质量解</strong>。</p>
+<p>• <strong>基于梯度的优化（grad）</strong>：利用 PyTorch 进行梯度下降与反向传播，实现<strong>可微分动力学与损失函数</strong>的轨迹优化，高效完成端到端可学习控制。</p>
+<p>• <strong>线性二次调节器（LQR）[2]<strong>：针对可线性化的动力系统执行</strong>最优跟踪控制</strong>，通过最小化状态与控制量的二次代价，实现精确的轨迹跟踪。</p>
+<p>• <strong>混合整数线性规划（MILP）</strong>：用于在<strong>高层时序逻辑（STL）约束</strong>下进行鲁棒的轨迹规划，可同时描述空间与时间约束。</p>
+<p>• <strong>模型预测控制（MPC）[8]<strong>：基于 CasADi 实现的预测优化控制方法，在有限预测时域内计算</strong>最优控制与规划解</strong>，支持线性与非线性动力学系统及其约束。</p>
+<p>• <strong>PID 控制（PID）[31]<strong>：实现一种简单而有效的</strong>比例-积分-微分控制策略</strong>，适用于低复杂度的轨迹跟踪或航点跟随任务。</p>
+<p>• <em>*快速扩展随机树（RRT）[14], [13]<em><em>：提供基于随机采样的路径规划方法，可采用标准 RRT 或优化版 RRT</em> 算法，高效搜索</em>*高维或障碍密集空间</em>*中的可行路径。</p>
+<p>一种 <strong>“从自然语言 → 算法选择 → 参数配置 → 代码执行”</strong> 的自动化流程。首先prompt让LLM选择某一个API，之后再去搜索API的详细信息，例如输入输出格式。进一步生成代码以及配置接口，生成可执行代码。</p>
+<p>一个Round分为三个步骤：</p>
+<ul>
+<li>询问使用的API</li>
+</ul>
+<img src="/images/a12.jpg" alt="图片" style="zoom:80%;" />
+
+<ul>
+<li><p>梳理问题的求解步骤以及后续的python实现</p>
+<img src="/images/a13.jpg" alt="图片" style="zoom:80%;" /></li>
+<li><p>如果代码失败了，round+1重复咨询。</p>
+</li>
+</ul>
+<img src="/images/a14.jpg" alt="图片" style="zoom:80%;" />
+
+<h3 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h3><p>考虑五个规划和控制场景，难度逐渐提升。每个场景随机初始化，实验100次得到评价指标。跟踪过程中，mpc被调用，c场景调用了rrt，d场景调用A*以及rrt。所有实验都使用GPT-4o LLM进行推理。最大的迭代次数被限定在6次。</p>
+<img src="/images/a15.jpg" alt="图片" style="zoom:100%;" />
+
+<p>对比试验</p>
+<ul>
+<li>本文方法 LLM-use-API</li>
+<li>end-to-end LLM-predict</li>
+<li>LLM-code</li>
+</ul>
+<p>评价指标：</p>
+<ul>
+<li>成功率</li>
+<li>成功使用的迭代次数</li>
+<li>随着迭代次数的成功率变化</li>
+<li>误差检测与分类<ul>
+<li><strong>解析错误（Parsing errors）</strong></li>
+<li><strong>语法错误（Syntax errors）</strong></li>
+<li><strong>超时错误（Timeout errors）</strong></li>
+<li><strong>任务失败（Task failures）</strong></li>
+</ul>
+</li>
+</ul>
+<p>左侧是三个模型的成功率，右侧是平均查询次数，<span style="color:green; font-weight:bold;">本文的方法</span>还是占优势的。困难问题其他两个方法很难成功</p>
+<img src="/images/a16.jpg" alt="图片" style="zoom:100%;" />
+
+<p>相同的query次数，本文方法成功率高一些</p>
+<img src="/images/a17.jpg" alt="图片" style="zoom:100%;" />
+
+<p>三个模型不同的失败情况占比。本文方法大部分情况成功，task failure 也比较低。</p>
+<img src="/images/a18.jpg" alt="图片" style="zoom:100%;" />
+
+<h4 id="消融实验"><a href="#消融实验" class="headerlink" title="消融实验"></a>消融实验</h4><p>第一个是比较temperature的影响（温度影响模型输出的随机性）。温度低，输出结果更加deterministic，反之更加具有随机性。发现温度升高，成功率下降，并且query次数增加。</p>
+<img src="/images/a19.jpg" alt="图片" style="zoom:100%;" />
+
+<p>​    另外还比较了不同的gpt系列对于成功率影响，但是没有很细致的结论。模型并不是越大越好，大模型成功率可能更低而且推理耗时。最后还比较了，只提供一个API信息和直接提供所有API信息的比较结果，发现只提供一个API效果反而更好一点。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/thesis/" rel="tag"><i class="fa fa-tag"></i> thesis</a>
+              <a href="/tags/VLM/" rel="tag"><i class="fa fa-tag"></i> VLM</a>
+              <a href="/tags/Note/" rel="tag"><i class="fa fa-tag"></i> Note</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/12/15/Attack%20On%20Titan/" rel="prev" title="Attack On Titan">
+      <i class="fa fa-chevron-left"></i> Attack On Titan
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2025/11/02/Navigation%20World%20Models%20%20%5BMeta%202025%5D/" rel="next" title="Navigation World Models  [Meta 2025]">
+      Navigation World Models  [Meta 2025] <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#AuDeRe-Automated-Strategy-Decision-and-Realization-in-Robot-Planning-and-Control-via-LLMs-MIT-202511"><span class="nav-number">1.</span> <span class="nav-text">AuDeRe: Automated Strategy Decision and Realization in Robot Planning and Control via LLMs[MIT 202511]</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%91%98%E8%A6%81"><span class="nav-number">1.1.</span> <span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.2.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C"><span class="nav-number">1.3.</span> <span class="nav-text">实验</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B6%88%E8%9E%8D%E5%AE%9E%E9%AA%8C"><span class="nav-number">1.3.1.</span> <span class="nav-text">消融实验</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Daniel Hu"
+      src="/images/headpotrait.jpg">
+  <p class="site-author-name" itemprop="name">Daniel Hu</p>
+  <div class="site-description" itemprop="description">Share Notes & Life</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Daniel Hu</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">124k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">1:52</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
