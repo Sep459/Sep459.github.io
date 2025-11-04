@@ -80,10 +80,10 @@ comments: false
 </style>
 """
 
-md_content = md_header + "\n" + body
+md_content =  body
 
 # === 5. 输出 ===
-output_path = os.path.join(os.getcwd(), "gallery_generated.md")
+output_path = os.path.join(os.getcwd(), "my_index.md")
 with open(output_path, "w", encoding="utf-8") as f:
     f.write(md_content)
 
