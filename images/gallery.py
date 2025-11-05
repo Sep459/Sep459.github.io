@@ -3,7 +3,7 @@ import os
 # === 1. 配置 ===
 # 图片目录（改成你的路径）
 img_dir = r"F:\Hexo\source\images\gallery"
-
+# img_dir = r"F:\Hexo\source\images\pet"
 # 图片文件扩展名（可按需增加）
 exts = ('.jpg', '.jpeg', '.png', '.gif', '.webp', '.JPG', '.PNG')
 
@@ -83,7 +83,7 @@ comments: false
 md_content =  body
 
 # === 5. 输出 ===
-output_path = os.path.join(os.getcwd(), "my_index.md")
+output_path = os.path.join(os.getcwd(), "index_gallery.md")
 with open(output_path, "w", encoding="utf-8") as f:
     f.write(md_content)
 

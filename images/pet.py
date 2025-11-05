@@ -29,7 +29,7 @@ body = template.format("\n".join(item_htmls))
 
 # === 4. 生成 Markdown 输出 ===
 md_header = """---
-title: 照片墙
+title: 宠物日常
 date: 2025-11-04
 layout: page
 comments: false
@@ -83,7 +83,7 @@ comments: false
 md_content = md_header + "\n" + body
 
 # === 5. 输出 ===
-output_path = os.path.join(os.getcwd(), "gallery_generated.md")
+output_path = os.path.join(os.getcwd(), "index_pet.md")
 with open(output_path, "w", encoding="utf-8") as f:
     f.write(md_content)
 
