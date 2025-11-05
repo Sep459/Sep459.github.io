@@ -3,11 +3,10 @@
   <entry>
     <title>π0 ：A Vision-Language-Action Flow Model for General Robot Control[2024,physical intelligence]</title>
     <url>/2025/11/04/%CF%800%20%EF%BC%9AA%20Vision-Language-Action%20Flow%20Model%20for%20General%20Robot%20Control%5B2024,physical%20intelligence%5D/</url>
-    <content><![CDATA[<h2 id="π0-：A-Vision-Language-Action-Flow-Model-for-General-Robot-Control-2024-physical-intelligence"><a href="#π0-：A-Vision-Language-Action-Flow-Model-for-General-Robot-Control-2024-physical-intelligence" class="headerlink" title="π0 ：A Vision-Language-Action Flow Model for General Robot Control[2024,physical intelligence]"></a>π0 ：A Vision-Language-Action Flow Model for General Robot Control[2024,physical intelligence]</h2><p><code>非常出名的一个初创公司physical intelligence闭源产品，页面https://physicalintelligence.company/blog/pi0</code></p>
+    <content><![CDATA[<p><code>非常出名的一个初创公司physical intelligence闭源产品，页面https://physicalintelligence.company/blog/pi0</code></p>
+<p>模型结构，使用预训练的VLM作为backbone，以及一系列的cross-embodiment 灵巧手操控数据集。在VLM后独立添加了一个action expert，通过flow matching生成连续动作。主要考虑数据，通用性以及鲁棒性。实现complex and dexterous tasks。</p>
 <img src="/images/a6.jpg" alt="" style="zoom:100%;" />
 
-<p>模型结构，使用预训练的VLM作为backbone，以及一系列的cross-embodiment 灵巧手操控数据集。在VLM后独立添加了一个action expert，通过flow matching生成连续动作。</p>
-<p>主要考虑数据，通用性以及鲁棒性。实现complex and dexterous tasks。</p>
 <p>解决的三个bottlenecks：数据量的问题，大数据的预训练优势，在小数据时通常不会显示。模型结构以及数据利用率。最后就是训练的recipe，也就是数据配方，强调的是<strong>数据策划（data curation）</strong>的“精细性”和“策略性”。</p>
 <p>动作模型用的流匹配，是diffusion的一种变体。训练流程和文本/图像训练是一样的，预训练然后微调。作者提到，由于数据集里没有错误恢复的数据，因此很难学到这种能力。有两种数据，高质量和低质量的，结合这两种数据可以得到理想的能力（repertoire of recoveries and corrections）。<span id="more"></span> </p>
 <img src="/images/a7.jpg" alt="" style="zoom:100%;" />
