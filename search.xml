@@ -1,79 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>π0 ：A Vision-Language-Action Flow Model for General Robot Control[2024,physical intelligence]</title>
-    <url>/2025/11/04/%CF%800%20%EF%BC%9AA%20Vision-Language-Action%20Flow%20Model%20for%20General%20Robot%20Control%5B2024,physical%20intelligence%5D/</url>
-    <content><![CDATA[<p><code>非常出名的一个初创公司physical intelligence闭源产品，页面https://physicalintelligence.company/blog/pi0</code></p>
-<p>模型结构，使用预训练的VLM作为backbone，以及一系列的cross-embodiment 灵巧手操控数据集。在VLM后独立添加了一个action expert，通过flow matching生成连续动作。主要考虑数据，通用性以及鲁棒性。实现complex and dexterous tasks。</p>
-<img src="/images/a6.jpg" alt="" style="zoom:100%;" />
-
-<p>解决的三个bottlenecks：数据量的问题，大数据的预训练优势，在小数据时通常不会显示。模型结构以及数据利用率。最后就是训练的recipe，也就是数据配方，强调的是<strong>数据策划（data curation）</strong>的“精细性”和“策略性”。</p>
-<p>动作模型用的流匹配，是diffusion的一种变体。训练流程和文本/图像训练是一样的，预训练然后微调。作者提到，由于数据集里没有错误恢复的数据，因此很难学到这种能力。有两种数据，高质量和低质量的，结合这两种数据可以得到理想的能力（repertoire of recoveries and corrections）。<span id="more"></span> </p>
-<img src="/images/a7.jpg" alt="" style="zoom:100%;" />
-
-<p><code>Intuitively, the diverse (but lower quality) pre-training data allows the model to recover from mistakes and handle highly varied situations</code></p>
-<p>多视角图像如何处理？一般可能多个特征通过cross 注意力变为一个，或者直接多个token输入给vlm直接处理变长度输入。本文是直接For robots with fewer than three images, we also mask out the missing image slots.用mask处理缺失的视角图像。</p>
-<p>文中虽然说只有68个任务，但不同于将“捡起盘子”，“捡起杯子”视为不同的任务，本文实际的任务场景是很多的。</p>
-<p>输出的动作维度不一样，例如单臂双臂，或者6dof与7dof，做法是取最大的dof，用0补齐动作数据。</p>
-<p>可以利用saycan这样的策略，将粗略的任务指令，分解为更细致的命令。</p>
-<h4 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h4><p>实验有开箱即用的实验结果（只用了粗数据进行预训练，没有后续高质量数据的后训练），以及后训练后在复杂任务上的效果。</p>
-]]></content>
-      <categories>
-        <category>笔记</category>
-      </categories>
-      <tags>
-        <tag>thesis</tag>
-        <tag>VLM</tag>
-        <tag>Note</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Navigation World Models  [Meta 2025]</title>
-    <url>/2025/11/02/Navigation%20World%20Models%20%20%5BMeta%202025%5D/</url>
-    <content><![CDATA[<h2 id="Navigation-World-Models-Meta-2025"><a href="#Navigation-World-Models-Meta-2025" class="headerlink" title="Navigation World Models  [Meta 2025]"></a>Navigation World Models  [Meta 2025]</h2><p><code>Bar A, Zhou G, Tran D, et al. Navigation world models[C]//Proceedings of the Computer Vision and Pattern Recognition Conference. 2025: 15791-15801. </code></p>
-<img src="/images/a1.png" alt="" style="zoom:70%;" />
-
-<p>文章使用1B的条件扩散Transformer（CDiT），实现的功能为给定图片以及动作序列，预测未来的图像序列。另外可以给定起始点，规划运动轨迹，对最后的结果打分（与goal的差距）。</p>
-<p>CDiT方法计算复杂度与图像数量线性增加。1B情况下也可以稳定训练相比于传统的DiT减小了4X的FLOPs计算。</p>
-<p>本文辅助使用了NoMaD进行导航，该模型是行为克隆训练的扩散模型，另外可以使用temporal distance 目标对目标进行跟踪。也可以在新环境下进行探索。相应的也有其他导航方法例如RL，或者neural slam结合A*/迪杰斯特拉等plannner的方案。</p>
-<p>不同于直接学习策略，NWM的目标是simulate 环境。给定当前状态，预测未来的状态以及对应的reward。<strong>联合学习world model以及policy可以提升数据效率。</strong><span id="more"></span> </p>
-<h4 id="Formulation"><a href="#Formulation" class="headerlink" title="Formulation"></a>Formulation</h4><p>给定图像动作序列D=[x0,a0,x1,a1,…,xT,aT],其中a由两部分组成，a=[u,phi],u是二维向量，前后与左右运动，phi是标量，控制旋转角度。实际上这个状态可以很容易拓展到三维情况。外部的实际输入xt，通过预训练的VAE进行编码得到st，然后结合at去预测下一个s_{t+1}.</p>
-<p>进一步修改方程，引入时间下标k到动作at中a = (u, phi, k),表示预测未来或者过去的第k个状态，而不仅仅是单步。使得模型不仅能学习“动作导致的状态变化”，还能<strong>显式地控制时间跨度和时间方向（向前或向后）</strong>。</p>
-<p>为了防止直接根据时间去预测结果（entanglement of actions and time.），实际采集数据的时候，同一个起点会设置多个目标，收集数据。</p>
-<p>Conditional Diffusion Transformer (CDiT) Block结构如下：复杂度与frame number成线性关系。</p>
-<img src="/images/a2.jpg" alt="" style="zoom:70%;" />
-
-
-
-<p>at先通过正弦编码嵌入到d/3维度，然后拼接，通过mlp之后，k也同样处理到d维度，然后和at部分相加，t也变为d维度。三个d维度向量相加得到condition条件的嵌入向量</p>
-<img src="/images/a3.jpg" alt="" style="zoom:100%;" />
-
-<p>该部分之后通过AdaLN生成scale以及shift向量。用于调节layer norm以及attn模块的输出。</p>
-<p>使用CDiT而不是DiT，是因为如果将at部分的信息也一同作为输入给attn，会导致computationally expensive。主要是对于过去帧的处理，如果将过去帧一起放入atten计算，会导致计算量非常大。例如llm里，如果将过去的language token一起放进来，会导致计算增长很快。所以这里即使是</p>
-<p>这里的t随机采样，使得模型可以对不同的加噪声进行denoising。也对扩撒模型进行了改进，预测协方差，用变分下界辅助训练，提高稳定性。</p>
-<p>模型的目标函数是最小化MSE，希望学到去噪过程</p>
-<img src="/images/a4.jpg" alt="" style="zoom:100%;" />
-
-<h4 id="Navigation-Planning-with-World-Models"><a href="#Navigation-Planning-with-World-Models" class="headerlink" title="Navigation Planning with World Models"></a>Navigation Planning with World Models</h4><p>如果模型对于环境很熟悉，那么可以simulate导航轨迹并且选择达到目标的那条轨迹。如果说不熟悉环境，长期的planning就需要想象。</p>
-<p>给初始的隐藏状态s0,目标s*，希望找到动作序列（a0,a1,…,aT）。S(sT,s*)表示对于自回归结果的评分（未进行归一化）。另外还有能量函数，最小化能量函数对应最大化感知相似度，并且保证动作和状态的有效性（一些安全约束等）：</p>
-<img src="/images/a5.jpg" alt="" style="zoom:100%;" />
-
-<p>第一部分相似度通过预训练的VAE编码进行计算。Avalid可以是“never go left then right”，Ssafe可以是“never explore the edge of the cliff”。优化问题得到的就是动作序列（a0,…,aT）。</p>
-<p>有了目标函数，就可以用CEM方法，去随机采样k条轨迹然后加权得到预测的控制量，然后用Moving horizon方法执行动作。</p>
-<h4 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h4><p>数据集使用：SCAND [30], Tartan-Drive [60], RECON [52], and HuRoN [27]</p>
-<p>对不同的机器人step distance进行归一化处理，除以各自的平均distance。过滤了backward 运动。有些数据集例如Ego4D以及GO Stanford没有label，就是没有前后左右以及转向标签，只有帧数的标签，当作unknown evaluation environment.</p>
-<p>测试标准：一个是轨迹的位置以及角度误差。对于图像的相似度，用LPIPS [76] and DreamSim提取的deep features进行对比。PSNR测量像素级别的相似度。对于image以及视频合成，使用FID [23] and FVD [64]进行衡量数据分布，因为这个时候，我们是完全外推的，不知道真实的对比图像或者视频。</p>
-]]></content>
-      <categories>
-        <category>笔记</category>
-      </categories>
-      <tags>
-        <tag>thesis</tag>
-        <tag>VLM</tag>
-        <tag>Note</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Attack On Titan</title>
     <url>/2023/12/15/Attack%20On%20Titan/</url>
     <content><![CDATA[<h2 id="致两千年前的你"><a href="#致两千年前的你" class="headerlink" title="致两千年前的你"></a>致两千年前的你</h2><p>2000年前，一个名为艾尔迪亚的部落存在于这个世界的某个大陆上，和许多其他的部落一样，该部落实行奴隶制，将俘获的其他部落的战俘割掉舌头，当作自己部落的奴隶，这个部落的首领，叫初代弗里茨王，1900多年后他的后代是帕拉迪岛的实际控制者——雷斯家族。<span id="more"></span><br>弗里茨王的奴隶中，有一个小女孩，叫做尤弥尔，这个尤弥尔也是个被割了舌头的奴隶，某天，在尤弥尔正围观一对男女，心脏扑通直跳，就和其他奴隶一起被抓了起来，原来，围栏里有一头特立独行的猪向往自由，顺着开着的门跑了，弗里茨王很生气，要求奴隶供出到底谁把猪栏的门打开，把猪给放跑了，如果没人承认，那么所有的奴隶都要被挖掉一只眼睛，然后，十三个奴隶把手齐齐的指向了尤弥尔（13是作者的幸运数字，以后会多次出现，比如，埃尔文·史密斯团长就是调查兵团第十三任团长，包括每任巨人能力持有者的寿命也是13年），于是，可怜的尤弥尔不得不承认她放走了猪，她被放逐了，弗里茨王嘲讽的说，“你，自由了。”<br>随后部落开始了人猎，尤弥尔在前面逃跑，后面的人骑着马，带着猎狗，朝她射箭，尤弥尔流出了血泪，生死之际，尤弥尔发现了一个树洞，她跳了进去，却不曾想里面竟然是冰冷的地下水，刺骨的冷水刺激着尤弥尔的皮肤，就在此刻，一种神秘的史前生物靠近了她，这边是巨人力量的来源——怪诞虫。<br>尤弥尔因此获得了巨人之力，后来的传说是，尤弥尔与大地恶魔做了交易，自此，尤弥尔被称作始祖尤弥尔。<br>尤弥尔获得了巨人之力后，并没有选择复仇，或者说，她从小就被灌输了奴隶的思想，她甚至不知道复仇是一个什么概念，于是她又回到了艾尔迪亚部落，再次成为了一个奴隶，因为尤弥尔拥有了巨人之力，弗里茨凭此带领部落迅速的开疆扩土，铺路建桥，征服了很多敌对部落，期间，弗里茨王破格赐给了尤弥尔姓氏，并和她生下了三个女儿， 玛丽亚，罗塞，希纳，也就是后来帕拉迪岛上的三道巨人之墙的名字。<br>在尤弥尔的帮助下，艾尔迪亚无人能敌，其中臣服于它的武力下的部落里，就有马莱，某天，马莱人假装来和弗里茨王谈判，实际却是刺杀，在马莱人掷出了飞茅后，尤弥尔挺身而出，替弗里茨王挡下了这致命一击，弗里茨却王丝毫不为所动，还冷冷的说，“站起来干活啊，尤弥尔，我知道这是杀不了你的。”然而尤弥尔却没有响应弗里茨王的话，她真的死了。</p>
@@ -150,23 +77,6 @@
       </categories>
       <tags>
         <tag>-Anime -Attack On Titan</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Mobile ALOHA:Learning Bimanual Mobile Manipulation with Low-Cost Whole-Body Teleoperation[Stanford 2024]</title>
-    <url>/2025/11/10/Mobile%20ALOHALearning%20Bimanual%20Mobile%20Manipulation%20with%20Low-Cost%20Whole-Body%20Teleoperation%5BStanford%202024%5D/</url>
-    <content><![CDATA[<h2 id="Mobile-ALOHA-Learning-Bimanual-Mobile-Manipulation-with-Low-Cost-Whole-Body-Teleoperation-Stanford-2024"><a href="#Mobile-ALOHA-Learning-Bimanual-Mobile-Manipulation-with-Low-Cost-Whole-Body-Teleoperation-Stanford-2024" class="headerlink" title="Mobile ALOHA:Learning Bimanual Mobile Manipulation with Low-Cost Whole-Body Teleoperation[Stanford 2024]"></a>Mobile ALOHA:Learning Bimanual Mobile Manipulation with Low-Cost Whole-Body Teleoperation[Stanford 2024]</h2><img src="/images/a8.jpg" alt="" style="zoom:100%;" />
-
-<p>模仿学习，和之前的ALOHA一样，主要是提出了cheap的结构设计，模仿学习收集数据。这里只是加了mobile底座。</p>
-<span id="more"></span> 
-]]></content>
-      <categories>
-        <category>笔记</category>
-      </categories>
-      <tags>
-        <tag>thesis</tag>
-        <tag>VLM</tag>
-        <tag>Note</tag>
       </tags>
   </entry>
   <entry>
@@ -256,6 +166,96 @@
 <img src="/images/a19.jpg" alt="" style="zoom:100%;" />
 
 <p>​    另外还比较了不同的gpt系列对于成功率影响，但是没有很细致的结论。模型并不是越大越好，大模型成功率可能更低而且推理耗时。最后还比较了，只提供一个API信息和直接提供所有API信息的比较结果，发现只提供一个API效果反而更好一点。</p>
+]]></content>
+      <categories>
+        <category>笔记</category>
+      </categories>
+      <tags>
+        <tag>thesis</tag>
+        <tag>VLM</tag>
+        <tag>Note</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Mobile ALOHA:Learning Bimanual Mobile Manipulation with Low-Cost Whole-Body Teleoperation[Stanford 2024]</title>
+    <url>/2025/11/10/Mobile%20ALOHALearning%20Bimanual%20Mobile%20Manipulation%20with%20Low-Cost%20Whole-Body%20Teleoperation%5BStanford%202024%5D/</url>
+    <content><![CDATA[<h2 id="Mobile-ALOHA-Learning-Bimanual-Mobile-Manipulation-with-Low-Cost-Whole-Body-Teleoperation-Stanford-2024"><a href="#Mobile-ALOHA-Learning-Bimanual-Mobile-Manipulation-with-Low-Cost-Whole-Body-Teleoperation-Stanford-2024" class="headerlink" title="Mobile ALOHA:Learning Bimanual Mobile Manipulation with Low-Cost Whole-Body Teleoperation[Stanford 2024]"></a>Mobile ALOHA:Learning Bimanual Mobile Manipulation with Low-Cost Whole-Body Teleoperation[Stanford 2024]</h2><img src="/images/a8.jpg" alt="" style="zoom:100%;" />
+
+<p>模仿学习，和之前的ALOHA一样，主要是提出了cheap的结构设计，模仿学习收集数据。这里只是加了mobile底座。</p>
+<span id="more"></span> 
+]]></content>
+      <categories>
+        <category>笔记</category>
+      </categories>
+      <tags>
+        <tag>thesis</tag>
+        <tag>VLM</tag>
+        <tag>Note</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Navigation World Models  [Meta 2025]</title>
+    <url>/2025/11/02/Navigation%20World%20Models%20%20%5BMeta%202025%5D/</url>
+    <content><![CDATA[<h2 id="Navigation-World-Models-Meta-2025"><a href="#Navigation-World-Models-Meta-2025" class="headerlink" title="Navigation World Models  [Meta 2025]"></a>Navigation World Models  [Meta 2025]</h2><p><code>Bar A, Zhou G, Tran D, et al. Navigation world models[C]//Proceedings of the Computer Vision and Pattern Recognition Conference. 2025: 15791-15801. </code></p>
+<img src="/images/a1.png" alt="" style="zoom:70%;" />
+
+<p>文章使用1B的条件扩散Transformer（CDiT），实现的功能为给定图片以及动作序列，预测未来的图像序列。另外可以给定起始点，规划运动轨迹，对最后的结果打分（与goal的差距）。</p>
+<p>CDiT方法计算复杂度与图像数量线性增加。1B情况下也可以稳定训练相比于传统的DiT减小了4X的FLOPs计算。</p>
+<p>本文辅助使用了NoMaD进行导航，该模型是行为克隆训练的扩散模型，另外可以使用temporal distance 目标对目标进行跟踪。也可以在新环境下进行探索。相应的也有其他导航方法例如RL，或者neural slam结合A*/迪杰斯特拉等plannner的方案。</p>
+<p>不同于直接学习策略，NWM的目标是simulate 环境。给定当前状态，预测未来的状态以及对应的reward。<strong>联合学习world model以及policy可以提升数据效率。</strong><span id="more"></span> </p>
+<h4 id="Formulation"><a href="#Formulation" class="headerlink" title="Formulation"></a>Formulation</h4><p>给定图像动作序列D=[x0,a0,x1,a1,…,xT,aT],其中a由两部分组成，a=[u,phi],u是二维向量，前后与左右运动，phi是标量，控制旋转角度。实际上这个状态可以很容易拓展到三维情况。外部的实际输入xt，通过预训练的VAE进行编码得到st，然后结合at去预测下一个s_{t+1}.</p>
+<p>进一步修改方程，引入时间下标k到动作at中a = (u, phi, k),表示预测未来或者过去的第k个状态，而不仅仅是单步。使得模型不仅能学习“动作导致的状态变化”，还能<strong>显式地控制时间跨度和时间方向（向前或向后）</strong>。</p>
+<p>为了防止直接根据时间去预测结果（entanglement of actions and time.），实际采集数据的时候，同一个起点会设置多个目标，收集数据。</p>
+<p>Conditional Diffusion Transformer (CDiT) Block结构如下：复杂度与frame number成线性关系。</p>
+<img src="/images/a2.jpg" alt="" style="zoom:70%;" />
+
+
+
+<p>at先通过正弦编码嵌入到d/3维度，然后拼接，通过mlp之后，k也同样处理到d维度，然后和at部分相加，t也变为d维度。三个d维度向量相加得到condition条件的嵌入向量</p>
+<img src="/images/a3.jpg" alt="" style="zoom:100%;" />
+
+<p>该部分之后通过AdaLN生成scale以及shift向量。用于调节layer norm以及attn模块的输出。</p>
+<p>使用CDiT而不是DiT，是因为如果将at部分的信息也一同作为输入给attn，会导致computationally expensive。主要是对于过去帧的处理，如果将过去帧一起放入atten计算，会导致计算量非常大。例如llm里，如果将过去的language token一起放进来，会导致计算增长很快。所以这里即使是</p>
+<p>这里的t随机采样，使得模型可以对不同的加噪声进行denoising。也对扩撒模型进行了改进，预测协方差，用变分下界辅助训练，提高稳定性。</p>
+<p>模型的目标函数是最小化MSE，希望学到去噪过程</p>
+<img src="/images/a4.jpg" alt="" style="zoom:100%;" />
+
+<h4 id="Navigation-Planning-with-World-Models"><a href="#Navigation-Planning-with-World-Models" class="headerlink" title="Navigation Planning with World Models"></a>Navigation Planning with World Models</h4><p>如果模型对于环境很熟悉，那么可以simulate导航轨迹并且选择达到目标的那条轨迹。如果说不熟悉环境，长期的planning就需要想象。</p>
+<p>给初始的隐藏状态s0,目标s*，希望找到动作序列（a0,a1,…,aT）。S(sT,s*)表示对于自回归结果的评分（未进行归一化）。另外还有能量函数，最小化能量函数对应最大化感知相似度，并且保证动作和状态的有效性（一些安全约束等）：</p>
+<img src="/images/a5.jpg" alt="" style="zoom:100%;" />
+
+<p>第一部分相似度通过预训练的VAE编码进行计算。Avalid可以是“never go left then right”，Ssafe可以是“never explore the edge of the cliff”。优化问题得到的就是动作序列（a0,…,aT）。</p>
+<p>有了目标函数，就可以用CEM方法，去随机采样k条轨迹然后加权得到预测的控制量，然后用Moving horizon方法执行动作。</p>
+<h4 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h4><p>数据集使用：SCAND [30], Tartan-Drive [60], RECON [52], and HuRoN [27]</p>
+<p>对不同的机器人step distance进行归一化处理，除以各自的平均distance。过滤了backward 运动。有些数据集例如Ego4D以及GO Stanford没有label，就是没有前后左右以及转向标签，只有帧数的标签，当作unknown evaluation environment.</p>
+<p>测试标准：一个是轨迹的位置以及角度误差。对于图像的相似度，用LPIPS [76] and DreamSim提取的deep features进行对比。PSNR测量像素级别的相似度。对于image以及视频合成，使用FID [23] and FVD [64]进行衡量数据分布，因为这个时候，我们是完全外推的，不知道真实的对比图像或者视频。</p>
+]]></content>
+      <categories>
+        <category>笔记</category>
+      </categories>
+      <tags>
+        <tag>thesis</tag>
+        <tag>VLM</tag>
+        <tag>Note</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>π0 ：A Vision-Language-Action Flow Model for General Robot Control[2024,physical intelligence]</title>
+    <url>/2025/11/04/%CF%800%20%EF%BC%9AA%20Vision-Language-Action%20Flow%20Model%20for%20General%20Robot%20Control%5B2024,physical%20intelligence%5D/</url>
+    <content><![CDATA[<p><code>非常出名的一个初创公司physical intelligence闭源产品，页面https://physicalintelligence.company/blog/pi0</code></p>
+<p>模型结构，使用预训练的VLM作为backbone，以及一系列的cross-embodiment 灵巧手操控数据集。在VLM后独立添加了一个action expert，通过flow matching生成连续动作。主要考虑数据，通用性以及鲁棒性。实现complex and dexterous tasks。</p>
+<img src="/images/a6.jpg" alt="" style="zoom:100%;" />
+
+<p>解决的三个bottlenecks：数据量的问题，大数据的预训练优势，在小数据时通常不会显示。模型结构以及数据利用率。最后就是训练的recipe，也就是数据配方，强调的是<strong>数据策划（data curation）</strong>的“精细性”和“策略性”。</p>
+<p>动作模型用的流匹配，是diffusion的一种变体。训练流程和文本/图像训练是一样的，预训练然后微调。作者提到，由于数据集里没有错误恢复的数据，因此很难学到这种能力。有两种数据，高质量和低质量的，结合这两种数据可以得到理想的能力（repertoire of recoveries and corrections）。<span id="more"></span> </p>
+<img src="/images/a7.jpg" alt="" style="zoom:100%;" />
+
+<p><code>Intuitively, the diverse (but lower quality) pre-training data allows the model to recover from mistakes and handle highly varied situations</code></p>
+<p>多视角图像如何处理？一般可能多个特征通过cross 注意力变为一个，或者直接多个token输入给vlm直接处理变长度输入。本文是直接For robots with fewer than three images, we also mask out the missing image slots.用mask处理缺失的视角图像。</p>
+<p>文中虽然说只有68个任务，但不同于将“捡起盘子”，“捡起杯子”视为不同的任务，本文实际的任务场景是很多的。</p>
+<p>输出的动作维度不一样，例如单臂双臂，或者6dof与7dof，做法是取最大的dof，用0补齐动作数据。</p>
+<p>可以利用saycan这样的策略，将粗略的任务指令，分解为更细致的命令。</p>
+<h4 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h4><p>实验有开箱即用的实验结果（只用了粗数据进行预训练，没有后续高质量数据的后训练），以及后训练后在复杂任务上的效果。</p>
 ]]></content>
       <categories>
         <category>笔记</category>
