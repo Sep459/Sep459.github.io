@@ -1189,6 +1189,77 @@ pre .javascript .function {
 .book-mark-link-fixed {
   top: -2px;
 }
+.github-corner :hover .octo-arm {
+  animation: octocat-wave 560ms ease-in-out;
+}
+.github-corner svg {
+  border: 0;
+  color: #fff;
+  fill: #222;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 1000;
+}
+@media (max-width: 991px) {
+  .github-corner {
+    display: none;
+  }
+  .github-corner svg {
+    color: #222;
+    fill: #fff;
+  }
+  .github-corner .github-corner:hover .octo-arm {
+    animation: none;
+  }
+  .github-corner .github-corner .octo-arm {
+    animation: octocat-wave 560ms ease-in-out;
+  }
+}
+@-moz-keyframes octocat-wave {
+  0%, 100% {
+    transform: rotate(0);
+  }
+  20%, 60% {
+    transform: rotate(-25deg);
+  }
+  40%, 80% {
+    transform: rotate(10deg);
+  }
+}
+@-webkit-keyframes octocat-wave {
+  0%, 100% {
+    transform: rotate(0);
+  }
+  20%, 60% {
+    transform: rotate(-25deg);
+  }
+  40%, 80% {
+    transform: rotate(10deg);
+  }
+}
+@-o-keyframes octocat-wave {
+  0%, 100% {
+    transform: rotate(0);
+  }
+  20%, 60% {
+    transform: rotate(-25deg);
+  }
+  40%, 80% {
+    transform: rotate(10deg);
+  }
+}
+@keyframes octocat-wave {
+  0%, 100% {
+    transform: rotate(0);
+  }
+  20%, 60% {
+    transform: rotate(-25deg);
+  }
+  40%, 80% {
+    transform: rotate(10deg);
+  }
+}
 .sidebar {
   background: #222;
   bottom: 0;
@@ -1254,7 +1325,7 @@ pre .javascript .function {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #bdf42e;
+  background: #3e6cff;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
@@ -2858,4 +2929,35 @@ margin-left
   font-size: 1em;
   color: #fff;
   border-bottom: none;
+}
+.post-body a,
+.post-body a:visited {
+  color: #000 !important; /* 蓝色，可改 #fff 白色 */
+  text-decoration: underline; /* 保留下划线，可去掉 */
+}
+.post-body a:hover,
+.post-body a:active {
+  color: #ff4500 !important; /* 悬停颜色 */
+}
+#footer,
+#footer a,
+.site-stats,
+.site-stats a,
+.post-footer,
+.post-footer a,
+.post-copyright,
+.post-copyright a,
+.post-meta,
+.post-meta a,
+.post-tag,
+.post-tag a {
+  color: #fff !important; /* 改成你想要的颜色，比如 #1e90ff 蓝色 */
+}
+#footer a:hover,
+.site-stats a:hover,
+.post-footer a:hover,
+.post-copyright a:hover,
+.post-meta a:hover,
+.post-tag a:hover {
+  color: #1e90ff !important; /* 可改成你希望的悬停颜色 */
 }

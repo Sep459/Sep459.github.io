@@ -3,7 +3,7 @@ import os
 # === 1. 配置 ===
 # 图片目录（改成你的路径）
 img_dir = r"F:\Hexo\source\images\gallery"
-# img_dir = r"F:\Hexo\source\images\pet"
+img_dir = r"F:\Hexo\source\images\pet"
 # 图片文件扩展名（可按需增加）
 exts = ('.jpg', '.jpeg', '.png', '.gif', '.webp', '.JPG', '.PNG')
 
@@ -20,7 +20,10 @@ template = """
 
 item_htmls = []
 for img in images:
-    path = f"/images/gallery/{img}"
+    if img_dir == r"F:\Hexo\source\images\gallery":
+      path = f"/images/gallery/{img}"
+    else:
+       path = f"/images/pet/{img}"
     item_htmls.append(f'''  <a class="gallery-item" data-fancybox="gallery" href="{path}">
     <img src="{path}" alt="">
   </a>''')
