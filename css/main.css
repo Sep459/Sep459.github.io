@@ -1325,7 +1325,7 @@ pre .javascript .function {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #3e6cff;
+  background: #29ff45;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
@@ -2960,4 +2960,16 @@ margin-left
 .post-meta a:hover,
 .post-tag a:hover {
   color: #1e90ff !important; /* 可改成你希望的悬停颜色 */
+}
+.archive .post-title-link,
+.archive .post-meta a,
+.archive .post-meta a:visited {
+  color: #036db4 !important; /* 普通颜色，可改为白色或蓝色 */
+  text-decoration: underline; /* 可保留下划线 */
+  font-weight: bold; /* 设置粗体 */
+}
+.archive .post-title-link:hover,
+.archive .post-meta a:hover {
+  color: #e22e28 !important; /* 悬停颜色 */
+  font-weight: bold; /* 悬停也保持粗体 */
 }
