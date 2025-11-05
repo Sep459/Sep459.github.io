@@ -1,69 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>π0 ：A Vision-Language-Action Flow Model for General Robot Control[2024,physical intelligence]</title>
-    <url>/2025/11/04/%CF%800%20%EF%BC%9AA%20Vision-Language-Action%20Flow%20Model%20for%20General%20Robot%20Control%5B2024,physical%20intelligence%5D/</url>
-    <content><![CDATA[<h2 id="π0-：A-Vision-Language-Action-Flow-Model-for-General-Robot-Control-2024-physical-intelligence"><a href="#π0-：A-Vision-Language-Action-Flow-Model-for-General-Robot-Control-2024-physical-intelligence" class="headerlink" title="π0 ：A Vision-Language-Action Flow Model for General Robot Control[2024,physical intelligence]"></a>π0 ：A Vision-Language-Action Flow Model for General Robot Control[2024,physical intelligence]</h2><p><code>非常出名的一个初创公司physical intelligence闭源产品，页面https://physicalintelligence.company/blog/pi0</code></p>
-<img src="/images/a6.jpg" alt="" style="zoom:100%;" />
+    <title>AuDeRe-Automated Strategy Decision and Realization in Robot Planning and Control via LLMs[MIT 202511]</title>
+    <url>/2025/11/01/AuDeRe%20Automated%20Strategy%20Decision%20and%20Realization%20in%20Robot%20Planning%20and%20Control%20via%20LLMs%5BMIT%20202511%5D/</url>
+    <content><![CDATA[<h2 id="AuDeRe-Automated-Strategy-Decision-and-Realization-in-Robot-Planning-and-Control-via-LLMs-MIT-202511"><a href="#AuDeRe-Automated-Strategy-Decision-and-Realization-in-Robot-Planning-and-Control-via-LLMs-MIT-202511" class="headerlink" title="AuDeRe: Automated Strategy Decision and Realization in Robot Planning and Control via LLMs[MIT 202511]"></a>AuDeRe: Automated Strategy Decision and Realization in Robot Planning and Control via LLMs[MIT 202511]</h2><h3 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h3><p>现有的大多数基于 LLM 的机器人研究，要么直接预测轨迹关键点（waypoints），要么在固定的工具集成框架内调用 LLM，从而限制了针对不同任务探索与配置最优解决方案的灵活性。</p>
+<p>在本研究中，提出了一个框架，利用 LLM 根据<strong>任务描述、环境约束以及系统动力学特性</strong>，自动选择合适的<strong>规划与控制策略</strong>。随后，这些策略通过调用底层的通用规划与控制 API 得以执行。</p>
+<p>实验对比简单的轨迹工作，带有时空约束的规划，迷宫导航以及。</p>
+<p>使用prompt，模型自动选择规划以及控制策略，避免了手动调整以及专家知识。</p>
+<h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>模型并不直接生成轨迹或者code，LLM<strong>对任务需求、环境约束以及机器人动力学进行推理分析</strong>，并据此<strong>选择并调用相应的、功能完备的规划与控制应用编程接口（APIs）</strong>，以实现最契合当前任务特性的控制与执行过程。</p>
+<p>作为对比，LLM-predict以及LLM-code直接输出轨迹以及code。</p>
+<ul>
+<li>对比的评价指标：成功率，任务完成度，平均迭代query次数，基于迭代的成功率，不同的误差类别的详细分析。</li>
+</ul>
+<img src="/images/a9.jpg" alt="" style="zoom:100%;" />
 
-<p>模型结构，使用预训练的VLM作为backbone，以及一系列的cross-embodiment 灵巧手操控数据集。在VLM后独立添加了一个action expert，通过flow matching生成连续动作。</p>
-<p>主要考虑数据，通用性以及鲁棒性。实现complex and dexterous tasks。</p>
-<p>解决的三个bottlenecks：数据量的问题，大数据的预训练优势，在小数据时通常不会显示。模型结构以及数据利用率。最后就是训练的recipe，也就是数据配方，强调的是<strong>数据策划（data curation）</strong>的“精细性”和“策略性”。</p>
-<p>动作模型用的流匹配，是diffusion的一种变体。训练流程和文本/图像训练是一样的，预训练然后微调。作者提到，由于数据集里没有错误恢复的数据，因此很难学到这种能力。有两种数据，高质量和低质量的，结合这两种数据可以得到理想的能力（repertoire of recoveries and corrections）。<span id="more"></span> </p>
-<img src="/images/a7.jpg" alt="" style="zoom:100%;" />
+<p>Contribution：</p>
+<ul>
+<li>不直接生成轨迹或者代码，而是利用LLM选择合适的API进行调用，考虑环境约束以及任务细节等。</li>
+<li>不是将LLM融合到某一个算法框架single fixed tool，而是让LLM自主的根据内容，实现automated stategy selection。</li>
+<li>引入了迭代反馈机制，依据performance实现re-prompting。<span id="more"></span> </li>
+</ul>
+<p>任务描述：给定一个自然语言描述的任务，该任务包含了机器人动态，参考轨迹，初始状态，目标区域，环境约束，目标是LLM选择合适的规划和控制算法$A^\Tau\in A,其中A={A_1,A_2,…,A_N}$是一系列API。</p>
+<img src="/images/a10.jpg" alt="" style="zoom:100%;" />
 
-<p><code>Intuitively, the diverse (but lower quality) pre-training data allows the model to recover from mistakes and handle highly varied situations</code></p>
-<p>多视角图像如何处理？一般可能多个特征通过cross 注意力变为一个，或者直接多个token输入给vlm直接处理变长度输入。本文是直接For robots with fewer than three images, we also mask out the missing image slots.用mask处理缺失的视角图像。</p>
-<p>文中虽然说只有68个任务，但不同于将“捡起盘子”，“捡起杯子”视为不同的任务，本文实际的任务场景是很多的。</p>
-<p>输出的动作维度不一样，例如单臂双臂，或者6dof与7dof，做法是取最大的dof，用0补齐动作数据。</p>
-<p>可以利用saycan这样的策略，将粗略的任务指令，分解为更细致的命令。</p>
-<h4 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h4><p>实验有开箱即用的实验结果（只用了粗数据进行预训练，没有后续高质量数据的后训练），以及后训练后在复杂任务上的效果。</p>
-]]></content>
-      <categories>
-        <category>笔记</category>
-      </categories>
-      <tags>
-        <tag>thesis</tag>
-        <tag>VLM</tag>
-        <tag>Note</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Navigation World Models  [Meta 2025]</title>
-    <url>/2025/11/02/Navigation%20World%20Models%20%20%5BMeta%202025%5D/</url>
-    <content><![CDATA[<h2 id="Navigation-World-Models-Meta-2025"><a href="#Navigation-World-Models-Meta-2025" class="headerlink" title="Navigation World Models  [Meta 2025]"></a>Navigation World Models  [Meta 2025]</h2><p><code>Bar A, Zhou G, Tran D, et al. Navigation world models[C]//Proceedings of the Computer Vision and Pattern Recognition Conference. 2025: 15791-15801. </code></p>
-<img src="/images/a1.png" alt="" style="zoom:70%;" />
+<blockquote>
+<p>remark:实际上LLM去调用API不是很简单的事情。要理解API参数以及实现的功能等。理清任务与API的关系。</p>
+</blockquote>
+<img src="/images/a11.png" alt="" style="zoom:80%;" />
 
-<p>文章使用1B的条件扩散Transformer（CDiT），实现的功能为给定图片以及动作序列，预测未来的图像序列。另外可以给定起始点，规划运动轨迹，对最后的结果打分（与goal的差距）。</p>
-<p>CDiT方法计算复杂度与图像数量线性增加。1B情况下也可以稳定训练相比于传统的DiT减小了4X的FLOPs计算。</p>
-<p>本文辅助使用了NoMaD进行导航，该模型是行为克隆训练的扩散模型，另外可以使用temporal distance 目标对目标进行跟踪。也可以在新环境下进行探索。相应的也有其他导航方法例如RL，或者neural slam结合A*/迪杰斯特拉等plannner的方案。</p>
-<p>不同于直接学习策略，NWM的目标是simulate 环境。给定当前状态，预测未来的状态以及对应的reward。<strong>联合学习world model以及policy可以提升数据效率。</strong><span id="more"></span> </p>
-<h4 id="Formulation"><a href="#Formulation" class="headerlink" title="Formulation"></a>Formulation</h4><p>给定图像动作序列D=[x0,a0,x1,a1,…,xT,aT],其中a由两部分组成，a=[u,phi],u是二维向量，前后与左右运动，phi是标量，控制旋转角度。实际上这个状态可以很容易拓展到三维情况。外部的实际输入xt，通过预训练的VAE进行编码得到st，然后结合at去预测下一个s_{t+1}.</p>
-<p>进一步修改方程，引入时间下标k到动作at中a = (u, phi, k),表示预测未来或者过去的第k个状态，而不仅仅是单步。使得模型不仅能学习“动作导致的状态变化”，还能<strong>显式地控制时间跨度和时间方向（向前或向后）</strong>。</p>
-<p>为了防止直接根据时间去预测结果（entanglement of actions and time.），实际采集数据的时候，同一个起点会设置多个目标，收集数据。</p>
-<p>Conditional Diffusion Transformer (CDiT) Block结构如下：复杂度与frame number成线性关系。</p>
-<img src="/images/a2.jpg" alt="" style="zoom:70%;" />
+<p>API包含了一系列，从底层的轨迹跟踪，状态空间离散化到高层的规划都可以实现。总共设计了8个独立的API接口。并且通过模块化设计，具有很好的推广性以及通用性。</p>
+<p>• A⋆ 搜索（astar）[10]：基于图的最优路径规划方法，通过启发式搜索高效地在<strong>离散状态空间</strong>和<strong>障碍物环境</strong>中导航。</p>
+<p>• <strong>交叉熵方法（CEM）[24]<strong>：系统性地探索工作空间，选择性能较优的样本，并通过迭代更新搜索分布逐步</strong>收敛至高质量解</strong>。</p>
+<p>• <strong>基于梯度的优化（grad）</strong>：利用 PyTorch 进行梯度下降与反向传播，实现<strong>可微分动力学与损失函数</strong>的轨迹优化，高效完成端到端可学习控制。</p>
+<p>• <strong>线性二次调节器（LQR）[2]<strong>：针对可线性化的动力系统执行</strong>最优跟踪控制</strong>，通过最小化状态与控制量的二次代价，实现精确的轨迹跟踪。</p>
+<p>• <strong>混合整数线性规划（MILP）</strong>：用于在<strong>高层时序逻辑（STL）约束</strong>下进行鲁棒的轨迹规划，可同时描述空间与时间约束。</p>
+<p>• <strong>模型预测控制（MPC）[8]<strong>：基于 CasADi 实现的预测优化控制方法，在有限预测时域内计算</strong>最优控制与规划解</strong>，支持线性与非线性动力学系统及其约束。</p>
+<p>• <strong>PID 控制（PID）[31]<strong>：实现一种简单而有效的</strong>比例-积分-微分控制策略</strong>，适用于低复杂度的轨迹跟踪或航点跟随任务。</p>
+<p>• <em>*快速扩展随机树（RRT）[14], [13]<em><em>：提供基于随机采样的路径规划方法，可采用标准 RRT 或优化版 RRT</em> 算法，高效搜索</em>*高维或障碍密集空间</em>*中的可行路径。</p>
+<p>一种 <strong>“从自然语言 → 算法选择 → 参数配置 → 代码执行”</strong> 的自动化流程。首先prompt让LLM选择某一个API，之后再去搜索API的详细信息，例如输入输出格式。进一步生成代码以及配置接口，生成可执行代码。</p>
+<p>一个Round分为三个步骤：</p>
+<ul>
+<li>询问使用的API</li>
+</ul>
+<img src="/images/a12.jpg" alt="" style="zoom:80%;" />
 
+<ul>
+<li><p>梳理问题的求解步骤以及后续的python实现</p>
+<img src="/images/a13.jpg" alt="" style="zoom:80%;" /></li>
+<li><p>如果代码失败了，round+1重复咨询。</p>
+</li>
+</ul>
+<img src="/images/a14.jpg" alt="" style="zoom:80%;" />
 
+<h3 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h3><p>考虑五个规划和控制场景，难度逐渐提升。每个场景随机初始化，实验100次得到评价指标。跟踪过程中，mpc被调用，c场景调用了rrt，d场景调用A*以及rrt。所有实验都使用GPT-4o LLM进行推理。最大的迭代次数被限定在6次。</p>
+<img src="/images/a15.jpg" alt="" style="zoom:100%;" />
 
-<p>at先通过正弦编码嵌入到d/3维度，然后拼接，通过mlp之后，k也同样处理到d维度，然后和at部分相加，t也变为d维度。三个d维度向量相加得到condition条件的嵌入向量</p>
-<img src="/images/a3.jpg" alt="" style="zoom:100%;" />
+<p>对比试验</p>
+<ul>
+<li>本文方法 LLM-use-API</li>
+<li>end-to-end LLM-predict</li>
+<li>LLM-code</li>
+</ul>
+<p>评价指标：</p>
+<ul>
+<li>成功率</li>
+<li>成功使用的迭代次数</li>
+<li>随着迭代次数的成功率变化</li>
+<li>误差检测与分类<ul>
+<li><strong>解析错误（Parsing errors）</strong></li>
+<li><strong>语法错误（Syntax errors）</strong></li>
+<li><strong>超时错误（Timeout errors）</strong></li>
+<li><strong>任务失败（Task failures）</strong></li>
+</ul>
+</li>
+</ul>
+<p>左侧是三个模型的成功率，右侧是平均查询次数，<span style="color:green; font-weight:bold;">本文的方法</span>还是占优势的。困难问题其他两个方法很难成功</p>
+<img src="/images/a16.jpg" alt="" style="zoom:100%;" />
 
-<p>该部分之后通过AdaLN生成scale以及shift向量。用于调节layer norm以及attn模块的输出。</p>
-<p>使用CDiT而不是DiT，是因为如果将at部分的信息也一同作为输入给attn，会导致computationally expensive。主要是对于过去帧的处理，如果将过去帧一起放入atten计算，会导致计算量非常大。例如llm里，如果将过去的language token一起放进来，会导致计算增长很快。所以这里即使是</p>
-<p>这里的t随机采样，使得模型可以对不同的加噪声进行denoising。也对扩撒模型进行了改进，预测协方差，用变分下界辅助训练，提高稳定性。</p>
-<p>模型的目标函数是最小化MSE，希望学到去噪过程</p>
-<img src="/images/a4.jpg" alt="" style="zoom:100%;" />
+<p>相同的query次数，本文方法成功率高一些</p>
+<img src="/images/a17.jpg" alt="" style="zoom:100%;" />
 
-<h4 id="Navigation-Planning-with-World-Models"><a href="#Navigation-Planning-with-World-Models" class="headerlink" title="Navigation Planning with World Models"></a>Navigation Planning with World Models</h4><p>如果模型对于环境很熟悉，那么可以simulate导航轨迹并且选择达到目标的那条轨迹。如果说不熟悉环境，长期的planning就需要想象。</p>
-<p>给初始的隐藏状态s0,目标s*，希望找到动作序列（a0,a1,…,aT）。S(sT,s*)表示对于自回归结果的评分（未进行归一化）。另外还有能量函数，最小化能量函数对应最大化感知相似度，并且保证动作和状态的有效性（一些安全约束等）：</p>
-<img src="/images/a5.jpg" alt="" style="zoom:100%;" />
+<p>三个模型不同的失败情况占比。本文方法大部分情况成功，task failure 也比较低。</p>
+<img src="/images/a18.jpg" alt="" style="zoom:100%;" />
 
-<p>第一部分相似度通过预训练的VAE编码进行计算。Avalid可以是“never go left then right”，Ssafe可以是“never explore the edge of the cliff”。优化问题得到的就是动作序列（a0,…,aT）。</p>
-<p>有了目标函数，就可以用CEM方法，去随机采样k条轨迹然后加权得到预测的控制量，然后用Moving horizon方法执行动作。</p>
-<h4 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h4><p>数据集使用：SCAND [30], Tartan-Drive [60], RECON [52], and HuRoN [27]</p>
-<p>对不同的机器人step distance进行归一化处理，除以各自的平均distance。过滤了backward 运动。有些数据集例如Ego4D以及GO Stanford没有label，就是没有前后左右以及转向标签，只有帧数的标签，当作unknown evaluation environment.</p>
-<p>测试标准：一个是轨迹的位置以及角度误差。对于图像的相似度，用LPIPS [76] and DreamSim提取的deep features进行对比。PSNR测量像素级别的相似度。对于image以及视频合成，使用FID [23] and FVD [64]进行衡量数据分布，因为这个时候，我们是完全外推的，不知道真实的对比图像或者视频。</p>
+<h4 id="消融实验"><a href="#消融实验" class="headerlink" title="消融实验"></a>消融实验</h4><p>第一个是比较temperature的影响（温度影响模型输出的随机性）。温度低，输出结果更加deterministic，反之更加具有随机性。发现温度升高，成功率下降，并且query次数增加。</p>
+<img src="/images/a19.jpg" alt="" style="zoom:100%;" />
+
+<p>​    另外还比较了不同的gpt系列对于成功率影响，但是没有很细致的结论。模型并不是越大越好，大模型成功率可能更低而且推理耗时。最后还比较了，只提供一个API信息和直接提供所有API信息的比较结果，发现只提供一个API效果反而更好一点。</p>
 ]]></content>
       <categories>
         <category>笔记</category>
@@ -171,92 +194,69 @@
       </tags>
   </entry>
   <entry>
-    <title>AuDeRe-Automated Strategy Decision and Realization in Robot Planning and Control via LLMs[MIT 202511]</title>
-    <url>/2025/11/01/AuDeRe%20Automated%20Strategy%20Decision%20and%20Realization%20in%20Robot%20Planning%20and%20Control%20via%20LLMs%5BMIT%20202511%5D/</url>
-    <content><![CDATA[<h2 id="AuDeRe-Automated-Strategy-Decision-and-Realization-in-Robot-Planning-and-Control-via-LLMs-MIT-202511"><a href="#AuDeRe-Automated-Strategy-Decision-and-Realization-in-Robot-Planning-and-Control-via-LLMs-MIT-202511" class="headerlink" title="AuDeRe: Automated Strategy Decision and Realization in Robot Planning and Control via LLMs[MIT 202511]"></a>AuDeRe: Automated Strategy Decision and Realization in Robot Planning and Control via LLMs[MIT 202511]</h2><h3 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h3><p>现有的大多数基于 LLM 的机器人研究，要么直接预测轨迹关键点（waypoints），要么在固定的工具集成框架内调用 LLM，从而限制了针对不同任务探索与配置最优解决方案的灵活性。</p>
-<p>在本研究中，提出了一个框架，利用 LLM 根据<strong>任务描述、环境约束以及系统动力学特性</strong>，自动选择合适的<strong>规划与控制策略</strong>。随后，这些策略通过调用底层的通用规划与控制 API 得以执行。</p>
-<p>实验对比简单的轨迹工作，带有时空约束的规划，迷宫导航以及。</p>
-<p>使用prompt，模型自动选择规划以及控制策略，避免了手动调整以及专家知识。</p>
-<h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>模型并不直接生成轨迹或者code，LLM<strong>对任务需求、环境约束以及机器人动力学进行推理分析</strong>，并据此<strong>选择并调用相应的、功能完备的规划与控制应用编程接口（APIs）</strong>，以实现最契合当前任务特性的控制与执行过程。</p>
-<p>作为对比，LLM-predict以及LLM-code直接输出轨迹以及code。</p>
-<ul>
-<li>对比的评价指标：成功率，任务完成度，平均迭代query次数，基于迭代的成功率，不同的误差类别的详细分析。</li>
-</ul>
-<img src="/images/a9.jpg" alt="" style="zoom:100%;" />
+    <title>π0 ：A Vision-Language-Action Flow Model for General Robot Control[2024,physical intelligence]</title>
+    <url>/2025/11/04/%CF%800%20%EF%BC%9AA%20Vision-Language-Action%20Flow%20Model%20for%20General%20Robot%20Control%5B2024,physical%20intelligence%5D/</url>
+    <content><![CDATA[<h2 id="π0-：A-Vision-Language-Action-Flow-Model-for-General-Robot-Control-2024-physical-intelligence"><a href="#π0-：A-Vision-Language-Action-Flow-Model-for-General-Robot-Control-2024-physical-intelligence" class="headerlink" title="π0 ：A Vision-Language-Action Flow Model for General Robot Control[2024,physical intelligence]"></a>π0 ：A Vision-Language-Action Flow Model for General Robot Control[2024,physical intelligence]</h2><p><code>非常出名的一个初创公司physical intelligence闭源产品，页面https://physicalintelligence.company/blog/pi0</code></p>
+<img src="/images/a6.jpg" alt="" style="zoom:100%;" />
 
-<p>Contribution：</p>
-<ul>
-<li>不直接生成轨迹或者代码，而是利用LLM选择合适的API进行调用，考虑环境约束以及任务细节等。</li>
-<li>不是将LLM融合到某一个算法框架single fixed tool，而是让LLM自主的根据内容，实现automated stategy selection。</li>
-<li>引入了迭代反馈机制，依据performance实现re-prompting。<span id="more"></span> </li>
-</ul>
-<p>任务描述：给定一个自然语言描述的任务，该任务包含了机器人动态，参考轨迹，初始状态，目标区域，环境约束，目标是LLM选择合适的规划和控制算法$A^\Tau\in A,其中A={A_1,A_2,…,A_N}$是一系列API。</p>
-<img src="/images/a10.jpg" alt="" style="zoom:100%;" />
+<p>模型结构，使用预训练的VLM作为backbone，以及一系列的cross-embodiment 灵巧手操控数据集。在VLM后独立添加了一个action expert，通过flow matching生成连续动作。</p>
+<p>主要考虑数据，通用性以及鲁棒性。实现complex and dexterous tasks。</p>
+<p>解决的三个bottlenecks：数据量的问题，大数据的预训练优势，在小数据时通常不会显示。模型结构以及数据利用率。最后就是训练的recipe，也就是数据配方，强调的是<strong>数据策划（data curation）</strong>的“精细性”和“策略性”。</p>
+<p>动作模型用的流匹配，是diffusion的一种变体。训练流程和文本/图像训练是一样的，预训练然后微调。作者提到，由于数据集里没有错误恢复的数据，因此很难学到这种能力。有两种数据，高质量和低质量的，结合这两种数据可以得到理想的能力（repertoire of recoveries and corrections）。<span id="more"></span> </p>
+<img src="/images/a7.jpg" alt="" style="zoom:100%;" />
 
-<blockquote>
-<p>remark:实际上LLM去调用API不是很简单的事情。要理解API参数以及实现的功能等。理清任务与API的关系。</p>
-</blockquote>
-<img src="/images/a11.png" alt="" style="zoom:80%;" />
+<p><code>Intuitively, the diverse (but lower quality) pre-training data allows the model to recover from mistakes and handle highly varied situations</code></p>
+<p>多视角图像如何处理？一般可能多个特征通过cross 注意力变为一个，或者直接多个token输入给vlm直接处理变长度输入。本文是直接For robots with fewer than three images, we also mask out the missing image slots.用mask处理缺失的视角图像。</p>
+<p>文中虽然说只有68个任务，但不同于将“捡起盘子”，“捡起杯子”视为不同的任务，本文实际的任务场景是很多的。</p>
+<p>输出的动作维度不一样，例如单臂双臂，或者6dof与7dof，做法是取最大的dof，用0补齐动作数据。</p>
+<p>可以利用saycan这样的策略，将粗略的任务指令，分解为更细致的命令。</p>
+<h4 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h4><p>实验有开箱即用的实验结果（只用了粗数据进行预训练，没有后续高质量数据的后训练），以及后训练后在复杂任务上的效果。</p>
+]]></content>
+      <categories>
+        <category>笔记</category>
+      </categories>
+      <tags>
+        <tag>thesis</tag>
+        <tag>VLM</tag>
+        <tag>Note</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Navigation World Models  [Meta 2025]</title>
+    <url>/2025/11/02/Navigation%20World%20Models%20%20%5BMeta%202025%5D/</url>
+    <content><![CDATA[<h2 id="Navigation-World-Models-Meta-2025"><a href="#Navigation-World-Models-Meta-2025" class="headerlink" title="Navigation World Models  [Meta 2025]"></a>Navigation World Models  [Meta 2025]</h2><p><code>Bar A, Zhou G, Tran D, et al. Navigation world models[C]//Proceedings of the Computer Vision and Pattern Recognition Conference. 2025: 15791-15801. </code></p>
+<img src="/images/a1.png" alt="" style="zoom:70%;" />
 
-<p>API包含了一系列，从底层的轨迹跟踪，状态空间离散化到高层的规划都可以实现。总共设计了8个独立的API接口。并且通过模块化设计，具有很好的推广性以及通用性。</p>
-<p>• A⋆ 搜索（astar）[10]：基于图的最优路径规划方法，通过启发式搜索高效地在<strong>离散状态空间</strong>和<strong>障碍物环境</strong>中导航。</p>
-<p>• <strong>交叉熵方法（CEM）[24]<strong>：系统性地探索工作空间，选择性能较优的样本，并通过迭代更新搜索分布逐步</strong>收敛至高质量解</strong>。</p>
-<p>• <strong>基于梯度的优化（grad）</strong>：利用 PyTorch 进行梯度下降与反向传播，实现<strong>可微分动力学与损失函数</strong>的轨迹优化，高效完成端到端可学习控制。</p>
-<p>• <strong>线性二次调节器（LQR）[2]<strong>：针对可线性化的动力系统执行</strong>最优跟踪控制</strong>，通过最小化状态与控制量的二次代价，实现精确的轨迹跟踪。</p>
-<p>• <strong>混合整数线性规划（MILP）</strong>：用于在<strong>高层时序逻辑（STL）约束</strong>下进行鲁棒的轨迹规划，可同时描述空间与时间约束。</p>
-<p>• <strong>模型预测控制（MPC）[8]<strong>：基于 CasADi 实现的预测优化控制方法，在有限预测时域内计算</strong>最优控制与规划解</strong>，支持线性与非线性动力学系统及其约束。</p>
-<p>• <strong>PID 控制（PID）[31]<strong>：实现一种简单而有效的</strong>比例-积分-微分控制策略</strong>，适用于低复杂度的轨迹跟踪或航点跟随任务。</p>
-<p>• <em>*快速扩展随机树（RRT）[14], [13]<em><em>：提供基于随机采样的路径规划方法，可采用标准 RRT 或优化版 RRT</em> 算法，高效搜索</em>*高维或障碍密集空间</em>*中的可行路径。</p>
-<p>一种 <strong>“从自然语言 → 算法选择 → 参数配置 → 代码执行”</strong> 的自动化流程。首先prompt让LLM选择某一个API，之后再去搜索API的详细信息，例如输入输出格式。进一步生成代码以及配置接口，生成可执行代码。</p>
-<p>一个Round分为三个步骤：</p>
-<ul>
-<li>询问使用的API</li>
-</ul>
-<img src="/images/a12.jpg" alt="" style="zoom:80%;" />
+<p>文章使用1B的条件扩散Transformer（CDiT），实现的功能为给定图片以及动作序列，预测未来的图像序列。另外可以给定起始点，规划运动轨迹，对最后的结果打分（与goal的差距）。</p>
+<p>CDiT方法计算复杂度与图像数量线性增加。1B情况下也可以稳定训练相比于传统的DiT减小了4X的FLOPs计算。</p>
+<p>本文辅助使用了NoMaD进行导航，该模型是行为克隆训练的扩散模型，另外可以使用temporal distance 目标对目标进行跟踪。也可以在新环境下进行探索。相应的也有其他导航方法例如RL，或者neural slam结合A*/迪杰斯特拉等plannner的方案。</p>
+<p>不同于直接学习策略，NWM的目标是simulate 环境。给定当前状态，预测未来的状态以及对应的reward。<strong>联合学习world model以及policy可以提升数据效率。</strong><span id="more"></span> </p>
+<h4 id="Formulation"><a href="#Formulation" class="headerlink" title="Formulation"></a>Formulation</h4><p>给定图像动作序列D=[x0,a0,x1,a1,…,xT,aT],其中a由两部分组成，a=[u,phi],u是二维向量，前后与左右运动，phi是标量，控制旋转角度。实际上这个状态可以很容易拓展到三维情况。外部的实际输入xt，通过预训练的VAE进行编码得到st，然后结合at去预测下一个s_{t+1}.</p>
+<p>进一步修改方程，引入时间下标k到动作at中a = (u, phi, k),表示预测未来或者过去的第k个状态，而不仅仅是单步。使得模型不仅能学习“动作导致的状态变化”，还能<strong>显式地控制时间跨度和时间方向（向前或向后）</strong>。</p>
+<p>为了防止直接根据时间去预测结果（entanglement of actions and time.），实际采集数据的时候，同一个起点会设置多个目标，收集数据。</p>
+<p>Conditional Diffusion Transformer (CDiT) Block结构如下：复杂度与frame number成线性关系。</p>
+<img src="/images/a2.jpg" alt="" style="zoom:70%;" />
 
-<ul>
-<li><p>梳理问题的求解步骤以及后续的python实现</p>
-<img src="/images/a13.jpg" alt="" style="zoom:80%;" /></li>
-<li><p>如果代码失败了，round+1重复咨询。</p>
-</li>
-</ul>
-<img src="/images/a14.jpg" alt="" style="zoom:80%;" />
 
-<h3 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h3><p>考虑五个规划和控制场景，难度逐渐提升。每个场景随机初始化，实验100次得到评价指标。跟踪过程中，mpc被调用，c场景调用了rrt，d场景调用A*以及rrt。所有实验都使用GPT-4o LLM进行推理。最大的迭代次数被限定在6次。</p>
-<img src="/images/a15.jpg" alt="" style="zoom:100%;" />
 
-<p>对比试验</p>
-<ul>
-<li>本文方法 LLM-use-API</li>
-<li>end-to-end LLM-predict</li>
-<li>LLM-code</li>
-</ul>
-<p>评价指标：</p>
-<ul>
-<li>成功率</li>
-<li>成功使用的迭代次数</li>
-<li>随着迭代次数的成功率变化</li>
-<li>误差检测与分类<ul>
-<li><strong>解析错误（Parsing errors）</strong></li>
-<li><strong>语法错误（Syntax errors）</strong></li>
-<li><strong>超时错误（Timeout errors）</strong></li>
-<li><strong>任务失败（Task failures）</strong></li>
-</ul>
-</li>
-</ul>
-<p>左侧是三个模型的成功率，右侧是平均查询次数，<span style="color:green; font-weight:bold;">本文的方法</span>还是占优势的。困难问题其他两个方法很难成功</p>
-<img src="/images/a16.jpg" alt="" style="zoom:100%;" />
+<p>at先通过正弦编码嵌入到d/3维度，然后拼接，通过mlp之后，k也同样处理到d维度，然后和at部分相加，t也变为d维度。三个d维度向量相加得到condition条件的嵌入向量</p>
+<img src="/images/a3.jpg" alt="" style="zoom:100%;" />
 
-<p>相同的query次数，本文方法成功率高一些</p>
-<img src="/images/a17.jpg" alt="" style="zoom:100%;" />
+<p>该部分之后通过AdaLN生成scale以及shift向量。用于调节layer norm以及attn模块的输出。</p>
+<p>使用CDiT而不是DiT，是因为如果将at部分的信息也一同作为输入给attn，会导致computationally expensive。主要是对于过去帧的处理，如果将过去帧一起放入atten计算，会导致计算量非常大。例如llm里，如果将过去的language token一起放进来，会导致计算增长很快。所以这里即使是</p>
+<p>这里的t随机采样，使得模型可以对不同的加噪声进行denoising。也对扩撒模型进行了改进，预测协方差，用变分下界辅助训练，提高稳定性。</p>
+<p>模型的目标函数是最小化MSE，希望学到去噪过程</p>
+<img src="/images/a4.jpg" alt="" style="zoom:100%;" />
 
-<p>三个模型不同的失败情况占比。本文方法大部分情况成功，task failure 也比较低。</p>
-<img src="/images/a18.jpg" alt="" style="zoom:100%;" />
+<h4 id="Navigation-Planning-with-World-Models"><a href="#Navigation-Planning-with-World-Models" class="headerlink" title="Navigation Planning with World Models"></a>Navigation Planning with World Models</h4><p>如果模型对于环境很熟悉，那么可以simulate导航轨迹并且选择达到目标的那条轨迹。如果说不熟悉环境，长期的planning就需要想象。</p>
+<p>给初始的隐藏状态s0,目标s*，希望找到动作序列（a0,a1,…,aT）。S(sT,s*)表示对于自回归结果的评分（未进行归一化）。另外还有能量函数，最小化能量函数对应最大化感知相似度，并且保证动作和状态的有效性（一些安全约束等）：</p>
+<img src="/images/a5.jpg" alt="" style="zoom:100%;" />
 
-<h4 id="消融实验"><a href="#消融实验" class="headerlink" title="消融实验"></a>消融实验</h4><p>第一个是比较temperature的影响（温度影响模型输出的随机性）。温度低，输出结果更加deterministic，反之更加具有随机性。发现温度升高，成功率下降，并且query次数增加。</p>
-<img src="/images/a19.jpg" alt="" style="zoom:100%;" />
-
-<p>​    另外还比较了不同的gpt系列对于成功率影响，但是没有很细致的结论。模型并不是越大越好，大模型成功率可能更低而且推理耗时。最后还比较了，只提供一个API信息和直接提供所有API信息的比较结果，发现只提供一个API效果反而更好一点。</p>
+<p>第一部分相似度通过预训练的VAE编码进行计算。Avalid可以是“never go left then right”，Ssafe可以是“never explore the edge of the cliff”。优化问题得到的就是动作序列（a0,…,aT）。</p>
+<p>有了目标函数，就可以用CEM方法，去随机采样k条轨迹然后加权得到预测的控制量，然后用Moving horizon方法执行动作。</p>
+<h4 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h4><p>数据集使用：SCAND [30], Tartan-Drive [60], RECON [52], and HuRoN [27]</p>
+<p>对不同的机器人step distance进行归一化处理，除以各自的平均distance。过滤了backward 运动。有些数据集例如Ego4D以及GO Stanford没有label，就是没有前后左右以及转向标签，只有帧数的标签，当作unknown evaluation environment.</p>
+<p>测试标准：一个是轨迹的位置以及角度误差。对于图像的相似度，用LPIPS [76] and DreamSim提取的deep features进行对比。PSNR测量像素级别的相似度。对于image以及视频合成，使用FID [23] and FVD [64]进行衡量数据分布，因为这个时候，我们是完全外推的，不知道真实的对比图像或者视频。</p>
 ]]></content>
       <categories>
         <category>笔记</category>
