@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/s5.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/s5.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":{"enable":true,"caption":false},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="[TOC] Why VLA具身智能控制，主要是模仿学习，强化学习，以及VLA。  模仿学习：通过采集的控制轨迹进行训练，学习输入输出映射关系。 需要大量的数据training from scratch，数据获取代价大，尤其是针对机器人方面，需要人为控制得到一轮数据（较NLP与图像标注，代价更高）； 泛化能力不够，由于数据量的限制，模型大小也受限，对应的语义理解，图像理解能力都只在特定的数据集获得较">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Overview of OpenVLA Content">
+<meta property="og:url" content="http://example.com/2025/07/01/20250621-OpenVAL%E8%AE%BA%E6%96%87/index.html">
+<meta property="og:site_name" content="Sep_459&#39;s Blog">
+<meta property="og:description" content="[TOC] Why VLA具身智能控制，主要是模仿学习，强化学习，以及VLA。  模仿学习：通过采集的控制轨迹进行训练，学习输入输出映射关系。 需要大量的数据training from scratch，数据获取代价大，尤其是针对机器人方面，需要人为控制得到一轮数据（较NLP与图像标注，代价更高）； 泛化能力不够，由于数据量的限制，模型大小也受限，对应的语义理解，图像理解能力都只在特定的数据集获得较">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2025/07/01/images/2.png">
+<meta property="og:image" content="http://example.com/2025/07/01/images/2.png">
+<meta property="og:image" content="http://example.com/2025/07/01/20250621-OpenVAL%E8%AE%BA%E6%96%87/.assets/3.png">
+<meta property="og:image" content="http://example.com/2025/07/01/images/2.gif">
+<meta property="og:image" content="http://example.com/2025/07/01/20250621-OpenVAL%E8%AE%BA%E6%96%87/.assets/5.png">
+<meta property="og:image" content="http://example.com/2025/07/01/20250621-OpenVAL%E8%AE%BA%E6%96%87/.assets/4.png">
+<meta property="og:image" content="http://example.com/2025/07/01/20250621-OpenVAL%E8%AE%BA%E6%96%87/.assets/6.png">
+<meta property="og:image" content="http://example.com/2025/07/01/20250621-OpenVAL%E8%AE%BA%E6%96%87/.assets/10.png">
+<meta property="og:image" content="http://example.com/2025/07/01/images/7.png">
+<meta property="og:image" content="http://example.com/2025/07/01/images/8.png">
+<meta property="og:image" content="http://example.com/2025/07/01/20250621-OpenVAL%E8%AE%BA%E6%96%87/.assets/9.png">
+<meta property="og:image" content="http://example.com/2025/07/01/images/1.png">
+<meta property="og:image" content="http://example.com/2025/07/01/images/3.png">
+<meta property="og:image" content="http://example.com/2025/07/01/images/DINO.png">
+<meta property="og:image" content="http://example.com/2025/07/01/images/11.png">
+<meta property="og:image" content="http://example.com/2025/07/01/images/12.png">
+<meta property="og:image" content="http://example.com/2025/07/01/20250621-OpenVAL%E8%AE%BA%E6%96%87/.assets/15.jpeg">
+<meta property="og:image" content="http://example.com/2025/07/01/images/13.png">
+<meta property="og:image" content="http://example.com/2025/07/01/images/14.png">
+<meta property="og:image" content="http://example.com/2025/07/01/images/15.png">
+<meta property="article:published_time" content="2025-07-01T00:23:42.000Z">
+<meta property="article:modified_time" content="2025-11-08T05:38:25.926Z">
+<meta property="article:author" content="Daniel Hu">
+<meta property="article:tag" content="VLA">
+<meta property="article:tag" content="Note">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2025/07/01/images/2.png">
+
+<link rel="canonical" href="http://example.com/2025/07/01/20250621-OpenVAL%E8%AE%BA%E6%96%87/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Overview of OpenVLA Content | Sep_459's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Sep_459's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Welcome to my website</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">16</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">2</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">19</span></a>
+
+  </li>
+        <li class="menu-item menu-item-相册">
+
+    <a href="/gallery/" rel="section"><i class="fa fa-camera fa-fw"></i>相册</a>
+
+  </li>
+        <li class="menu-item menu-item-美食">
+
+    <a href="/food/" rel="section"><i class="fa fa-utensils fa-fw"></i>美食</a>
+
+  </li>
+        <li class="menu-item menu-item-日常">
+
+    <a href="/daily/" rel="section"><i class="fa fa-book fa-fw"></i>日常</a>
+
+  </li>
+        <li class="menu-item menu-item-宠物日常">
+
+    <a href="/pet/" rel="section"><i class="fa fa-paw fa-fw"></i>宠物日常</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/sep459" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/07/01/20250621-OpenVAL%E8%AE%BA%E6%96%87/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/headpotrait.jpg">
+      <meta itemprop="name" content="Daniel Hu">
+      <meta itemprop="description" content="Share Notes & Life">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sep_459's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Overview of OpenVLA Content
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2025-07-01 08:23:42" itemprop="dateCreated datePublished" datetime="2025-07-01T08:23:42+08:00">2025-07-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-11-08 13:38:25" itemprop="dateModified" datetime="2025-11-08T13:38:25+08:00">2025-11-08</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>8.3k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>8 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>[TOC]</p>
+<h3 id="Why-VLA"><a href="#Why-VLA" class="headerlink" title="Why VLA"></a>Why VLA</h3><p>具身智能控制，主要是模仿学习，强化学习，以及VLA。</p>
+<ul>
+<li><strong>模仿学习</strong>：通过采集的控制轨迹进行训练，学习输入输出映射关系。<ul>
+<li>需要大量的数据training from scratch，数据获取代价大，尤其是针对机器人方面，需要人为控制得到一轮数据（较NLP与图像标注，代价更高）；</li>
+<li>泛化能力不够，由于数据量的限制，模型大小也受限，对应的语义理解，图像理解能力都只在特定的数据集获得较高的成绩。导致迁移能力也较弱，对于新任务的学习，开销较大。</li>
+</ul>
+</li>
+<li><strong>强化学习</strong>：强化学习属于控制的另一条路线，主要难点还是在于仿真环境以及奖励的设置。</li>
+<li><strong>VLA(Vision Language Action model)</strong>:更为<strong>端到端</strong>的多模态深度学习模型，综合视觉，语言以及机器人控制信息。旨在利用<strong>外部感知输入</strong>以及控制指令，实现闭环控制。回答问什么是VLA<ul>
+<li><strong>端到端的设计</strong>，结构简单。目前主流的CV或者NLP，都尽量避免其他组件的干扰结构，例如Vit提出之时，即使CNN提取特征保留<strong>局部不变性</strong>，<strong>平移不变性</strong>等归纳偏置可以提升transformer效果，但为了保持结构的一致性，依然只采用纯transformer结构。</li>
+<li><strong>模块化设计</strong>，通过<strong>SigLIP</strong>提取高级的语义信息，<strong>DIno V2</strong> 提取底层的空间信息，LLama大预言模型进行信息的整合。三个组件都基于纯transformer架构，可以依靠CV以及NLP领域的发展，直接提升控制方向的性能。</li>
+<li><strong>自监督学习的趋势</strong>：目前主流的大模型发展下，数据的获取标注代价过大，提升模型的语言理解，图像理解能力依靠监督学习难以进一步提升。VLA中的<strong>DinoV2</strong>以及<strong>SigLIP</strong>都采用自监督的方式，进行文本以及图像的理解。</li>
+<li><strong>便于微调</strong>：采用Internet-scale 数据集预训练好的组件，可以极大地降低训练成本。</li>
+</ul>
+</li>
+</ul>
+<p align="center">
+  <img src="../images/2.png" alt="" width="80%">
+</p>
+
+<h3 id="Motivation-of-OpenVLA"><a href="#Motivation-of-OpenVLA" class="headerlink" title="Motivation of OpenVLA"></a>Motivation of OpenVLA</h3><p>考虑到从头训练困难，由此考虑fine-tune下的控制模型训练。目前VLA模型难点：</p>
+<ul>
+<li>不开源</li>
+<li>针对性比较强，没有考虑new task下的fine-tuning</li>
+</ul>
+<h3 id="Model-structure"><a href="#Model-structure" class="headerlink" title="Model structure"></a>Model structure</h3><p align="center">
+  <img src="../images/2.png" alt="" width="80%">
+</p>
+
+
+<p><strong>主体结构</strong>是<strong>Llama2 7b</strong>模型，然后fuse 从<strong>DinoV2</strong>以及<strong>SigLIP</strong>模型得到的预训练特征。<strong>visiual encoder</strong> = DINIv2+SigLIP;</p>
+<ul>
+<li><p>SigLIP 与CLIP类似，通过图文数据对学习，对齐语言与图像，提供了<strong>language grounding abilities</strong>。自监督学习框架使得transformer获取大数据，并进一步得到超越监督学习性能成为可能。所以SigLIP 提供给LLama2 的，可以理解为<strong>输入图像的语义特征（semantic features）</strong></p>
+<p align="center">
+  <img src=".assets/3.png" alt="" width="60%">
+</p></li>
+<li><p>DinoV2本质上与Vit类似，只是没有针对特定的分类或者检测框架，利用自监督学习图像的特征表示；通过自蒸馏以及图像裁剪的方法训练特征提取网络；DinoV2提供给LLama2 的，可以理解为<strong>图像的空间特征（spatial features）</strong></p>
+</li>
+</ul>
+<p align="center">
+  <img src="../images/2.gif" alt="" width="60%">
+</p>
+
+
+<ul>
+<li><p>输入给LLama2的除了上述两部分信息，还有prompt信息，例如“message=f”What action should the robot take to {instruction.lower()}?”。 通过上述分析，可以发现<strong>SigLIP以及DinoV2提供的图像特征是完全不同的</strong>，其网络的设计出发点也不同，这也解释了为何联合使用会得到更好的效果。二者的联合是有依据的，而不是单纯的堆叠。以往的CNN中特征融合通常是融合浅层纹理特征与深层语义信息，不过此处由于DinoV2的训练规模，已经单个模型便已经提供了足够丰富的空间特征信息。</p>
+</li>
+<li><p>机械臂输出七个维度控制量，虽然图中写作Δ形式，但是文中处理离散化动作得到256个离散动作，似乎输出的就是动作而不是动作的变化量：<br>$$<br>7 ~ \textrm{DoF} \rightarrow (\Delta \textrm{x},\Delta \textrm{y},\Delta \textrm{z}<del>|</del>\Delta  \theta_{x},\Delta  \theta_{y},\Delta  \theta_{z}<del>|</del>\Delta \textrm{Grip})<br>$$</p>
+</li>
+</ul>
+<h3 id="Contributions-of-OpenVLA"><a href="#Contributions-of-OpenVLA" class="headerlink" title="Contributions of OpenVLA"></a>Contributions of OpenVLA</h3><ul>
+<li>发布开源代码以及训练的checkpoint以及调试过程；</li>
+<li>OpenVLA在大数据集<strong>Open X-Embodiment dataset</strong>上预训练，得到了SOTA的控制效果，虽然在一些简单任务上并不是最好的，但是在复杂任务下的泛化能力更好。最后实验表明，相比于其他模型，在绝对任务成功率方面（29个task）。参数少了7倍。对比从零模仿学习的学习的模型，提升更明显。</li>
+<li>在计算效率方面，验证<strong>Lora</strong>方法以及<strong>模型量化（bfloat16&amp;int4）</strong> 方法的有效性，方法虽然不是本文提出的，但是也是第一次得到验证；实现了消费机gpu上的运行，且没有严重影响推理性能；</li>
+<li>消融实验得到的一些额外结论：例如：<ul>
+<li>训练阶段是否冻结visual encoder；    A: No</li>
+<li>是否需要多个epoch？                          A: Yes</li>
+<li>SigLIP融合DinoV2 是否有效？            A:Yes</li>
+<li>大规模机器人数据预训练是否有必要  A :Yes</li>
+<li>高分辨率是否有利于控制 ?                   A:No</li>
+</ul>
+</li>
+</ul>
+<h3 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h3><p>目前的针对视觉和文本的模型，都有很强的迁移能力（CLIP, SigLIP, and Llama 2 ）主要原因是互联网级别的数据量。对于机器人控制而言，这样的数据量太难了,一般是100k-1M级别。这种不均衡性引出了本文思路，用其他大模型作为核心building block去提升控制模型泛化能力。用视觉或者语言大模型辅助实现 robotic representation learning。</p>
+<ul>
+<li><p>OpenVLA 使用了多个<strong>预训练模型组件</strong>：SigLIP 和 DinoV2 视觉编码器，以及 Llama 2 语言模型作为主干。对于这三个模型，它们的权重是公开的，但它们的训练数据和代码并未公开。本文发布了 OpenVLA 的训练数据、代码以及在这些组件基础上的模型权重。组件的训练过程本文其实是不讨论的。</p>
+</li>
+<li><p>使用<strong>更大的Open-X Embodiment 数据集</strong>，并且进行全零数据的剔除清洗，提升数据集的质量；只考虑单臂机械臂，至少有一个第三人称视角的图像数据；并且不同的数据集设置 data misture weights ；</p>
+</li>
+</ul>
+<h4 id="泛化能力对比："><a href="#泛化能力对比：" class="headerlink" title="泛化能力对比："></a>泛化能力对比：</h4><p><strong>视觉泛化</strong>，<strong>运动泛化</strong>，<strong>物理泛化</strong>，<strong>语义泛化</strong>。希望实现开箱即用。</p>
+<p align="center">
+  <img src=".assets/5.png" alt="" width="75%">
+</p>
+正如之前所说，由于大量机器人数据的训练，OpenVLA在大多数任务里都取得了很好的成绩。唯一不占优势的就是Semantic Generallization。
+
+<p>仅仅利用机械臂数据进行<strong>Visually-Conditioned Language Models（VLMs）</strong> 到VLA的微调，而没有进行文本图像的联合调整，故而在一些对比中语义能力不如RT-2-X(55B), 本身本文的7B模型也不算特别大，在语义泛化方面会稍弱一些。在一些实验中，OpenVLA弱于其他模型，更像是LLama本身能力限制导致的。当然，训练过程中只考虑了机械臂数据，而不是Internet pretraining data和机械臂数据联调，也会对语义，图像理解能力有影响。但后者对于训练的难度更大，设置也更复杂。</p>
+<p align="center">
+  <img src=".assets/4.png" alt="" width="80%">
+</p>
+#### Fine-tune能力对比：
+
+<p>微调过程中，每个任务都只有10-150条演示数据。相比于Open X-Embodiment dataset的970K，非常少的数据量。</p>
+<p align="center">
+  <img src=".assets/6.png" alt="" width="80%">
+</p>
+模仿学习的方法（Diffusion Policy）在简单任务里确实取得了较好的效果，不过在复杂任务里效果欠佳，缺少泛化能力；而考虑微调的Octo和OpenVLA泛化能力上取得了不错的效果，虽然简单任务上效果甚至不如模仿学习。Diffusion policy由于用了滑动窗口机制，一次输出可以重复使用很多次，输出更为平滑而且对其求解频率要求也会更低。相比之下Diffusion policy matched由于只预测一次动作，连续性上降低，导致效果变差（作者没有提供相关的视频）。
+
+<p>相比于别的方法，OpenVLA实际上在微调方面优势没有很明显，虽然总体上比较高，但是其他模型也在一些方面有很高的水平。</p>
+<p align="center">
+  <img src=".assets/10.png" alt="" width="90%">
+</p>
+#### Lora模型以及模型量化:
+
+<p>Lora方法不同rank=32与64差别不大，说明权重微调所需的参数实际上并不多。且控制效果上仅降低了1.5%</p>
+<p align="center">
+  <img src="../images/7.png" alt="" width="70%">
+</p>
+
+<p>由于硬件上的优化，bit8效果不是很好，因为求解频率太低了导致控制性能很差。int4和bfloat16都取得了不错的控制效果</p>
+<p align="center">
+  <img src="../images/8.png" alt="" width="80%">
+</p>
+
+<h3 id="Questions"><a href="#Questions" class="headerlink" title="Questions"></a>Questions</h3><ul>
+<li><p>动作空间离散化，虽然文中对于0动作单独进行了处理，但是依然可以看到控制存在抖动，离散化的控制依然存在问题。角度方向对于不同的执行器范围是相同的，但是位置差距会很大，例如xyz方向划分为0-255然后归一化到0-1，但是如果机械臂的体型变化过大，是否会有问题？</p>
+</li>
+<li><p>预测动作采用自回归形式，给定prompt，例如“What should the robot do to {task}? A:”，之后添加BOS进行自回归，构建的数据集类似“What should the robot do to {task}? A:[BOS] 0.1 0.1 0.3 0.2 0.3 0.1 0.7 [EOS]”，但是七个维度的动作本质上不是关联的，用自回归的形式确实方便训练以及代码编写，但是对于推理而言，这种处理不太符合逻辑。</p>
+</li>
+<li><p>OpenVLA中，不像其他一些模型，输入是单张图像，这就导致前后时刻的预测独立，缺乏连续性。挑选了一些比较明显的带有抖动的视频：</p>
+<div style="display: flex; justify-content: center; gap: 5px;">
+  <video src="./../images/base_vlm--flip_pot_upright.mp4" width="75%" poster="" controls></video>
+  <video src="./../images/openvla--put_carrot.mp4" width="75%" poster="" controls></video>
+</div>
+
+<p>大多数时候，本身轨迹是连续的（归纳偏执），其他论文例如目标检测中。</p>
+<ul>
+<li>预处理：模型输入修改为<strong>连续图像序列</strong>，或者保留一段前面控制序列的特征向量信息；</li>
+<li>后处理：例如目标检测中<strong>EKF</strong>或者动量法，去处理视频中目标检测框图抖动问题；</li>
+</ul>
+</li>
+<li><p>实验表现的泛化能力较弱，例如下列两个任务：Bowl 和Plate都是训练集里见过的，Carrot没有见过，就导致最终实验失败。</p>
+<p align="center">
+  <img src=".assets/9.png" alt="" width="80%">
+</p></li>
+</ul>
+<p>  并且实物实验由于成本，时间限制，次数太少，计算的success rate 波动过大，参考价值较纯NLP或者视觉而言，一些指标参考价值较低。</p>
+<ul>
+<li><p>能否如CLIP中所示，简单的设计prompt即可获得较大的提升，“Put eggplant in bowl”，可以分解为，“Move to eggplant”, “lift eggplant”,  “Move to bowl”,  “put eggplant”；类似语言模型prompt处理数学推理时，think step by setp。相比于NLP领域的能力，VLAs有时候即使简单的修改物体的颜色或者抓取物体的种类，就导致完全不一样的结果，泛化能力方面仍然有很大的提升空间。</p>
+<p align="center">
+  <img src="../images/1.png" alt="prompt 工程和 Ensemble 对 Zero-Shot 性能的影响" width="60%">
+</p></li>
+<li><p>如何理解消融实验中的，图像大小的修改，对于控制性能的影响甚微。是因为控制任务相比于图像分割这种像素级别粒度的任务，对于图像的特征精细度要求更低吗？</p>
+</li>
+</ul>
+<h2 id="Appendix"><a href="#Appendix" class="headerlink" title="Appendix"></a>Appendix</h2><h3 id="CLIP与SigLIP"><a href="#CLIP与SigLIP" class="headerlink" title="CLIP与SigLIP"></a>CLIP与SigLIP</h3><p align="center">
+  <img src="../images/3.png" alt="" width="60%">
+</p>
+
+
+
+<p>二者实际上网络结构都一样，区别在于损失函数的设置；CLIP将损失函数视为N个类的多分类交叉熵；二SigMIP视为N个二分类问题。</p>
+<p>学习两个网络，Image encoder以及Text encoder，网络的输出是语言以及图像的特征向量表示，映射到语义空间。目的主要是两个：</p>
+<ul>
+<li>首先是将语言以及图像都进行投影，投影到语义空间中；</li>
+<li>其次，对齐语言与图像，在特征空间中对齐二者之间的投影距离。越接近说明图像和文本越相似；</li>
+</ul>
+<p>所以最终的两个网络的输出都是一个向量，图像encoder不一定要用transformer，也可以是resnet之类的cnn网络，作者都进行了对比，但主流的方向还是统一结构，用transformer进行所有任务特征提取以及表示。</p>
+<h3 id="DINO-ICCV-2021-FacebookAI-amp-DINOv2"><a href="#DINO-ICCV-2021-FacebookAI-amp-DINOv2" class="headerlink" title="DINO [ICCV 2021 FacebookAI] &amp; DINOv2"></a>DINO [ICCV 2021 FacebookAI] &amp; DINOv2</h3><blockquote>
+<p>paper: <a target="_blank" rel="noopener" href="https://openaccess.thecvf.com/content/ICCV2021/papers/Caron_Emerging_Properties_in_Self-Supervised_Vision_Transformers_ICCV_2021_paper.pdf">Emerging Properties in Self-Supervised Vision Transformers</a></p>
+</blockquote>
+<p>从DINO的名字出发—— <strong>self-DIstillation with NO labels</strong>，我们可以得出 DINO是属于 <strong>无监督自蒸馏[^1]学习范式</strong> 的。Facebook 团队（现 meta AI)旨在探索<strong>基于transformer架构的视觉自监督模型来提取通用视觉特征</strong>。从最后实验结果上来说，<strong>DINO提取器确实优于 传统的CNN架构提取器，如 ResNet</strong>。</p>
+<hr>
+<p>DINO的模型架构如下图所示：</p>
+<p align="center">
+  <img src="../images/DINO.png" alt="" width="60%">
+</p>
+
+
+<ul>
+<li>输入同一张图片x，经过不同的数据增强手段（颜色扰动、高斯模糊、曝光、裁剪）等方式得到了 x1 , x2 。分别喂入到 学生模型和教师模型当中<ul>
+<li>裁剪有两种方式：局部裁剪，即裁剪的面积 小于 原始图像的 50% + 全局裁剪，即裁剪的面积大于原始图像50%</li>
+<li>学生模型接受 所有的增强。旨在鼓励 从 局部到全局的响应中，学生模型能从一个小的裁剪画面中推断出更广泛的上下文信息</li>
+<li>教师模型只接受 全局裁剪的信息</li>
+</ul>
+</li>
+<li>同时 为了避免模式崩溃问题，引入了 动量教师模型 以及 centering &amp; sharpening 这些trick<ul>
+<li>模式崩溃（mode collapse）问题：当教师模型和学生模型输出相同的 embedding // 分类信息时，此时 他们俩学习到的模型特征趋于一致，而此时在反向传播分类误差时，模型会偷懒只针对这几种数据特征进行学习，即 不关注了 数据分布的多样性，影响了模型的鲁棒性和泛化性。更学术的定义为 <strong>网络的学习过程中出现了多样性减少的现象。具体来说，当网络学习到一组特征表示时，往往会出现多个输入数据映射到相同的特征表示的情况，这就是所谓的模式崩塌。</strong></li>
+<li>所以 为了 防止 教师模型和学生模型沆瀣一气，引入了动量教师模型。具体来说就是，分类误差只在学生模型上反向传播，然后更新的权重 通过指数移动平均的方式 更新给 教师模型。这种方式的好处在于 教师模型能够 更好的关注 数据的整体分布（毕竟以往的学习到的数据分布还没有忘记）。</li>
+<li>其次 centering &amp; sharpening 的 trick，都是为了有效防止 模式崩溃<ul>
+<li>centering 类似 bn类似的归一化： 将教师模型的输出先经过EMA操作，然后减去 原始的输出 即 （ output -= EMA(output) ) , 数学意义上来说，将 输出的值 避免 陷入 softmax的饱和区，即 防止任何一种特征占据统治地位</li>
+<li>sharpening 其实 就是 在 softmax上引入了 temperature 系数，来强制模型将概率分布变得差异化。上一步的模型输出 经过 类似于 标准化的处理，那么本身数值将会缩小，那么 ，将会放大这些小差异，可以进一步引导学生模型了解哪些特征需要进一步强化。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>本身因为是 自蒸馏的范式，也就是其实 教师模型和学生模型是 同一个模型，论文也探究过 多种设置教师模型的方式：1。 直接copy学生模型当前的权重 ； 2. copy 上一个iteration的学生模型的权重；3. copy 上一个epoch的学生模型的权重；3. EMA方式动态更新教师模型的权重</li>
+</ul>
+<h3 id="Denoise-Diffusion-Probabilistic-Models-Berkeley-2020"><a href="#Denoise-Diffusion-Probabilistic-Models-Berkeley-2020" class="headerlink" title="Denoise Diffusion Probabilistic Models [Berkeley 2020]"></a>Denoise Diffusion Probabilistic Models [Berkeley 2020]</h3><blockquote>
+<p>Paper: <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2006.11239">Denoising Diffusion Probabilistic Models</a></p>
+<p>Reference Blog: <a target="_blank" rel="noopener" href="https://divertingpan.github.io/post/understanding_diffusion_models/">从统一的视角理解扩散模型 | 老潘家的潘老师</a></p>
+</blockquote>
+<p>我这里并不涉及具体的数学推导，旨在 以感性的角度深入理解DDPM，从而解密 DDPM是后续文生图类扩散模型框架的基石 的强大能力。</p>
+<p>那么，首先从生成模型开始聊聊。给定一个真实的数据分布$p(x)$，我们从中采样了很多样本$X={x_i}_{i=1}^{N}$，那么生成模型就是从这些样本$X$中，去拟合这个真实分布$p(x)$。那么，一旦学到了这个分布，我们就可以利用这个近似的模型来生成我们想要的新的样本。</p>
+<p>当我第一次看GAN时，接触到了 **latent space(隐空间) // latent variable $z$ (隐变量) // latent representation(隐表示) **等等概念，这些其实就是 生成模型如何去拟合真实分布$p(x)$的关键视角。一个直观的例子是 <strong>柏拉图的洞穴（Allegory of the cave)</strong></p>
+<h3 id="Deit"><a href="#Deit" class="headerlink" title="Deit"></a>Deit</h3><p>Deit本身也是一个VIT模型，但希望用更少的计算量实现类似的效果。VIT原始使用JFT300 （3亿张图片）,而Deit使用ImageNet进行监督学习。</p>
+<p align="center">
+  <img src="../images/11.png" alt="prompt 工程和 Ensemble 对 Zero-Shot 性能的影响" width="80%">
+</p>
+
+<p>首先训练一个teacher模型，比如cnn结构的。</p>
+<p align="center">
+  <img src="../images/12.png" alt="prompt 工程和 Ensemble 对 Zero-Shot 性能的影响" width="50%">
+</p>
+
+
+<p>进一步依靠自蒸馏的方法进行训练，本质上和提出自蒸馏的论文没有什么不一样。损失分为两部分，token预测损失以及与teacher输出label的交叉熵损失。由于教师模型输出不是one hot，实际上提供了更加丰富的信息，学习教师模型不容易过拟合。例如除了概率最高的那一维度输出，第二高的维度可能也有很高的概率，就说明这两个维度实际上有比较强的相关性。</p>
+<h3 id="Chain-of-thought"><a href="#Chain-of-thought" class="headerlink" title="Chain of thought"></a>Chain of thought</h3><p>思维链更多的是一种思想，例如用户在prompt中修改提示词即可获得更好的模型输出</p>
+<ul>
+<li>Q1:证明XXX;</li>
+<li>Q2: 先给一个类似的例子。证明XXX；</li>
+</ul>
+<p>相比于Q1，Q2通过更合适的prompt，可以使得模型输出更准确，其他的可以是prompt中添加“Think step by step”。这一点在训练的时候也可以提升效果，给出回答的模版，让模型依据模版进行回答。</p>
+<h3 id="GPT"><a href="#GPT" class="headerlink" title="GPT"></a>GPT</h3><blockquote>
+<p>参考链接：<a target="_blank" rel="noopener" href="https://paddlepedia.readthedocs.io/en/latest/tutorials/pretrain_model/GPT.html">GPT — PaddleEdu documentation</a></p>
+</blockquote>
+<p align="center">
+  <img src=".assets/15.jpeg" alt="prompt 工程和 Ensemble 对 Zero-Shot 性能的影响" width="60%">
+</p>
+这里去掉了中间的交叉注意力机制，Decoder only与Encoder  only结构区别，在于多头注意力中，有没有用Masked，GPT的注意力实际上只关注之前的单词，对于后续的单词是没有办法注意到的，这种做法有好有坏。Bert这样的Encoder only结构，注意力中是具有全局注意力的。这也是最主要的差别。
+
+<h3 id="Bert"><a href="#Bert" class="headerlink" title="Bert"></a>Bert</h3><blockquote>
+<p>参考链接：<a target="_blank" rel="noopener" href="https://paddlepedia.readthedocs.io/en/latest/tutorials/pretrain_model/bert.html">BERT — PaddleEdu documentation</a>，<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/403495863">读懂BERT，看这一篇就够了 - 知乎</a></p>
+</blockquote>
+<p>Bert为Encoder only模型，输入结构没有任何变化，主要是输入输出以及代价函数的设置。</p>
+<p>输入为两个句子，中间用[SEP]分隔开，为了说明是两个句子，加入额外的embedding，也就是一个句子全1，一个句子全0，用于提供先验句子信息。添加MASK随机将单词替换为MASK，或者替换为别的任意单词，提高“完形填空”的能力。</p>
+<p align="center">
+  <img src="../images/13.png" alt="prompt 工程和 Ensemble 对 Zero-Shot 性能的影响" width="80%">
+</p>
+
+<p align="center">
+  <img src="../images/14.png" alt="prompt 工程和 Ensemble 对 Zero-Shot 性能的影响" width="80%">
+</p>
+
+
+
+<p>预训练过程如下，损失有两部分组成，一个是预测MASK掉的单词（MLM：Masked Language Model），依据概率分布，与GPT类似。另一个损失是完成NSP任务（NSP：Next setence prediction）</p>
+<p align="center">
+  <img src="../images/15.png" alt="prompt 工程和 Ensemble 对 Zero-Shot 性能的影响" width="80%">
+</p>
+
+
+
+<p>但实际上NSP损失影响不大，在后续的改进中去掉了这一部分，而且对于MASK的预测，如果两个句子无关，用一个句子去预测另一个句子的MASK实际上没有帮助，个人觉得这种结构理在直观理解上上会差一些。</p>
+<h3 id="OpenVLA与Coto，RT-X-2"><a href="#OpenVLA与Coto，RT-X-2" class="headerlink" title="OpenVLA与Coto，RT-X-2"></a>OpenVLA与Coto，RT-X-2</h3><p><strong>Visually-Conditioned Language Models</strong> （VLMs）：模型架构能够将预训练视觉编码器（如 SigLIP、DinoV2）与预训练语言模型（如 Llama、LLM 系列）的特征连接起来，直接借助计算机视觉和自然语言处理领域的进步，构建出强大的多模态模型。新的开源 VLMs 采用一种更简单的“<strong>patch-as-token</strong>”方法。将预训练视觉 Transformer 提取的图像块（patch）特征直接视为语言模型中的“token”，然后将其投影到语言模型的输入空间中，实现视觉与语言的融合处理。两步骤，而不是两个模型交叉注意力去融合信息。</p>
+<p>本文的VLMs参考Karamcheti，融合了来自 DINOv2 的低级空间信息和来自 SigLIP 的高级语义信息</p>
+<p><strong>Generalist Robot Policies</strong>:本文的方法架构和Notably, Octo等不一样，他们给定了训练好的视觉和语言模型，考虑从头训练网络学习如何“拼接”这两个模型。</p>
+<p>本文的方法相比之下更为端到端，<strong>将机器人动作视为语言模型词汇表中的 token</strong></p>
+<p>**Vision-Language-Action Models **：VLMs微调得到VLAs，一方面可以利用大量大模型信息。另一方面，无需特地为控制提出的架构。最后，可以在未来依靠VLMs的进步，提高控制性能。</p>
+<p>比RT-2-X 以及r state-of-the-art VLA,提升了16%。29个任务，机器人平台用的是 WidowX &amp; Google Robot embodiments。高效微调讨论了7种情况，比如擦桌子，抓放。和其他微调模型相比，比如Octo，本文的也更好。与从头训练的模型相比，</p>
+<h2 id="Annotation"><a href="#Annotation" class="headerlink" title="Annotation"></a>Annotation</h2><p>[^1]: 教师模型和学生模型都是同一个模型，自己教自己学习，故而称之为 自蒸馏</p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Daniel Hu
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://example.com/2025/07/01/20250621-OpenVAL%E8%AE%BA%E6%96%87/" title="Overview of OpenVLA Content">http://example.com/2025/07/01/20250621-OpenVAL论文/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/VLA/" rel="tag"><i class="fa fa-tag"></i> VLA</a>
+              <a href="/tags/Note/" rel="tag"><i class="fa fa-tag"></i> Note</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/07/01/Difussion%20Model%20-Lil's%20blog/" rel="prev" title="Overview of Diffusion Models">
+      <i class="fa fa-chevron-left"></i> Overview of Diffusion Models
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2025/07/06/20250624-ChatVLA%20%E8%AE%BA%E6%96%87/" rel="next" title="Overview of ChatVLA Content">
+      Overview of ChatVLA Content <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Why-VLA"><span class="nav-number">1.</span> <span class="nav-text">Why VLA</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Motivation-of-OpenVLA"><span class="nav-number">2.</span> <span class="nav-text">Motivation of OpenVLA</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Model-structure"><span class="nav-number">3.</span> <span class="nav-text">Model structure</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Contributions-of-OpenVLA"><span class="nav-number">4.</span> <span class="nav-text">Contributions of OpenVLA</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Experiments"><span class="nav-number">5.</span> <span class="nav-text">Experiments</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B3%9B%E5%8C%96%E8%83%BD%E5%8A%9B%E5%AF%B9%E6%AF%94%EF%BC%9A"><span class="nav-number">5.1.</span> <span class="nav-text">泛化能力对比：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Questions"><span class="nav-number">6.</span> <span class="nav-text">Questions</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Appendix"><span class="nav-number"></span> <span class="nav-text">Appendix</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CLIP%E4%B8%8ESigLIP"><span class="nav-number">1.</span> <span class="nav-text">CLIP与SigLIP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DINO-ICCV-2021-FacebookAI-amp-DINOv2"><span class="nav-number">2.</span> <span class="nav-text">DINO [ICCV 2021 FacebookAI] &amp; DINOv2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Denoise-Diffusion-Probabilistic-Models-Berkeley-2020"><span class="nav-number">3.</span> <span class="nav-text">Denoise Diffusion Probabilistic Models [Berkeley 2020]</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Deit"><span class="nav-number">4.</span> <span class="nav-text">Deit</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Chain-of-thought"><span class="nav-number">5.</span> <span class="nav-text">Chain of thought</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GPT"><span class="nav-number">6.</span> <span class="nav-text">GPT</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Bert"><span class="nav-number">7.</span> <span class="nav-text">Bert</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#OpenVLA%E4%B8%8ECoto%EF%BC%8CRT-X-2"><span class="nav-number">8.</span> <span class="nav-text">OpenVLA与Coto，RT-X-2</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Annotation"><span class="nav-number"></span> <span class="nav-text">Annotation</span></a></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Daniel Hu"
+      src="/images/headpotrait.jpg">
+  <p class="site-author-name" itemprop="name">Daniel Hu</p>
+  <div class="site-description" itemprop="description">Share Notes & Life</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">19</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/sep459" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;sep459" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Daniel Hu</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">141k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">2:09</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共85.2k字</span>
+  <span class="post-meta-divider">|</span>
+  本站总访问量<span id="busuanzi_value_site_pv"></span>次
+  <span class="post-meta-divider">|</span>
+  本站访客数<span id="busuanzi_value_site_uv"></span>人次
+  <span class="post-meta-divider">|</span>
+  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

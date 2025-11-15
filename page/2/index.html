@@ -1,0 +1,2146 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/s5.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/s5.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":{"enable":true,"caption":false},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Share Notes &amp; Life">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Sep_459&#39;s Blog">
+<meta property="og:url" content="http://example.com/page/2/index.html">
+<meta property="og:site_name" content="Sep_459&#39;s Blog">
+<meta property="og:description" content="Share Notes &amp; Life">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:author" content="Daniel Hu">
+<meta property="article:tag" content="Computer Vision, Embodiment intelligence, LLM,MLA, photograph">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/page/2/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : true,
+    isPost : false,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Sep_459's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Sep_459's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Welcome to my website</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">16</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">2</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">19</span></a>
+
+  </li>
+        <li class="menu-item menu-item-相册">
+
+    <a href="/gallery/" rel="section"><i class="fa fa-camera fa-fw"></i>相册</a>
+
+  </li>
+        <li class="menu-item menu-item-美食">
+
+    <a href="/food/" rel="section"><i class="fa fa-utensils fa-fw"></i>美食</a>
+
+  </li>
+        <li class="menu-item menu-item-日常">
+
+    <a href="/daily/" rel="section"><i class="fa fa-book fa-fw"></i>日常</a>
+
+  </li>
+        <li class="menu-item menu-item-宠物日常">
+
+    <a href="/pet/" rel="section"><i class="fa fa-paw fa-fw"></i>宠物日常</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/sep459" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content index posts-expand">
+            
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/11/06/Reasoning%20with%20Language%20Model%20is%20Planning%20withWorld%20Model/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/headpotrait.jpg">
+      <meta itemprop="name" content="Daniel Hu">
+      <meta itemprop="description" content="Share Notes & Life">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sep_459's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/11/06/Reasoning%20with%20Language%20Model%20is%20Planning%20withWorld%20Model/" class="post-title-link" itemprop="url">Reasoning with Language Model is Planning withWorld Model[UC San Diego,University of Florida,202310]</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2025-11-06 23:23:42" itemprop="dateCreated datePublished" datetime="2025-11-06T23:23:42+08:00">2025-11-06</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-11-07 14:35:28" itemprop="dateModified" datetime="2025-11-07T14:35:28+08:00">2025-11-07</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>366</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>LLM结合CoT方法，可以实现很强的推理能力。但是对于复杂环境下的动作预测以及复杂的数学推理，依然存在不足。根本原因是缺少<strong>internal world model</strong>用于预测world state。为了解决这个问题，提出了新的LLM推理框架，称为<strong>RAP：Reasoning via Planning</strong>。RAP 将大语言模型（LLM）重新用于<strong>世界模型</strong>和<strong>推理代理（reasoning agent）两种角色，并引入一种基于蒙特卡洛树搜索（Monte Carlo Tree Search, MCTS）的系统化规划算法，用于在庞大的推理空间中进行策略性探索</strong>。</p>
+<p>在推理过程中，LLM（作为代理）在LLM（作为世界模型）和奖励信号的指导下，<strong>逐步构建推理树</strong>，并通过在探索与利用（exploration vs. exploitation）之间取得平衡，<strong>高效地找到高奖励的推理路径</strong>。</p>
+<img src="../images/a.jpg" alt="" style="zoom:100%;" />
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/11/06/Reasoning%20with%20Language%20Model%20is%20Planning%20withWorld%20Model/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/11/01/AuDeRe%20Automated%20Strategy%20Decision%20and%20Realization%20in%20Robot%20Planning%20and%20Control%20via%20LLMs[MIT%20202511]/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/headpotrait.jpg">
+      <meta itemprop="name" content="Daniel Hu">
+      <meta itemprop="description" content="Share Notes & Life">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sep_459's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/11/01/AuDeRe%20Automated%20Strategy%20Decision%20and%20Realization%20in%20Robot%20Planning%20and%20Control%20via%20LLMs%5BMIT%20202511%5D/" class="post-title-link" itemprop="url">AuDeRe-Automated Strategy Decision and Realization in Robot Planning and Control via LLMs[MIT 202511]</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2025-11-01 08:23:42" itemprop="dateCreated datePublished" datetime="2025-11-01T08:23:42+08:00">2025-11-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-11-04 21:57:43" itemprop="dateModified" datetime="2025-11-04T21:57:43+08:00">2025-11-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="AuDeRe-Automated-Strategy-Decision-and-Realization-in-Robot-Planning-and-Control-via-LLMs-MIT-202511"><a href="#AuDeRe-Automated-Strategy-Decision-and-Realization-in-Robot-Planning-and-Control-via-LLMs-MIT-202511" class="headerlink" title="AuDeRe: Automated Strategy Decision and Realization in Robot Planning and Control via LLMs[MIT 202511]"></a>AuDeRe: Automated Strategy Decision and Realization in Robot Planning and Control via LLMs[MIT 202511]</h2><h3 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h3><p>现有的大多数基于 LLM 的机器人研究，要么直接预测轨迹关键点（waypoints），要么在固定的工具集成框架内调用 LLM，从而限制了针对不同任务探索与配置最优解决方案的灵活性。</p>
+<p>在本研究中，提出了一个框架，利用 LLM 根据<strong>任务描述、环境约束以及系统动力学特性</strong>，自动选择合适的<strong>规划与控制策略</strong>。随后，这些策略通过调用底层的通用规划与控制 API 得以执行。</p>
+<p>实验对比简单的轨迹工作，带有时空约束的规划，迷宫导航以及。</p>
+<p>使用prompt，模型自动选择规划以及控制策略，避免了手动调整以及专家知识。</p>
+<h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>模型并不直接生成轨迹或者code，LLM<strong>对任务需求、环境约束以及机器人动力学进行推理分析</strong>，并据此<strong>选择并调用相应的、功能完备的规划与控制应用编程接口（APIs）</strong>，以实现最契合当前任务特性的控制与执行过程。</p>
+<p>作为对比，LLM-predict以及LLM-code直接输出轨迹以及code。</p>
+<ul>
+<li>对比的评价指标：成功率，任务完成度，平均迭代query次数，基于迭代的成功率，不同的误差类别的详细分析。</li>
+</ul>
+<img src="/images/a9.jpg" alt="" style="zoom:100%;" />
+
+<p>Contribution：</p>
+<ul>
+<li>不直接生成轨迹或者代码，而是利用LLM选择合适的API进行调用，考虑环境约束以及任务细节等。</li>
+<li>不是将LLM融合到某一个算法框架single fixed tool，而是让LLM自主的根据内容，实现automated stategy selection。</li>
+<li>引入了迭代反馈机制，依据performance实现re-prompting。
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/11/01/AuDeRe%20Automated%20Strategy%20Decision%20and%20Realization%20in%20Robot%20Planning%20and%20Control%20via%20LLMs%5BMIT%20202511%5D/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/07/27/20250727-%E6%89%8B%E5%A4%B4%E5%8D%8F%E5%90%8C%E8%AE%BA%E6%96%87%E8%B0%83%E7%A0%94/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/headpotrait.jpg">
+      <meta itemprop="name" content="Daniel Hu">
+      <meta itemprop="description" content="Share Notes & Life">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sep_459's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/07/27/20250727-%E6%89%8B%E5%A4%B4%E5%8D%8F%E5%90%8C%E8%AE%BA%E6%96%87%E8%B0%83%E7%A0%94/" class="post-title-link" itemprop="url">Overview of 手-头协同</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2025-07-27 19:23:42" itemprop="dateCreated datePublished" datetime="2025-07-27T19:23:42+08:00">2025-07-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-11-08 13:28:16" itemprop="dateModified" datetime="2025-11-08T13:28:16+08:00">2025-11-08</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>7.5k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>7 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>[TOC]</p>
+<h2 id="调研内容"><a href="#调研内容" class="headerlink" title="调研内容"></a>调研内容</h2><p>论文调研，关注手-头协同。</p>
+<ul>
+<li>如何收集协同数据</li>
+<li>如何使用协同数据</li>
+</ul>
+<h2 id="参考论文"><a href="#参考论文" class="headerlink" title="参考论文"></a>参考论文</h2><ul>
+<li><p>ViA</p>
+</li>
+<li><p>open-television:Teleoperation with immersive active visual feedback</p>
+</li>
+<li><p>human2huanoid：ICRA 2024  <strong>“Learning Human‑to‑Humanoid Real‑Time Whole‑Body Teleoperation</strong></p>
+<blockquote>
+<p>项目地址：<a target="_blank" rel="noopener" href="https://human2humanoid.com/?utm_source=chatgpt.com">Learning Human-to-Humanoid Real-Time Whole-Body Teleoperation</a></p>
+</blockquote>
+</li>
+<li><p>HOME</p>
+</li>
+<li><p>CLONE: Closed‑Loop Whole‑Body Humanoid Teleoperation for Long‑Horizon Tasks </p>
+</li>
+<li><p>Moma-teleop: Whole-Body Teleoperation for Mobile Manipulation at Zero Added Cost</p>
+</li>
+<li><p>ViTaceFormer: Learning Cross-Modal Representation for Visuo-Tactile Dexterous Manipulation</p>
+</li>
+<li><p>Mobile-television: Predictive motion priors for humanoid whole-body control。是open-televison的二代论文</p>
+</li>
+</ul>
+<h2 id="Learning-Human‑to‑Humanoid-Real‑Time-Whole‑Body-Teleoperation"><a href="#Learning-Human‑to‑Humanoid-Real‑Time-Whole‑Body-Teleoperation" class="headerlink" title="Learning Human‑to‑Humanoid Real‑Time Whole‑Body Teleoperation"></a>Learning Human‑to‑Humanoid Real‑Time Whole‑Body Teleoperation</h2><p>这篇论文主要是讲高效数据采集的，不是聚焦手眼协同控制。</p>
+<h2 id="Mobile-TeleVision-Predictive-Motion-Priors-for-Humanoid-Whole-Body-Control"><a href="#Mobile-TeleVision-Predictive-Motion-Priors-for-Humanoid-Whole-Body-Control" class="headerlink" title="Mobile-TeleVision: Predictive Motion Priors for Humanoid Whole-Body Control"></a><strong>Mobile-TeleVision: Predictive Motion Priors for</strong> <strong>Humanoid Whole-Body Control</strong></h2><p><strong>出发点：</strong>强化学习直接控制，精度略显不足。本文将人形机器人的上下部分控制解耦，上半身用逆运动学+运动重定向，下半身用RL学习。引入PMP（预测运动先验），使用条件变分自动编码器（CVAE）进行训练，以有效地表示上半身运动。然后在上半身训练的基础上，学习下半身的运动策略，确保运动时候的鲁棒性。</p>
+<p>训练的目的，是为了后续遥控机器人，探索环境执行任务，同时也是收集数据。</p>
+<h3 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h3><p>作者认为，上半身主要负责精细操控，例如arm。下半身主要复杂捕获常见的运动范围，维持平衡。</p>
+<p>RL方式的缺点：RL policy is also not well-suited for high DoF positional and orientation control，并且具有随机性。因此，作者引出，控制手臂也腿需要不同的机制。</p>
+<p>上半身无需考虑平衡问题，因此可以直接逆运动学计算控制信号。下半身的RL训练，就不考虑上半身控制维度，降低了训练代价。前文也有讨论，完全解耦会导致运动不稳定，因为失去了交互能力。</p>
+<p>本文在此基础上，虽然解耦上下部分，但想办法将两部分结合起来。简单来说，上半身简单的用逆运动学控制，然后训练一个条件变分自编码器，输入是上半身的过去几个时间点的动作轨迹，输出是上半身之后的运动轨迹预测，将其编码输入给下半身的RL，也就是变相的将上半身的运动轨迹作为条件，输入给下半身，下半身通过RL实现平衡。最主要的就是中间的<strong>CVAE</strong>部分，其作用就是<strong>表示学习</strong>，预测未来的上半身运动轨迹</p>
+<p align="center">
+  <img src="../images/31.png" alt="" width="100%">
+</p>
+
+<h3 id="三阶段训练："><a href="#三阶段训练：" class="headerlink" title="三阶段训练："></a><strong>三阶段训练：</strong></h3><ul>
+<li>第一阶段：数据转化，得到每个执行器的joint angle数据，数据过滤。</li>
+<li>第二阶段训练上半身的模型，自回归预测未来的上半身action，运动重定向。这部分用逆运动学或者其他模仿学习都可以实现。</li>
+<li>训练下半身的控制策略，RL训练。输入是控制指令，自回归预测的上半身模型运动序列，以及其他的感知信号（例如上一时刻的下半身action，时间步长等）。此时会使用课程学习，上半身有一个参数$\alpha \in [0,1]$，让参数有小到大，这样子上半身运动幅度由小到大，训练难度逐渐增加。等于0的时候，上半身手臂相当于维持在初始点。</li>
+</ul>
+<h3 id="实验设置"><a href="#实验设置" class="headerlink" title="实验设置"></a>实验设置</h3><p>使用宇树机器人与Fourier GR-1 robot。</p>
+<p>讨论内容：</p>
+<ul>
+<li>与其他方法比，本文的解耦方法上半身表现（用的是仿真）</li>
+<li>disturbance下的稳定性</li>
+<li>实际环境下，上下身结合的性能。</li>
+</ul>
+<p>摇杆方法：</p>
+<ul>
+<li><p>颈部与手部的运动，是用Apple Vision Pro 追踪得到的。然后数据经过逆向运动学以及动作重定向，转化为机器人关节角度。vr显示的就是机器人实时拍摄的画面。这里比较重要的是，Apple Vision Pro 得到的到底有哪些数据。头部的位置以及四元数，还计算了手部（等效终端执行器）的位置，所以本文这里就没有采用额外的辅助机械臂（不同于ViA的方法），去收集手臂数据。</p>
+</li>
+<li><p>下半身用两种方式：</p>
+<ul>
+<li><p><strong>分离控制</strong>：一名操作员使用 VR 头显控制上半身，另一名操作员使用带摇杆的遥控器控制下半身。</p>
+</li>
+<li><p><strong>统一控制</strong>：由单个用户同时控制上半身和下半身，其中上半身通过 VR 头显控制，下半身通过踏板控制。全部操作单人完成。效果如下所示：</p>
+<p align="center">
+  <img src="../images/40.png" alt="" width="90%">
+</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>为什么用苹果的VR设备：</strong></p>
+<p align="center">
+  <img src="../images/48.png" alt="" width="90%">
+</p>
+
+
+<p>苹果的ARKit提供了很多sdk，vr设备可以直接输出头部以及手部的位置以及手部的姿态。有些基于rgb深度的三维场景重构，应该也是利用了官方提供的接口进行渲染。</p>
+<h2 id="Vision-in-Action-Learning-Active-Perception-from-Human-Demonstrations"><a href="#Vision-in-Action-Learning-Active-Perception-from-Human-Demonstrations" class="headerlink" title="Vision in Action: Learning Active Perception from Human Demonstrations"></a>Vision in Action: Learning Active Perception from Human Demonstrations</h2><p>机械结构：双臂+6DOF neck模拟头部运动</p>
+<p align="center">
+  <img src="../images/32.png" alt="" width="50%">
+</p>
+
+
+<p>希望通过neck的移动，实现视角的移动，在搜索过程中增加视觉覆盖范围，减少障碍物造成的遮挡影响。</p>
+<p>通常多视角，例如waist可以一定程度处理上述的背包遮挡问题，但其本质上是任务导向的（手伸进背包），而不是主动的去感知。此外，对于一些数据，采集人员通常会移动自身视线取采集数据，但是机器采集的数据却不会对应的调整，<strong>采集人员所看到的与实际采集的数据，是存在偏差的</strong>。</p>
+<p><strong>observation mismatch</strong>：what the human sees and what the robot learns from。不匹配影响了学习效率。实际上关注的有两个方面，如何实现active 视角变化，如何消除robot与采集人员观测的mismatch。</p>
+<p>面临的困难：</p>
+<ul>
+<li>大部分机器人视角相关的自由度低，例如只有2dof的head，导致很难调整视角。</li>
+<li>相机同步，也就是采集人员用vr设备观测，在硬件上实现低延迟是较为困难的。此外电机反馈需要很快，动态的调整head视角。</li>
+<li>过去机器人视角变化，可能是在特定任务下，用特定策略指定的，缺少可扩展性。</li>
+</ul>
+<p>本文提出的<strong>ViA</strong>，对上述问题，提出如下解决方案：</p>
+<ul>
+<li>使用6dof arm作为neck，没有专门设计复杂的结构去模拟人类头部眼部的运动。</li>
+<li>以往的数据采集，顺序是，采集人员移动头部-&gt;发送指令-&gt;机器人运动-&gt;回传实时数据。本文设计一个方法，根据当前的采集人员头部姿态，去渲染实时画面，就不需要每次都依靠机器人采集新图像。</li>
+<li>在第二点贡献的基础上，实现了<strong>共享视角</strong>，这对于后续的模仿学习是有利的，即使采用最基础的行为克隆，也能够学会active的注视策略。</li>
+</ul>
+<p>实验设计了三个任务，都包含视觉遮挡。</p>
+<h3 id="数据采集"><a href="#数据采集" class="headerlink" title="数据采集"></a>数据采集</h3><p>两个问题：</p>
+<ul>
+<li>视觉延迟：头部运动与vr设备的延迟</li>
+<li>机器人控制延迟，包括程序执行，电机延迟等</li>
+</ul>
+<p align="center">
+  <img src="../images/33.png" alt="" width="30%">
+</p>
+
+
+<p>本文的方法：Async Teleop：<strong>Decoupled view rendering and asynchronous updating</strong></p>
+<p align="center">
+  <img src="../images/34.png" alt="" width="100%">
+</p>
+
+
+<p>上图的<strong>绿色轨迹</strong>，指的是依据用户头部姿态，在点云上实时渲染双目rgb图像。实现实时反馈无需等待机器人视角切换。</p>
+<p><strong>红色部分</strong>，依靠用户的头部姿态，以及手臂关节，更新机器人姿态。并且依据机器人的观测，对点云数据进行补全。</p>
+<p>将本身要传输的rgb数据换成点云数据，可能传输的数据会更少？</p>
+<p>具体的数据收集过程视觉效果：右侧点云渲染图就是vr设备真实看到的。所以本文最主要的共享主要还是在摇杆渲染这一块。</p>
+<p align="center">
+  <img src="../images/35.png" alt="" width="100%">
+</p>
+
+<p align="center">
+  <img src="../images/36.png" alt="" width="100%">
+</p>
+
+
+<h3 id="硬件设计"><a href="#硬件设计" class="headerlink" title="硬件设计"></a>硬件设计</h3><p>头部camera可以提供rgb，depth图像以及camera pose 数据。实际上是用iphone 15 pro，连接在一个ARX5机器人手臂上实现的。</p>
+<h3 id="摇杆接口"><a href="#摇杆接口" class="headerlink" title="摇杆接口"></a>摇杆接口</h3><p>手臂的数据很好收集，两个外骨骼形状的操控杆，手机双臂数据。</p>
+<p>vr设备的延时是比较低的，一般可以达到10ms，但是对于机器人控制，更多的是control latency，头部运动与实际的机器人运动之间会存在较大的延时。为此设计了之前的VR渲染模块，主要有以下三个内容：</p>
+<ul>
+<li>点云构造：需要两个变换，一个是6dof neck的坐标系变换，还有一个是头部相机的坐标变换。</li>
+<li>低延迟视角渲染：点云数据是t时刻的，渲染是t+k时刻的，在t+k时刻，利用t+k时刻的头部姿态以及t时刻的点云数据，渲染3d环境（150Hz）。因为是渲染的，所以有些地方会有缺失。</li>
+<li>结合头部运动更新点云：在时间t+K，注意此处的K远大于k，具体的K取值，与机器人控制系统的延迟决定。同时，系统会用10Hz的频率更新RGB以及深度图像的值，用于更新点云渲染数据。</li>
+</ul>
+<h3 id="How-to-learn"><a href="#How-to-learn" class="headerlink" title="How to learn?"></a>How to learn?</h3><p>设计网络比较简单，用的就是模仿学习，模型采用扩散策略Difussion Policy。<strong>单步预测未来的手臂以及neck动作序列。</strong>所以本文的头-手交互，难点在于数据的采集以及摇杆设备的处理。实际的数据使用是较为简单的。输出动作维度是23</p>
+<ul>
+<li>左臂，7dof</li>
+<li>右臂，7dof</li>
+<li>两个夹爪，2dof</li>
+<li>剩下的七个维度是neck的，位置3加上四元数4，一共得到七个自由度。</li>
+</ul>
+<p>图像经过DINOv2，得到一个384维度的token，将其作为观测的语义特征。预测窗口16，执行前8个预测的控制量。控制频率设定为10Hz。</p>
+<h3 id="评估"><a href="#评估" class="headerlink" title="评估"></a>评估</h3><p>实验对比一下内容：</p>
+<ul>
+<li>不同相机设置</li>
+<li>视觉表示能力</li>
+<li>摇杆界面</li>
+</ul>
+<p>三个实验：</p>
+<ul>
+<li>Bag Task：打开背包拿出物体，这个时候<strong>手臂的摄像头存在遮挡</strong>。训练阶段使用5个对象：香蕉、胡萝卜、小狗、鞋子、草莓；共收集150条示范；测试阶段使用2个未见过的对象：蓝色大象、绿色鳄梨；每个测试对象进行5次实验，共10次测试尝试；每次实验中，背包内仅放置一个目标物体。</li>
+<li>Cup Task：通过主动视角切换完成杯子摆放</li>
+<li>Pot Task：找到一个青柠并将其放入锅中；使用双臂共同抬起锅；将锅精确对准托盘放置。</li>
+</ul>
+<h4 id="实验1："><a href="#实验1：" class="headerlink" title="实验1："></a>实验1：</h4><p>第一个实验对比不同相机设置</p>
+<ul>
+<li>ViA:只使用head摄像头</li>
+<li>Active head摄像头以及两个wrist摄像头：head摄像头与ViA完全一致，相当于多提供了两个视角信息。</li>
+<li>固定在胸部的相机与两个wrist相机</li>
+</ul>
+<p>实验结果表明额外加了wrist相机反而降低了18%的性能，猜测是由于数据量不够，并且腕部相机提供的有效信息实际上很小，反而由于遮挡引入了更多的干扰噪声。下图是分阶段的成功率。</p>
+<p align="center">
+  <img src="../images/37.png" alt="" width="100%">
+</p>
+
+
+<h4 id="试验2：对比不同视觉表征方法"><a href="#试验2：对比不同视觉表征方法" class="headerlink" title="试验2：对比不同视觉表征方法"></a>试验2：对比不同视觉表征方法</h4><ul>
+<li>本文的DINOv2</li>
+<li>ResNet-18 用ImageNet训练</li>
+<li>DP3，用采集的点云数据</li>
+</ul>
+<p align="center">
+  <img src="../images/38.png" alt="" width="100%">
+</p>
+
+
+<h4 id="实验3：对比不同摇杆方式"><a href="#实验3：对比不同摇杆方式" class="headerlink" title="实验3：对比不同摇杆方式"></a>实验3：对比不同摇杆方式</h4><p>实际上对比的是传输rgb数据与点云数据。找了一些人员体验他们设计的vr渲染系统，说明他们的系统收集数据会慢一些，因为没有rgb图像直观，不过对于防眩晕会更友好。</p>
+<p align="center">
+  <img src="../images/39.png" alt="" width="70%">
+</p>
+
+
+<h3 id="Questions"><a href="#Questions" class="headerlink" title="Questions"></a>Questions</h3><ul>
+<li><p>头部可以控制角度，但采集人员如何控制6dof的neck呢？看了一下数据采集演示视频，也是依靠人的运动去直接控制的，相对来说比采集手臂难操作一点。</p>
+</li>
+<li><p>如何区分，到底是简单的模仿学习跟踪头部动作，还是说真的学会并且理解了关注region of interest。实际上在实验的时候应该设置一些随机性。</p>
+</li>
+</ul>
+<h2 id="Open-TeleVision-Teleoperation-with-Immersive-Active-Visual-Feedback"><a href="#Open-TeleVision-Teleoperation-with-Immersive-Active-Visual-Feedback" class="headerlink" title="Open-TeleVision: Teleoperation with Immersive Active Visual Feedback"></a>Open-TeleVision: Teleoperation with Immersive Active Visual Feedback</h2><p>主要是提出了一种沉浸式的摇操系统，OpenTeleVision。用于高效的收集数据，然后在四个复杂任务上说明了数据采集的有效性。利用头戴式设备，采集rgb图像，然后分析手臂位置以及手部关节，得到双臂数据。头部数据直接根据头戴vr设备可以得到。</p>
+<p>本文只考虑头部以及双臂和手的控制。</p>
+<p align="center">
+  <img src="../images/41.png" alt="" width="90%">
+</p>
+
+
+<p>数据采集流程如下：本文开发了一个基于Vuer的Web服务器[。VR设备将操作员的手，头和手腕姿势传输到服务器，服务器处理人到机器人的运动重定向。机器人双目立体视频分辨率为480x640，频率60 Hz。Vr设备用的Apple Vision Pro。</p>
+<p align="center">
+  <img src="../images/42.png" alt="" width="90%">
+</p>
+
+
+<p>机器人设备如下：</p>
+<p>头部VR设备移动，直接控制机器人头部设备的移动（2-3个自由度）。该过程人可以主动的看向感兴趣的部分，实现了active的视觉感知功能。而且这样子处理，可以<strong>用更小的图像</strong>，因为视角可以移动。这里作者还提了一下，用的是双目摄像头。方便采集人员获得图像空间信息，可能是为了提高采集的准确性等，后续训练实际上也是提供了一些深度的信息。</p>
+<p>​    手臂的移动是跳过vr设备的rgb图像流处理的，两个部分，一部分是手臂的位置，另一部分是手的姿态。</p>
+<ul>
+<li>手臂位置：通过图像识别人手臂根部，通过逆运动学计算机器人的关节角度。</li>
+<li>手的姿态：</li>
+</ul>
+<p align="center">
+  <img src="../images/43.png" alt="" width="90%">
+</p>
+
+<p align="center">
+  <img src="../images/44.png" alt="" width="90%">
+</p>
+
+
+<h3 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h3><p>四个实验的数据采集</p>
+<p align="center">
+  <img src="../images/45.png" alt="" width="90%">
+</p>
+
+
+<p>讨论的问题</p>
+<ul>
+<li>实验中的一些设置对于模仿学习的影响。例如resnet对比Dinov，单目与双目</li>
+<li>本文设计的方案数据收集方面的有效性</li>
+</ul>
+<p>选用两个双目图像作为视觉输入，而不是腕部之类的摄像头。将其输入DiNOv2得到视觉特征。每个图形生成16*22个tokens。ACT网络实现chunk动作输出。本文的active head相对来说简单一点，因为主要涉及到2dof的旋转，而不是ViA中的位置变化。</p>
+<p>一些比较重要的结论：</p>
+<ul>
+<li>原始的ACT用了四个角度输入，而本文使用了双目图像，所以对于图像特征提取能力要求更高，导致ResNet效果不够好。</li>
+<li>单目实验效果不如双目实验，可能是因为缺少深度信息。对于距离的判断不足。</li>
+</ul>
+<h3 id="泛化性能"><a href="#泛化性能" class="headerlink" title="泛化性能"></a>泛化性能</h3><p>泛化性能实际上比较一般，只是位置稍微改一下，失败率就非常高（每个位置实验5次）</p>
+<p align="center">
+  <img src="../images/46.png" alt="" width="60%">
+</p>
+
+
+<p>一些常见的数据收集方案：</p>
+<p align="center">
+  <img src="../images/47.png" alt="" width="90%">
+</p>
+
+
+
+
+<h2 id="Learning-to-Look-Around-Enhancing-Teleoperation-and-Learning-with-a-Human-like-Actuated-Neck"><a href="#Learning-to-Look-Around-Enhancing-Teleoperation-and-Learning-with-a-Human-like-Actuated-Neck" class="headerlink" title="Learning to Look Around: Enhancing Teleoperation and Learning with a Human-like Actuated Neck"></a>Learning to Look Around: Enhancing Teleoperation and Learning with a Human-like Actuated Neck</h2><p align="center">
+  <img src="../images/49.png" alt="" width="90%">
+</p>
+
+
+<p>该文章是MIT2024年论文，同样是设计了一个摇操系统，控制双臂的同时，控制5dof的head，实现例如“偷看”或者“倾斜”之类的功能。一方面，对操作人员会比较友好，更直观而且更好操控。对于训练而言，这种方式，可以提供更好的<strong>空间理解能力</strong>，相比于静态的camera，可以实现<strong>任务自适应</strong>。</p>
+<h3 id="硬件："><a href="#硬件：" class="headerlink" title="硬件："></a>硬件：</h3><p>Apple visionPro 提供了头部跟踪以及手部跟踪，以此收集演示过程的数据。<strong>四个摄像头</strong>，分别安装在头部，躯干以及两个手腕。</p>
+<p align="center">
+  <img src="../images/50.png" alt="" width="90%">
+</p>
+
+
+<p>几种演示操作：</p>
+<p align="center">
+  <img src="../images/51.png" alt="" width="90%">
+</p>
+
+
+<h4 id="手部跟踪"><a href="#手部跟踪" class="headerlink" title="手部跟踪"></a>手部跟踪</h4><ul>
+<li><strong>Ascension trakSTAR</strong>：6自由度跟踪节点，使用一个<strong>手套</strong>进行捕捉。</li>
+<li><strong>Manus VR 手套</strong>：对于更复杂的任务用了这个手套，可以有25个关键节点跟踪</li>
+<li><strong>Apple Vision Pro</strong>：数据比较准，但是有时候手会移出视野，数据收集可能会有问题。</li>
+</ul>
+<h4 id="头部跟踪"><a href="#头部跟踪" class="headerlink" title="头部跟踪"></a>头部跟踪</h4><p><strong>头部跟踪</strong> 是使用 <strong>Apple Vision Pro</strong>，提供6dof头部跟踪。</p>
+<h3 id="实验-1"><a href="#实验-1" class="headerlink" title="实验"></a>实验</h3><p>用ACT训练，训练头部+右臂，训练三个任务的数据：</p>
+<ul>
+<li>Left-to-right Pick and Place (L2R): </li>
+<li>Close-range Object Manipulation (CRange):</li>
+<li>Cup Transfer From Bottom Shelf (CfB)</li>
+</ul>
+<p>这三个任务都需要控制过程移动neck，例如调整视角观察物体，移动视角保持物体的实时可见性。每个任务有120条演示数据。为了证明是学会了how to look而不是简单的模仿，作者将三个数据融合（但实际上这种做法任然不能很明显的说明学会了如何找到region of interest，应该移动物体或者改变位置，角度。不过这一点在后续的测试里也是有的）。</p>
+<p>实验结果如下：成功率有很大程度提高</p>
+<p align="center">
+  <img src="../images/52.png" alt="" width="60%">
+</p>
+
+
+<h2 id="Using-Apple-Vision-Pro-to-Train-and-Control-Robots"><a href="#Using-Apple-Vision-Pro-to-Train-and-Control-Robots" class="headerlink" title="Using Apple Vision Pro to Train and Control Robots"></a>Using Apple Vision Pro to Train and Control Robots</h2><p>改论文讲述了如何利用Apple vr设备，实现头部以及手部的姿态数据获取，24年论文，很多相关论文应该是用了其中的方法。</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://github.com/Improbable-AI/VisionProTeleop">Improbable-AI/VisionProTeleop: VisionOS App + Python Library to stream head / wrist / finger tracking data from Vision Pro to any robots.</a></p>
+</blockquote>
+<p>apple本身提供了ARKit库，主要提供了三类数据：</p>
+<ul>
+<li>头</li>
+<li>腕</li>
+<li>手指关节</li>
+</ul>
+<h3 id="使用步骤"><a href="#使用步骤" class="headerlink" title="使用步骤"></a>使用步骤</h3><ul>
+<li><p>下载app</p>
+<p align="center">
+  <img src="../images/53.png" alt="" width="60%">
+</p></li>
+<li><p>下载python库：pip install avp_stream</p>
+</li>
+<li><p>mac中函数调用获取数据</p>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> avp_stream <span class="keyword">import</span> VisionProStreamer</span><br><span class="line"><span class="number">2</span> avp_ip = <span class="string">&quot; 10.31.181.201 &quot;</span> <span class="comment"># example IP</span></span><br><span class="line"><span class="number">3</span> s = VisionProStreamer ( ip = avp_ip , record = <span class="literal">True</span> )</span><br><span class="line"><span class="number">4</span></span><br><span class="line"><span class="number">5</span> <span class="keyword">while</span> <span class="literal">True</span> :</span><br><span class="line"><span class="number">6</span> r = s . latest <span class="comment"># gets the latest tracking data</span></span><br><span class="line"><span class="number">7</span> <span class="built_in">print</span> ( r )</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>这里的r就是字典，可以获取例如r[‘head’]这样的数据</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">r</span>[<span class="string">&#x27;head&#x27;</span>]: np.ndarray  </span><br><span class="line">  <span class="comment"># shape (1,4,4) / measured from ground frame</span></span><br><span class="line"><span class="built_in">r</span>[<span class="string">&#x27;right_wrist&#x27;</span>]: np.ndarray </span><br><span class="line">  <span class="comment"># shape (1,4,4) / measured from ground frame</span></span><br><span class="line"><span class="built_in">r</span>[<span class="string">&#x27;left_wrist&#x27;</span>]: np.ndarray </span><br><span class="line">  <span class="comment"># shape (1,4,4) / measured from ground frame</span></span><br><span class="line"><span class="built_in">r</span>[<span class="string">&#x27;right_fingers&#x27;</span>]: np.ndarray </span><br><span class="line">  <span class="comment"># shape (25,4,4) / measured from right wrist frame </span></span><br><span class="line"><span class="built_in">r</span>[<span class="string">&#x27;left_fingers&#x27;</span>]: np.ndarray </span><br><span class="line">  <span class="comment"># shape (25,4,4) / measured from left wrist frame </span></span><br><span class="line"><span class="built_in">r</span>[<span class="string">&#x27;right_pinch_distance&#x27;</span>]: float  </span><br><span class="line">  <span class="comment"># distance between right index tip and thumb tip </span></span><br><span class="line"><span class="built_in">r</span>[<span class="string">&#x27;left_pinch_distance&#x27;</span>]: float  </span><br><span class="line">  <span class="comment"># distance between left index tip and thumb tip </span></span><br><span class="line"><span class="built_in">r</span>[<span class="string">&#x27;right_wrist_roll&#x27;</span>]: float </span><br><span class="line">  <span class="comment"># rotation angle of your right wrist around your arm axis</span></span><br><span class="line"><span class="built_in">r</span>[<span class="string">&#x27;left_wrist_roll&#x27;</span>]: float </span><br><span class="line"> <span class="comment"># rotation angle of your left wrist around your arm axis</span></span><br></pre></td></tr></table></figure>
+
+<p align="center">
+  <img src=".assets/54.png" alt="" width="90%">
+</p>
+  
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/07/27/DinoV2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/headpotrait.jpg">
+      <meta itemprop="name" content="Daniel Hu">
+      <meta itemprop="description" content="Share Notes & Life">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sep_459's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/07/27/DinoV2/" class="post-title-link" itemprop="url">Overview of DinoV2</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2025-07-27 18:23:42" itemprop="dateCreated datePublished" datetime="2025-07-27T18:23:42+08:00">2025-07-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-11-08 13:28:05" itemprop="dateModified" datetime="2025-11-08T13:28:05+08:00">2025-11-08</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>0</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/07/27/20250727-GELLO%20%E8%AE%BA%E6%96%87/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/headpotrait.jpg">
+      <meta itemprop="name" content="Daniel Hu">
+      <meta itemprop="description" content="Share Notes & Life">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sep_459's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/07/27/20250727-GELLO%20%E8%AE%BA%E6%96%87/" class="post-title-link" itemprop="url">Overview of GELLO</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2025-07-27 08:23:42" itemprop="dateCreated datePublished" datetime="2025-07-27T08:23:42+08:00">2025-07-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-11-08 13:26:45" itemprop="dateModified" datetime="2025-11-08T13:26:45+08:00">2025-11-08</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>178</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="GELLO-A-General-Low-Cost-and-Intuitive-Teleoperation-Framework-for-Robot-Manipulators"><a href="#GELLO-A-General-Low-Cost-and-Intuitive-Teleoperation-Framework-for-Robot-Manipulators" class="headerlink" title="GELLO: A General, Low-Cost, and Intuitive Teleoperation Framework for Robot Manipulators"></a>GELLO: A General, Low-Cost, and Intuitive Teleoperation Framework for Robot Manipulators</h2><p>设计一种外骨骼的数据采集方式，成本小于300＄。<strong>ALOHA</strong>也是外骨骼，但是要求1:1，成本会更高。一些研究关注双向反馈，被控的机械臂传递力反馈或者触觉反馈，是目前的一些研究方向。</p>
+<ul>
+<li>低价</li>
+<li>操控方便</li>
+<li>便携</li>
+<li>易复制</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/07/06/20250624-ChatVLA%20%E8%AE%BA%E6%96%87/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/headpotrait.jpg">
+      <meta itemprop="name" content="Daniel Hu">
+      <meta itemprop="description" content="Share Notes & Life">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sep_459's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/07/06/20250624-ChatVLA%20%E8%AE%BA%E6%96%87/" class="post-title-link" itemprop="url">Overview of ChatVLA Content</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2025-07-06 08:23:42" itemprop="dateCreated datePublished" datetime="2025-07-06T08:23:42+08:00">2025-07-06</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-11-08 13:34:49" itemprop="dateModified" datetime="2025-11-08T13:34:49+08:00">2025-11-08</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>[TOC]</p>
+<h2 id="本周进度"><a href="#本周进度" class="headerlink" title="本周进度"></a>本周进度</h2><p>调研VLM结构的控制类模型，熟悉DDMP原理，阅读difussion policy以及ScaleDP两篇论文。</p>
+<p>阅读文献ChatVLA: Unified Multimodal Understanding and Robot Control with Vision-Language-Action Model【arxiv 2502  Midea Group】以及代码，进一步看一下基于VLA的模型如何拓展至rejection操作。</p>
+<p>调研reject方法设计方法；</p>
+<p>了解DexVLA开源代码结构以及配置代码环境；</p>
+<h2 id="Overview-of-ChatVLAContent"><a href="#Overview-of-ChatVLAContent" class="headerlink" title="Overview of ChatVLAContent"></a>Overview of ChatVLAContent</h2><h3 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h3><p>我们希望实现的主要还是对于上层任务的一个判别，做出不同选择，关注的实际上不是控制精度方面，所以单臂，双臂实际上差别不大。双臂感觉模型会更大一些，控制的时候如果模型比较大，导致频率很低，有可能影响最后的效果。</p>
+<p align="center">
+  <img src="../images/25.png" alt="" width="50%">
+</p>
+
+
+<p>实际上只要该模型有类似action token 以及reasoning token 这样分离的设计，就可以实现类似的reject功能，可以进行对应的持续微调。主体还是VLM+控制模块。</p>
+<p>本文解决的两个问题：</p>
+<ul>
+<li>训练过程会导致虚假遗忘，破坏了visual-text alignment</li>
+<li>task interference，联合训练使得控制与语言图像理解冲突，性能无法同时保持提升</li>
+</ul>
+<p>对比了三种VLA训练方法</p>
+<ul>
+<li>只用控制演示数据训练，类似OpenVLA</li>
+<li>augmenting robot data with reasoning phrases to guide action<strong>（叠加机器人数据与动作）</strong></li>
+<li>co-training with both visual-text pairs and robot data(as in RT-2 [8]).</li>
+</ul>
+<h3 id="Contribution"><a href="#Contribution" class="headerlink" title="Contribution"></a>Contribution</h3><ul>
+<li><p>本文实际上还是重点关注语言能力，而不是控制部分能力（包含基础的控制以及复杂任务的分解）</p>
+<p align="center">
+  <img src="../images/27.png" alt="" width="100%">
+</p>
+
+
+
+<p>可以看到本文有三种训练的设置，第二种是类似DexVLA的设置<strong>（Setting 2）</strong>，输入的是图像以及指令以及状态信号，输出的是reasoning token有一集action；</p>
+<p>作为对比的，第三种方法联合训练<strong>（Setting 3）</strong>，输入除了上述控制数据，还额外加了image-text数据对，由于是随机采样的，图文数据对与控制数据可能完全没有关联。</p>
+<p>我们比较最终的<strong>实验结果</strong>：</p>
+<p>首先是第一个图，是在五个真实控制任务里的控制结果。可以发现直接图文数据对训练会导致控制性能非常差（Setting 3）非常差，远不如本文的后续改进方法以及Setting 2 方法。其中本文的方法在控制方面甚至不如setting 2。说明联合数据训练更多的是增加语言推理以及图像理解能力。该能力与控制过程中的，拆解复杂任务指令是不完全一致的。Setting 2是将prompt内部VLM进行拆解，这一过程与控制效果是息息相关的。而Image-Text的数据对本身和控制完全无关，在这方面的理解能力提升，不一定就会提升控制性能。</p>
+<p align="center">
+  <img src="../images/28.png" alt="" width="50%">
+</p></li>
+</ul>
+<p>上图（c）实际上是一些语言benchmark上的推理结果，发现Setting2 确实在这方面稍微弱一些，毕竟训练过程只有一些关于指令的分解，这部分对于语言能力的训练还是比较有限的，但依然保留了一些能力，相比于只用控制数据训练（Setting 1）已经有了很大的改进。</p>
+<h3 id="Model-structure"><a href="#Model-structure" class="headerlink" title="Model structure"></a>Model structure</h3><p>模型结构参考了另一篇论文【57】中的DiffusionVLA的模型，也是这个组24年提出的。本文的模型没有完全分离动作和图文特征提取模块，而是用了类似分支选择的方式进行训练，这一点和DexVLA差别会比较大。</p>
+<p align="center">
+  <img src="../images/29.png" alt="" width="50%">
+</p>
+
+
+<h3 id="Github-code"><a href="#Github-code" class="headerlink" title="Github code"></a>Github code</h3><p>该模型提供了完整的训练代码以及最后训练好的单臂模型，不过个人感觉这个模型更适用于聊天情况。</p>
+<blockquote>
+<p>代码地址：<a target="_blank" rel="noopener" href="https://github.com/tutujingyugang1/ChatVLA_public?tab=readme-ov-file">tutujingyugang1/ChatVLA_public</a></p>
+</blockquote>
+<p align="center">
+  <img src="../images/30.png" alt="" width="80%">
+</p>
+
+
+<p>但是之前提到了，本文更关注Multi-modal Understanding Tasks，但对我们的任务而言，实际上不需要那么强的语言能力。</p>
+<h3 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h3><p>本文与DexVLA相比，侧重的是两方面，本文更加注重机器人控制过程中的语言聊天或者图像理解能力，而不是希望更进一步提升控制性能。单纯的控制性能而言，例如处理复杂任务，本文的方法可能在实际中不如DexVLA的方法，但是对于语言方面的能力而言，通过第二阶段的两部分数据集联合训练，可以保留更好的图像理解以及文本理解能力。</p>
+<h2 id="DexVLA代码简述"><a href="#DexVLA代码简述" class="headerlink" title="DexVLA代码简述"></a>DexVLA代码简述</h2><h3 id="训练部分资源要求"><a href="#训练部分资源要求" class="headerlink" title="训练部分资源要求"></a>训练部分资源要求</h3><p>实际上没有给出训练部分的GPU显存要求，下面表格里的显存跑的是另一个脚本。但应该也是训练模型，虽然可能和stage2的一些设置不太一样。可以看到LoRA可以减少14GB显存，410M　ScaleDP可以节省大概5GB显存。作者是在 <strong>single</strong> A6000(46G) ，batch_size=2做的实验，如果训练stage2显存实在不满足要求，我们可以设置batch_size=1;  之前刘兴报错，可能是没修改参数，sh脚本里有个参数per_device_train_batch_size=2,如果不改这个，无论用了多少gpu，每个gpu都加载两组数据，会导致显存越界。另外的话，当时设置了LORA，还有一些参数需要冻结，</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">--lora_enable True \</span><br><span class="line">...</span><br><span class="line">--freeze_vision_tower True \</span><br><span class="line">--freeze_backbone True \</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>Notably, deepspeed may takes more GPU memory on single gpu with zero2 optimization.作者这里是对比deepspeed的影响，发现如果用的是一个GPU，使用DeepSpeed会导致内存占用变多</p>
+<table>
+<thead>
+<tr>
+<th>Script</th>
+<th>DeepSpeed offload</th>
+<th>LoRA VLM</th>
+<th>Smaller ScaleDP</th>
+<th>training speed</th>
+<th>CUDA memory</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>local_debug_deepspeed.sh</td>
+<td>✔️</td>
+<td>-</td>
+<td>-</td>
+<td>6.56s/iter</td>
+<td>20-29G</td>
+</tr>
+<tr>
+<td>local_debug_python.sh</td>
+<td>-</td>
+<td>✔️</td>
+<td>-</td>
+<td>1.09s/iter</td>
+<td>24G</td>
+</tr>
+<tr>
+<td>local_debug_python.sh</td>
+<td>-</td>
+<td>-</td>
+<td>✔️</td>
+<td>1.01s/iter</td>
+<td>33G</td>
+</tr>
+<tr>
+<td>local_debug_python.sh</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>1.1s/iter</td>
+<td>38G</td>
+</tr>
+</tbody></table>
+<p>实际训练过程中，</p>
+<table>
+<thead>
+<tr>
+<th>可训练参数</th>
+<th>所有参数</th>
+<th>占比</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>115M lora + 其他参数=592M</td>
+<td>2901 M</td>
+<td>4.13%| 20.4 %</td>
+</tr>
+</tbody></table>
+<p>不使用lora，训练参数是<strong>476M</strong>，训练过程显存也是满足要求的。</p>
+<p>使用lora+ ScaleDP 410M：训练参数115M，显存占用16.4GB左右</p>
+<p>不使用lora+ ScaleDP 410M，vision_tower 和backbone都设置为freeze：训练参数476M，显存不够，之前可能是不小心错误设置了freeze所以能跑。vision_tower和backbone都调整的话，显存不够。</p>
+<h3 id="推理部分资源要求"><a href="#推理部分资源要求" class="headerlink" title="推理部分资源要求"></a>推理部分资源要求</h3><p>推理部分暂时没有介绍，之后初步训练之后，运行测试脚本再看一下性能。作者的测试部分，求解一次，控制量重复使用十六次，计算代价相对来说会比openvla这种低很多。</p>
+<blockquote>
+<p>evaluate/smart_eval_agilex.py</p>
+</blockquote>
+<p>只训练了100步，然后测试了一下；每10步保存一个ckpt（输出都是nan，可能是因为训练的问题，也有可能因为测试输入图像是随机噪声，应该不太影响时间）。</p>
+<p>单次模型预测时间平均是1300ms，文中复用16次，大概控制频率12Hz。测试环境也是单卡3090运行的。运行占用显存大概是10.3GB。 如果将输入image和training的时候一样设置为（32,240）,单次求解时间可以缩减为657ms，也就是大概25Hz的一个频率</p>
+<p>测试的时候用lora模型，程序出错还没解决好。（7,3已经调试好了，lora可以用）</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/07/01/20250621-OpenVAL%E8%AE%BA%E6%96%87/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/headpotrait.jpg">
+      <meta itemprop="name" content="Daniel Hu">
+      <meta itemprop="description" content="Share Notes & Life">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sep_459's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/07/01/20250621-OpenVAL%E8%AE%BA%E6%96%87/" class="post-title-link" itemprop="url">Overview of OpenVLA Content</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2025-07-01 08:23:42" itemprop="dateCreated datePublished" datetime="2025-07-01T08:23:42+08:00">2025-07-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-11-08 13:38:25" itemprop="dateModified" datetime="2025-11-08T13:38:25+08:00">2025-11-08</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>8.3k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>8 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>[TOC]</p>
+<h3 id="Why-VLA"><a href="#Why-VLA" class="headerlink" title="Why VLA"></a>Why VLA</h3><p>具身智能控制，主要是模仿学习，强化学习，以及VLA。</p>
+<ul>
+<li><strong>模仿学习</strong>：通过采集的控制轨迹进行训练，学习输入输出映射关系。<ul>
+<li>需要大量的数据training from scratch，数据获取代价大，尤其是针对机器人方面，需要人为控制得到一轮数据（较NLP与图像标注，代价更高）；</li>
+<li>泛化能力不够，由于数据量的限制，模型大小也受限，对应的语义理解，图像理解能力都只在特定的数据集获得较高的成绩。导致迁移能力也较弱，对于新任务的学习，开销较大。</li>
+</ul>
+</li>
+<li><strong>强化学习</strong>：强化学习属于控制的另一条路线，主要难点还是在于仿真环境以及奖励的设置。</li>
+<li><strong>VLA(Vision Language Action model)</strong>:更为<strong>端到端</strong>的多模态深度学习模型，综合视觉，语言以及机器人控制信息。旨在利用<strong>外部感知输入</strong>以及控制指令，实现闭环控制。回答问什么是VLA<ul>
+<li><strong>端到端的设计</strong>，结构简单。目前主流的CV或者NLP，都尽量避免其他组件的干扰结构，例如Vit提出之时，即使CNN提取特征保留<strong>局部不变性</strong>，<strong>平移不变性</strong>等归纳偏置可以提升transformer效果，但为了保持结构的一致性，依然只采用纯transformer结构。</li>
+<li><strong>模块化设计</strong>，通过<strong>SigLIP</strong>提取高级的语义信息，<strong>DIno V2</strong> 提取底层的空间信息，LLama大预言模型进行信息的整合。三个组件都基于纯transformer架构，可以依靠CV以及NLP领域的发展，直接提升控制方向的性能。</li>
+<li><strong>自监督学习的趋势</strong>：目前主流的大模型发展下，数据的获取标注代价过大，提升模型的语言理解，图像理解能力依靠监督学习难以进一步提升。VLA中的<strong>DinoV2</strong>以及<strong>SigLIP</strong>都采用自监督的方式，进行文本以及图像的理解。</li>
+<li><strong>便于微调</strong>：采用Internet-scale 数据集预训练好的组件，可以极大地降低训练成本。</li>
+</ul>
+</li>
+</ul>
+<p align="center">
+  <img src="../images/2.png" alt="" width="80%">
+</p>
+
+<h3 id="Motivation-of-OpenVLA"><a href="#Motivation-of-OpenVLA" class="headerlink" title="Motivation of OpenVLA"></a>Motivation of OpenVLA</h3><p>考虑到从头训练困难，由此考虑fine-tune下的控制模型训练。目前VLA模型难点：</p>
+<ul>
+<li>不开源</li>
+<li>针对性比较强，没有考虑new task下的fine-tuning</li>
+</ul>
+<h3 id="Model-structure"><a href="#Model-structure" class="headerlink" title="Model structure"></a>Model structure</h3><p align="center">
+  <img src="../images/2.png" alt="" width="80%">
+</p>
+
+
+<p><strong>主体结构</strong>是<strong>Llama2 7b</strong>模型，然后fuse 从<strong>DinoV2</strong>以及<strong>SigLIP</strong>模型得到的预训练特征。<strong>visiual encoder</strong> = DINIv2+SigLIP;</p>
+<ul>
+<li><p>SigLIP 与CLIP类似，通过图文数据对学习，对齐语言与图像，提供了<strong>language grounding abilities</strong>。自监督学习框架使得transformer获取大数据，并进一步得到超越监督学习性能成为可能。所以SigLIP 提供给LLama2 的，可以理解为<strong>输入图像的语义特征（semantic features）</strong></p>
+<p align="center">
+  <img src=".assets/3.png" alt="" width="60%">
+</p></li>
+<li><p>DinoV2本质上与Vit类似，只是没有针对特定的分类或者检测框架，利用自监督学习图像的特征表示；通过自蒸馏以及图像裁剪的方法训练特征提取网络；DinoV2提供给LLama2 的，可以理解为<strong>图像的空间特征（spatial features）</strong></p>
+</li>
+</ul>
+<p align="center">
+  <img src="../images/2.gif" alt="" width="60%">
+</p>
+
+
+<ul>
+<li><p>输入给LLama2的除了上述两部分信息，还有prompt信息，例如“message=f”What action should the robot take to {instruction.lower()}?”。 通过上述分析，可以发现<strong>SigLIP以及DinoV2提供的图像特征是完全不同的</strong>，其网络的设计出发点也不同，这也解释了为何联合使用会得到更好的效果。二者的联合是有依据的，而不是单纯的堆叠。以往的CNN中特征融合通常是融合浅层纹理特征与深层语义信息，不过此处由于DinoV2的训练规模，已经单个模型便已经提供了足够丰富的空间特征信息。</p>
+</li>
+<li><p>机械臂输出七个维度控制量，虽然图中写作Δ形式，但是文中处理离散化动作得到256个离散动作，似乎输出的就是动作而不是动作的变化量：<br>$$<br>7 ~ \textrm{DoF} \rightarrow (\Delta \textrm{x},\Delta \textrm{y},\Delta \textrm{z}<del>|</del>\Delta  \theta_{x},\Delta  \theta_{y},\Delta  \theta_{z}<del>|</del>\Delta \textrm{Grip})<br>$$</p>
+</li>
+</ul>
+<h3 id="Contributions-of-OpenVLA"><a href="#Contributions-of-OpenVLA" class="headerlink" title="Contributions of OpenVLA"></a>Contributions of OpenVLA</h3><ul>
+<li>发布开源代码以及训练的checkpoint以及调试过程；</li>
+<li>OpenVLA在大数据集<strong>Open X-Embodiment dataset</strong>上预训练，得到了SOTA的控制效果，虽然在一些简单任务上并不是最好的，但是在复杂任务下的泛化能力更好。最后实验表明，相比于其他模型，在绝对任务成功率方面（29个task）。参数少了7倍。对比从零模仿学习的学习的模型，提升更明显。</li>
+<li>在计算效率方面，验证<strong>Lora</strong>方法以及<strong>模型量化（bfloat16&amp;int4）</strong> 方法的有效性，方法虽然不是本文提出的，但是也是第一次得到验证；实现了消费机gpu上的运行，且没有严重影响推理性能；</li>
+<li>消融实验得到的一些额外结论：例如：<ul>
+<li>训练阶段是否冻结visual encoder；    A: No</li>
+<li>是否需要多个epoch？                          A: Yes</li>
+<li>SigLIP融合DinoV2 是否有效？            A:Yes</li>
+<li>大规模机器人数据预训练是否有必要  A :Yes</li>
+<li>高分辨率是否有利于控制 ?                   A:No</li>
+</ul>
+</li>
+</ul>
+<h3 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h3><p>目前的针对视觉和文本的模型，都有很强的迁移能力（CLIP, SigLIP, and Llama 2 ）主要原因是互联网级别的数据量。对于机器人控制而言，这样的数据量太难了,一般是100k-1M级别。这种不均衡性引出了本文思路，用其他大模型作为核心building block去提升控制模型泛化能力。用视觉或者语言大模型辅助实现 robotic representation learning。</p>
+<ul>
+<li><p>OpenVLA 使用了多个<strong>预训练模型组件</strong>：SigLIP 和 DinoV2 视觉编码器，以及 Llama 2 语言模型作为主干。对于这三个模型，它们的权重是公开的，但它们的训练数据和代码并未公开。本文发布了 OpenVLA 的训练数据、代码以及在这些组件基础上的模型权重。组件的训练过程本文其实是不讨论的。</p>
+</li>
+<li><p>使用<strong>更大的Open-X Embodiment 数据集</strong>，并且进行全零数据的剔除清洗，提升数据集的质量；只考虑单臂机械臂，至少有一个第三人称视角的图像数据；并且不同的数据集设置 data misture weights ；</p>
+</li>
+</ul>
+<h4 id="泛化能力对比："><a href="#泛化能力对比：" class="headerlink" title="泛化能力对比："></a>泛化能力对比：</h4><p><strong>视觉泛化</strong>，<strong>运动泛化</strong>，<strong>物理泛化</strong>，<strong>语义泛化</strong>。希望实现开箱即用。</p>
+<p align="center">
+  <img src=".assets/5.png" alt="" width="75%">
+</p>
+正如之前所说，由于大量机器人数据的训练，OpenVLA在大多数任务里都取得了很好的成绩。唯一不占优势的就是Semantic Generallization。
+
+<p>仅仅利用机械臂数据进行<strong>Visually-Conditioned Language Models（VLMs）</strong> 到VLA的微调，而没有进行文本图像的联合调整，故而在一些对比中语义能力不如RT-2-X(55B), 本身本文的7B模型也不算特别大，在语义泛化方面会稍弱一些。在一些实验中，OpenVLA弱于其他模型，更像是LLama本身能力限制导致的。当然，训练过程中只考虑了机械臂数据，而不是Internet pretraining data和机械臂数据联调，也会对语义，图像理解能力有影响。但后者对于训练的难度更大，设置也更复杂。</p>
+<p align="center">
+  <img src=".assets/4.png" alt="" width="80%">
+</p>
+#### Fine-tune能力对比：
+
+<p>微调过程中，每个任务都只有10-150条演示数据。相比于Open X-Embodiment dataset的970K，非常少的数据量。</p>
+<p align="center">
+  <img src=".assets/6.png" alt="" width="80%">
+</p>
+模仿学习的方法（Diffusion Policy）在简单任务里确实取得了较好的效果，不过在复杂任务里效果欠佳，缺少泛化能力；而考虑微调的Octo和OpenVLA泛化能力上取得了不错的效果，虽然简单任务上效果甚至不如模仿学习。Diffusion policy由于用了滑动窗口机制，一次输出可以重复使用很多次，输出更为平滑而且对其求解频率要求也会更低。相比之下Diffusion policy matched由于只预测一次动作，连续性上降低，导致效果变差（作者没有提供相关的视频）。
+
+<p>相比于别的方法，OpenVLA实际上在微调方面优势没有很明显，虽然总体上比较高，但是其他模型也在一些方面有很高的水平。</p>
+<p align="center">
+  <img src=".assets/10.png" alt="" width="90%">
+</p>
+#### Lora模型以及模型量化:
+
+<p>Lora方法不同rank=32与64差别不大，说明权重微调所需的参数实际上并不多。且控制效果上仅降低了1.5%</p>
+<p align="center">
+  <img src="../images/7.png" alt="" width="70%">
+</p>
+
+<p>由于硬件上的优化，bit8效果不是很好，因为求解频率太低了导致控制性能很差。int4和bfloat16都取得了不错的控制效果</p>
+<p align="center">
+  <img src="../images/8.png" alt="" width="80%">
+</p>
+
+<h3 id="Questions"><a href="#Questions" class="headerlink" title="Questions"></a>Questions</h3><ul>
+<li><p>动作空间离散化，虽然文中对于0动作单独进行了处理，但是依然可以看到控制存在抖动，离散化的控制依然存在问题。角度方向对于不同的执行器范围是相同的，但是位置差距会很大，例如xyz方向划分为0-255然后归一化到0-1，但是如果机械臂的体型变化过大，是否会有问题？</p>
+</li>
+<li><p>预测动作采用自回归形式，给定prompt，例如“What should the robot do to {task}? A:”，之后添加BOS进行自回归，构建的数据集类似“What should the robot do to {task}? A:[BOS] 0.1 0.1 0.3 0.2 0.3 0.1 0.7 [EOS]”，但是七个维度的动作本质上不是关联的，用自回归的形式确实方便训练以及代码编写，但是对于推理而言，这种处理不太符合逻辑。</p>
+</li>
+<li><p>OpenVLA中，不像其他一些模型，输入是单张图像，这就导致前后时刻的预测独立，缺乏连续性。挑选了一些比较明显的带有抖动的视频：</p>
+<div style="display: flex; justify-content: center; gap: 5px;">
+  <video src="./../images/base_vlm--flip_pot_upright.mp4" width="75%" poster="" controls></video>
+  <video src="./../images/openvla--put_carrot.mp4" width="75%" poster="" controls></video>
+</div>
+
+<p>大多数时候，本身轨迹是连续的（归纳偏执），其他论文例如目标检测中。</p>
+<ul>
+<li>预处理：模型输入修改为<strong>连续图像序列</strong>，或者保留一段前面控制序列的特征向量信息；</li>
+<li>后处理：例如目标检测中<strong>EKF</strong>或者动量法，去处理视频中目标检测框图抖动问题；</li>
+</ul>
+</li>
+<li><p>实验表现的泛化能力较弱，例如下列两个任务：Bowl 和Plate都是训练集里见过的，Carrot没有见过，就导致最终实验失败。</p>
+<p align="center">
+  <img src=".assets/9.png" alt="" width="80%">
+</p></li>
+</ul>
+<p>  并且实物实验由于成本，时间限制，次数太少，计算的success rate 波动过大，参考价值较纯NLP或者视觉而言，一些指标参考价值较低。</p>
+<ul>
+<li><p>能否如CLIP中所示，简单的设计prompt即可获得较大的提升，“Put eggplant in bowl”，可以分解为，“Move to eggplant”, “lift eggplant”,  “Move to bowl”,  “put eggplant”；类似语言模型prompt处理数学推理时，think step by setp。相比于NLP领域的能力，VLAs有时候即使简单的修改物体的颜色或者抓取物体的种类，就导致完全不一样的结果，泛化能力方面仍然有很大的提升空间。</p>
+<p align="center">
+  <img src="../images/1.png" alt="prompt 工程和 Ensemble 对 Zero-Shot 性能的影响" width="60%">
+</p></li>
+<li><p>如何理解消融实验中的，图像大小的修改，对于控制性能的影响甚微。是因为控制任务相比于图像分割这种像素级别粒度的任务，对于图像的特征精细度要求更低吗？</p>
+</li>
+</ul>
+<h2 id="Appendix"><a href="#Appendix" class="headerlink" title="Appendix"></a>Appendix</h2><h3 id="CLIP与SigLIP"><a href="#CLIP与SigLIP" class="headerlink" title="CLIP与SigLIP"></a>CLIP与SigLIP</h3><p align="center">
+  <img src="../images/3.png" alt="" width="60%">
+</p>
+
+
+
+<p>二者实际上网络结构都一样，区别在于损失函数的设置；CLIP将损失函数视为N个类的多分类交叉熵；二SigMIP视为N个二分类问题。</p>
+<p>学习两个网络，Image encoder以及Text encoder，网络的输出是语言以及图像的特征向量表示，映射到语义空间。目的主要是两个：</p>
+<ul>
+<li>首先是将语言以及图像都进行投影，投影到语义空间中；</li>
+<li>其次，对齐语言与图像，在特征空间中对齐二者之间的投影距离。越接近说明图像和文本越相似；</li>
+</ul>
+<p>所以最终的两个网络的输出都是一个向量，图像encoder不一定要用transformer，也可以是resnet之类的cnn网络，作者都进行了对比，但主流的方向还是统一结构，用transformer进行所有任务特征提取以及表示。</p>
+<h3 id="DINO-ICCV-2021-FacebookAI-amp-DINOv2"><a href="#DINO-ICCV-2021-FacebookAI-amp-DINOv2" class="headerlink" title="DINO [ICCV 2021 FacebookAI] &amp; DINOv2"></a>DINO [ICCV 2021 FacebookAI] &amp; DINOv2</h3><blockquote>
+<p>paper: <a target="_blank" rel="noopener" href="https://openaccess.thecvf.com/content/ICCV2021/papers/Caron_Emerging_Properties_in_Self-Supervised_Vision_Transformers_ICCV_2021_paper.pdf">Emerging Properties in Self-Supervised Vision Transformers</a></p>
+</blockquote>
+<p>从DINO的名字出发—— <strong>self-DIstillation with NO labels</strong>，我们可以得出 DINO是属于 <strong>无监督自蒸馏[^1]学习范式</strong> 的。Facebook 团队（现 meta AI)旨在探索<strong>基于transformer架构的视觉自监督模型来提取通用视觉特征</strong>。从最后实验结果上来说，<strong>DINO提取器确实优于 传统的CNN架构提取器，如 ResNet</strong>。</p>
+<hr>
+<p>DINO的模型架构如下图所示：</p>
+<p align="center">
+  <img src="../images/DINO.png" alt="" width="60%">
+</p>
+
+
+<ul>
+<li>输入同一张图片x，经过不同的数据增强手段（颜色扰动、高斯模糊、曝光、裁剪）等方式得到了 x1 , x2 。分别喂入到 学生模型和教师模型当中<ul>
+<li>裁剪有两种方式：局部裁剪，即裁剪的面积 小于 原始图像的 50% + 全局裁剪，即裁剪的面积大于原始图像50%</li>
+<li>学生模型接受 所有的增强。旨在鼓励 从 局部到全局的响应中，学生模型能从一个小的裁剪画面中推断出更广泛的上下文信息</li>
+<li>教师模型只接受 全局裁剪的信息</li>
+</ul>
+</li>
+<li>同时 为了避免模式崩溃问题，引入了 动量教师模型 以及 centering &amp; sharpening 这些trick<ul>
+<li>模式崩溃（mode collapse）问题：当教师模型和学生模型输出相同的 embedding // 分类信息时，此时 他们俩学习到的模型特征趋于一致，而此时在反向传播分类误差时，模型会偷懒只针对这几种数据特征进行学习，即 不关注了 数据分布的多样性，影响了模型的鲁棒性和泛化性。更学术的定义为 <strong>网络的学习过程中出现了多样性减少的现象。具体来说，当网络学习到一组特征表示时，往往会出现多个输入数据映射到相同的特征表示的情况，这就是所谓的模式崩塌。</strong></li>
+<li>所以 为了 防止 教师模型和学生模型沆瀣一气，引入了动量教师模型。具体来说就是，分类误差只在学生模型上反向传播，然后更新的权重 通过指数移动平均的方式 更新给 教师模型。这种方式的好处在于 教师模型能够 更好的关注 数据的整体分布（毕竟以往的学习到的数据分布还没有忘记）。</li>
+<li>其次 centering &amp; sharpening 的 trick，都是为了有效防止 模式崩溃<ul>
+<li>centering 类似 bn类似的归一化： 将教师模型的输出先经过EMA操作，然后减去 原始的输出 即 （ output -= EMA(output) ) , 数学意义上来说，将 输出的值 避免 陷入 softmax的饱和区，即 防止任何一种特征占据统治地位</li>
+<li>sharpening 其实 就是 在 softmax上引入了 temperature 系数，来强制模型将概率分布变得差异化。上一步的模型输出 经过 类似于 标准化的处理，那么本身数值将会缩小，那么 ，将会放大这些小差异，可以进一步引导学生模型了解哪些特征需要进一步强化。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>本身因为是 自蒸馏的范式，也就是其实 教师模型和学生模型是 同一个模型，论文也探究过 多种设置教师模型的方式：1。 直接copy学生模型当前的权重 ； 2. copy 上一个iteration的学生模型的权重；3. copy 上一个epoch的学生模型的权重；3. EMA方式动态更新教师模型的权重</li>
+</ul>
+<h3 id="Denoise-Diffusion-Probabilistic-Models-Berkeley-2020"><a href="#Denoise-Diffusion-Probabilistic-Models-Berkeley-2020" class="headerlink" title="Denoise Diffusion Probabilistic Models [Berkeley 2020]"></a>Denoise Diffusion Probabilistic Models [Berkeley 2020]</h3><blockquote>
+<p>Paper: <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2006.11239">Denoising Diffusion Probabilistic Models</a></p>
+<p>Reference Blog: <a target="_blank" rel="noopener" href="https://divertingpan.github.io/post/understanding_diffusion_models/">从统一的视角理解扩散模型 | 老潘家的潘老师</a></p>
+</blockquote>
+<p>我这里并不涉及具体的数学推导，旨在 以感性的角度深入理解DDPM，从而解密 DDPM是后续文生图类扩散模型框架的基石 的强大能力。</p>
+<p>那么，首先从生成模型开始聊聊。给定一个真实的数据分布$p(x)$，我们从中采样了很多样本$X={x_i}_{i=1}^{N}$，那么生成模型就是从这些样本$X$中，去拟合这个真实分布$p(x)$。那么，一旦学到了这个分布，我们就可以利用这个近似的模型来生成我们想要的新的样本。</p>
+<p>当我第一次看GAN时，接触到了 **latent space(隐空间) // latent variable $z$ (隐变量) // latent representation(隐表示) **等等概念，这些其实就是 生成模型如何去拟合真实分布$p(x)$的关键视角。一个直观的例子是 <strong>柏拉图的洞穴（Allegory of the cave)</strong></p>
+<h3 id="Deit"><a href="#Deit" class="headerlink" title="Deit"></a>Deit</h3><p>Deit本身也是一个VIT模型，但希望用更少的计算量实现类似的效果。VIT原始使用JFT300 （3亿张图片）,而Deit使用ImageNet进行监督学习。</p>
+<p align="center">
+  <img src="../images/11.png" alt="prompt 工程和 Ensemble 对 Zero-Shot 性能的影响" width="80%">
+</p>
+
+<p>首先训练一个teacher模型，比如cnn结构的。</p>
+<p align="center">
+  <img src="../images/12.png" alt="prompt 工程和 Ensemble 对 Zero-Shot 性能的影响" width="50%">
+</p>
+
+
+<p>进一步依靠自蒸馏的方法进行训练，本质上和提出自蒸馏的论文没有什么不一样。损失分为两部分，token预测损失以及与teacher输出label的交叉熵损失。由于教师模型输出不是one hot，实际上提供了更加丰富的信息，学习教师模型不容易过拟合。例如除了概率最高的那一维度输出，第二高的维度可能也有很高的概率，就说明这两个维度实际上有比较强的相关性。</p>
+<h3 id="Chain-of-thought"><a href="#Chain-of-thought" class="headerlink" title="Chain of thought"></a>Chain of thought</h3><p>思维链更多的是一种思想，例如用户在prompt中修改提示词即可获得更好的模型输出</p>
+<ul>
+<li>Q1:证明XXX;</li>
+<li>Q2: 先给一个类似的例子。证明XXX；</li>
+</ul>
+<p>相比于Q1，Q2通过更合适的prompt，可以使得模型输出更准确，其他的可以是prompt中添加“Think step by step”。这一点在训练的时候也可以提升效果，给出回答的模版，让模型依据模版进行回答。</p>
+<h3 id="GPT"><a href="#GPT" class="headerlink" title="GPT"></a>GPT</h3><blockquote>
+<p>参考链接：<a target="_blank" rel="noopener" href="https://paddlepedia.readthedocs.io/en/latest/tutorials/pretrain_model/GPT.html">GPT — PaddleEdu documentation</a></p>
+</blockquote>
+<p align="center">
+  <img src=".assets/15.jpeg" alt="prompt 工程和 Ensemble 对 Zero-Shot 性能的影响" width="60%">
+</p>
+这里去掉了中间的交叉注意力机制，Decoder only与Encoder  only结构区别，在于多头注意力中，有没有用Masked，GPT的注意力实际上只关注之前的单词，对于后续的单词是没有办法注意到的，这种做法有好有坏。Bert这样的Encoder only结构，注意力中是具有全局注意力的。这也是最主要的差别。
+
+<h3 id="Bert"><a href="#Bert" class="headerlink" title="Bert"></a>Bert</h3><blockquote>
+<p>参考链接：<a target="_blank" rel="noopener" href="https://paddlepedia.readthedocs.io/en/latest/tutorials/pretrain_model/bert.html">BERT — PaddleEdu documentation</a>，<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/403495863">读懂BERT，看这一篇就够了 - 知乎</a></p>
+</blockquote>
+<p>Bert为Encoder only模型，输入结构没有任何变化，主要是输入输出以及代价函数的设置。</p>
+<p>输入为两个句子，中间用[SEP]分隔开，为了说明是两个句子，加入额外的embedding，也就是一个句子全1，一个句子全0，用于提供先验句子信息。添加MASK随机将单词替换为MASK，或者替换为别的任意单词，提高“完形填空”的能力。</p>
+<p align="center">
+  <img src="../images/13.png" alt="prompt 工程和 Ensemble 对 Zero-Shot 性能的影响" width="80%">
+</p>
+
+<p align="center">
+  <img src="../images/14.png" alt="prompt 工程和 Ensemble 对 Zero-Shot 性能的影响" width="80%">
+</p>
+
+
+
+<p>预训练过程如下，损失有两部分组成，一个是预测MASK掉的单词（MLM：Masked Language Model），依据概率分布，与GPT类似。另一个损失是完成NSP任务（NSP：Next setence prediction）</p>
+<p align="center">
+  <img src="../images/15.png" alt="prompt 工程和 Ensemble 对 Zero-Shot 性能的影响" width="80%">
+</p>
+
+
+
+<p>但实际上NSP损失影响不大，在后续的改进中去掉了这一部分，而且对于MASK的预测，如果两个句子无关，用一个句子去预测另一个句子的MASK实际上没有帮助，个人觉得这种结构理在直观理解上上会差一些。</p>
+<h3 id="OpenVLA与Coto，RT-X-2"><a href="#OpenVLA与Coto，RT-X-2" class="headerlink" title="OpenVLA与Coto，RT-X-2"></a>OpenVLA与Coto，RT-X-2</h3><p><strong>Visually-Conditioned Language Models</strong> （VLMs）：模型架构能够将预训练视觉编码器（如 SigLIP、DinoV2）与预训练语言模型（如 Llama、LLM 系列）的特征连接起来，直接借助计算机视觉和自然语言处理领域的进步，构建出强大的多模态模型。新的开源 VLMs 采用一种更简单的“<strong>patch-as-token</strong>”方法。将预训练视觉 Transformer 提取的图像块（patch）特征直接视为语言模型中的“token”，然后将其投影到语言模型的输入空间中，实现视觉与语言的融合处理。两步骤，而不是两个模型交叉注意力去融合信息。</p>
+<p>本文的VLMs参考Karamcheti，融合了来自 DINOv2 的低级空间信息和来自 SigLIP 的高级语义信息</p>
+<p><strong>Generalist Robot Policies</strong>:本文的方法架构和Notably, Octo等不一样，他们给定了训练好的视觉和语言模型，考虑从头训练网络学习如何“拼接”这两个模型。</p>
+<p>本文的方法相比之下更为端到端，<strong>将机器人动作视为语言模型词汇表中的 token</strong></p>
+<p>**Vision-Language-Action Models **：VLMs微调得到VLAs，一方面可以利用大量大模型信息。另一方面，无需特地为控制提出的架构。最后，可以在未来依靠VLMs的进步，提高控制性能。</p>
+<p>比RT-2-X 以及r state-of-the-art VLA,提升了16%。29个任务，机器人平台用的是 WidowX &amp; Google Robot embodiments。高效微调讨论了7种情况，比如擦桌子，抓放。和其他微调模型相比，比如Octo，本文的也更好。与从头训练的模型相比，</p>
+<h2 id="Annotation"><a href="#Annotation" class="headerlink" title="Annotation"></a>Annotation</h2><p>[^1]: 教师模型和学生模型都是同一个模型，自己教自己学习，故而称之为 自蒸馏</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/07/01/Difussion%20Model%20-Lil's%20blog/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/headpotrait.jpg">
+      <meta itemprop="name" content="Daniel Hu">
+      <meta itemprop="description" content="Share Notes & Life">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sep_459's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/07/01/Difussion%20Model%20-Lil's%20blog/" class="post-title-link" itemprop="url">Overview of Diffusion Models</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2025-07-01 08:23:42" itemprop="dateCreated datePublished" datetime="2025-07-01T08:23:42+08:00">2025-07-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-11-08 13:39:06" itemprop="dateModified" datetime="2025-11-08T13:39:06+08:00">2025-11-08</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>46k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>42 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="What-are-Diffusion-Models"><a href="#What-are-Diffusion-Models" class="headerlink" title="What are Diffusion Models?"></a>What are Diffusion Models?</h1><p>Date: July 11, 2021 | Estimated Reading Time: 31 min | Author: Lilian Weng</p>
+<details open="" style="box-sizing: border-box;"><summary accesskey="c" title="(Alt + C)" style="box-sizing: border-box; cursor: zoom-out; margin-inline-start: 20px;"><span class="details" style="box-sizing: border-box; display: inline; font-weight: 500;">Table of Contents</span></summary><div class="inner" style="box-sizing: border-box; margin: 0px 20px; padding: 10px 20px;"><ul style="box-sizing: border-box; padding: 0px; margin: 0px;"><li style="box-sizing: border-box;"><a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#what-are-diffusion-models" aria-label="What are Diffusion Models?" style="box-sizing: border-box; color: rgb(30, 30, 30); text-decoration: none;">What are Diffusion Models?</a><ul style="box-sizing: border-box; padding: 0px; margin: 0px; margin-inline-start: 24px;"><li style="box-sizing: border-box;"><a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#forward-diffusion-process" aria-label="Forward diffusion process" style="box-sizing: border-box; color: rgb(30, 30, 30); text-decoration: none;">Forward diffusion process</a><ul style="box-sizing: border-box; padding: 0px; margin: 0px; margin-inline-start: 24px;"><li style="box-sizing: border-box;"><a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#connection-with-stochastic-gradient-langevin-dynamics" aria-label="Connection with stochastic gradient Langevin dynamics" style="box-sizing: border-box; color: rgb(30, 30, 30); text-decoration: none;">Connection with stochastic gradient Langevin dynamics</a></li></ul></li><li style="box-sizing: border-box;"><a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#reverse-diffusion-process" aria-label="Reverse diffusion process" style="box-sizing: border-box; color: rgb(30, 30, 30); text-decoration: none;">Reverse diffusion process</a></li><li style="box-sizing: border-box;"><a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#parameterization-of-l_t-for-training-loss" aria-label="Parameterization of $L_t$ for Training Loss" style="box-sizing: border-box; color: rgb(30, 30, 30); text-decoration: none;">Parameterization of $L_t$ for Training Loss</a><ul style="box-sizing: border-box; padding: 0px; margin: 0px; margin-inline-start: 24px;"><li style="box-sizing: border-box;"><a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#simplification" aria-label="Simplification" style="box-sizing: border-box; color: rgb(30, 30, 30); text-decoration: none;">Simplification</a></li><li style="box-sizing: border-box;"><a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#connection-with-noise-conditioned-score-networks-ncsn" aria-label="Connection with noise-conditioned score networks (NCSN)" style="box-sizing: border-box; color: rgb(30, 30, 30); text-decoration: none;">Connection with noise-conditioned score networks (NCSN)</a></li></ul></li><li style="box-sizing: border-box;"><a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#parameterization-of-beta_t" aria-label="Parameterization of $\beta_t$" style="box-sizing: border-box; color: rgb(30, 30, 30); text-decoration: none;">Parameterization of $\beta_t$</a></li><li style="box-sizing: border-box;"><a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#parameterization-of-reverse-process-variance-boldsymbolsigma_theta" aria-label="Parameterization of reverse process variance $\boldsymbol{\Sigma}_\theta$" style="box-sizing: border-box; color: rgb(30, 30, 30); text-decoration: none;">Parameterization of reverse process variance $\boldsymbol{\Sigma}_\theta$</a></li></ul></li><li style="box-sizing: border-box;"><a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#conditioned-generation" aria-label="Conditioned Generation" style="box-sizing: border-box; color: rgb(30, 30, 30); text-decoration: none;">Conditioned Generation</a><ul style="box-sizing: border-box; padding: 0px; margin: 0px; margin-inline-start: 24px;"><li style="box-sizing: border-box;"><a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#classifier-guided-diffusion" aria-label="Classifier Guided Diffusion" style="box-sizing: border-box; color: rgb(30, 30, 30); text-decoration: none;">Classifier Guided Diffusion</a></li><li style="box-sizing: border-box;"><a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#classifier-free-guidance" aria-label="Classifier-Free Guidance" style="box-sizing: border-box; color: rgb(30, 30, 30); text-decoration: none;">Classifier-Free Guidance</a></li></ul></li><li style="box-sizing: border-box;"><a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#speed-up-diffusion-models" aria-label="Speed up Diffusion Models" style="box-sizing: border-box; color: rgb(30, 30, 30); text-decoration: none;">Speed up Diffusion Models</a><ul style="box-sizing: border-box; padding: 0px; margin: 0px; margin-inline-start: 24px;"><li style="box-sizing: border-box;"><a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#fewer-sampling-steps--distillation" aria-label="Fewer Sampling Steps &amp; Distillation" style="box-sizing: border-box; color: rgb(30, 30, 30); text-decoration: none;">Fewer Sampling Steps &amp; Distillation</a></li><li style="box-sizing: border-box;"><a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#latent-variable-space" aria-label="Latent Variable Space" style="box-sizing: border-box; color: rgb(30, 30, 30); text-decoration: none;">Latent Variable Space</a></li></ul></li><li style="box-sizing: border-box;"><a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#scale-up-generation-resolution-and-quality" aria-label="Scale up Generation Resolution and Quality" style="box-sizing: border-box; color: rgb(30, 30, 30); text-decoration: none;">Scale up Generation Resolution and Quality</a></li><li style="box-sizing: border-box;"><a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#model-architecture" aria-label="Model Architecture" style="box-sizing: border-box; color: rgb(30, 30, 30); text-decoration: none;">Model Architecture</a></li><li style="box-sizing: border-box;"><a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#quick-summary" aria-label="Quick Summary" style="box-sizing: border-box; color: rgb(30, 30, 30); text-decoration: none;">Quick Summary</a></li><li style="box-sizing: border-box;"><a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#citation" aria-label="Citation" style="box-sizing: border-box; color: rgb(30, 30, 30); text-decoration: none;">Citation</a></li><li style="box-sizing: border-box;"><a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#references" aria-label="References" style="box-sizing: border-box; color: rgb(30, 30, 30); text-decoration: none;">References</a></li></ul></div></details>
+
+<p>[Updated on 2021-09-19: Highly recommend this blog post on <a target="_blank" rel="noopener" href="https://yang-song.github.io/blog/2021/score/">score-based generative modeling</a> by Yang Song (author of several key papers in the references)].<br>[Updated on 2022-08-27: Added <a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#classifier-free-guidance">classifier-free guidance</a>, <a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#glide">GLIDE</a>, <a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#unclip">unCLIP</a> and <a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#imagen">Imagen</a>.<br>[Updated on 2022-08-31: Added <a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#ldm">latent diffusion model</a>.<br>[Updated on 2024-04-13: Added <a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#prog-distll">progressive distillation</a>, <a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#consistency">consistency models</a>, and the <a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#model-architecture">Model Architecture section</a>.</p>
+<p>So far, I’ve written about three types of generative models, <a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2017-08-20-gan/">GAN</a>, <a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2018-08-12-vae/">VAE</a>, and <a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2018-10-13-flow-models/">Flow-based</a> models. They have shown great success in generating high-quality samples, but each has some limitations of its own. GAN models are known for potentially unstable training and less diversity in generation due to their adversarial training nature. VAE relies on a surrogate loss. Flow models have to use specialized architectures to construct reversible transform.
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/07/01/Difussion%20Model%20-Lil's%20blog/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/06/24/20250624-DexVLA%20%E8%AE%BA%E6%96%87/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/headpotrait.jpg">
+      <meta itemprop="name" content="Daniel Hu">
+      <meta itemprop="description" content="Share Notes & Life">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sep_459's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/06/24/20250624-DexVLA%20%E8%AE%BA%E6%96%87/" class="post-title-link" itemprop="url">Overview of DexVLA Content</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2025-06-24 08:23:42" itemprop="dateCreated datePublished" datetime="2025-06-24T08:23:42+08:00">2025-06-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-11-08 13:25:38" itemprop="dateModified" datetime="2025-11-08T13:25:38+08:00">2025-11-08</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>6.2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>6 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>[TOC]</p>
+<h2 id="本周进度"><a href="#本周进度" class="headerlink" title="本周进度"></a>本周进度</h2><p>阅读文献DexVLA-Vision-Language Model with Plug-In Diffusion Expert for General Robot Control【arxiv 2502  Midea Group】以及代码，了解具身智能控制方法的发展进程以及其组件原理。</p>
+<h2 id="Overview-of-DexVLA-Content"><a href="#Overview-of-DexVLA-Content" class="headerlink" title="Overview of DexVLA Content"></a>Overview of DexVLA Content</h2><h3 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h3><p>OpenVLA训练需要大规模的机器人数据（这一缺点实际上对使用而言，并不是缺点，因为作者提供了训练好的参数），该方法存在如下问题：</p>
+<ul>
+<li>理解能力差，大预言模型存在<strong>虚假遗忘</strong>问题，这一点可以通过简单的训练重新进行激活；</li>
+<li>数据稀缺（这一点对于提供预训练好的模型而言，其实没有影响）</li>
+<li>架构不平衡。VLAs中的组件例如image encoder或者语言大模型，都经过大量数据学习优化，但相比而言，控制相关的数据数量少了非常多。这导致这些组件模块之间，缺少和控制的紧密联系。</li>
+<li>没有针对一些更复杂的任务做调整，比如折衣服，打包盒子。以往通常以来SayCan模型，将prompt拆分为更简单的子任务，针对这一点，本文希望实现更为端到端的设计，让VLM自动学会拆分任务；尤其是时间跨度比较长的任务，或者精细操控任务，简单的prompt经常会让机器人遗忘重要步骤。</li>
+</ul>
+<h3 id="Contribution"><a href="#Contribution" class="headerlink" title="Contribution"></a>Contribution</h3><p>本文的贡献主要有以下几点：</p>
+<ul>
+<li>分离VLM（QWen2-VL 2B模型）与控制空间的设计，利用10亿参数的模仿学习（扩散策略），实现动作的预训练；</li>
+<li>将扩散模型参数量增加到10亿（这一点实际上贡献并不大）</li>
+<li>设计<strong>三步骤</strong>训练方法，逐步增加训练难度，模仿人的学习过程；</li>
+<li>采用扩散策略，输出是一段轨迹，控制起来会更为连续，而不是像OpenVLA这样输出单次的控制量，缺少连续性；</li>
+</ul>
+<h3 id="Model-structure"><a href="#Model-structure" class="headerlink" title="Model structure"></a>Model structure</h3><p align="center">
+  <img src="../images/16.png" alt="" width="100%">
+</p>
+
+
+
+<p>模型主要由<strong>两部分</strong>组成</p>
+<ul>
+<li><strong>VLMs</strong>：本文采用<strong>QWen2-VL 2B</strong>模型，参数量上比OpenVLA更小一些，参数采用原始发布的Qwen2-VL参数；允许多视角图像输入，image encoder映射到向量空间之后，通过concatenated直接连接；输出两个Token: reasoning tokens 以及action tokens。<ul>
+<li><strong>动作token</strong>通过一个三层的MLP以及层归一化，输出给扩散策略网络</li>
+<li><strong>推理 token</strong> 通过一个FiLM模块，输出scale以及shift参数，去调整动作token的三层MLP网络（也可能修改了扩散策略内部，文中表述比较含糊）；这一步类似通过对于图像以及语言的理解，去调整动作；</li>
+</ul>
+</li>
+<li><strong>ScaleDP</strong>：第二部分是一个模型学习训练的扩散策略Scale Diffusion Policy (<strong>ScaleDP</strong> )，本文较其他论文，大幅度提升了扩散模型参数，希望更好的学到动作表示；参考Octo的方法，对于多个形态的机器人设置多个输出头。</li>
+</ul>
+<p>三步骤训练方法如下：</p>
+<ul>
+<li><p>首先，在<strong>跨体态数据</strong>上对扩散专家进行预训练。该步骤希望学会一些与机器人具体型号无关的动作。这一步骤仅仅训练一个扩散模型ScaleDP，训练的过程<strong>不修改VLM任何参数</strong>，利用一个预训练好的ResNet-50作为image encoder，以及DistilBERT，DP去训练本文的<strong>ScaleDP</strong>。此处的损失函数没有单独说明，但应该只包含扩散损失。本文做法不是很理解，为什么要额外加一些网络作为image encoder以及语言大模型，直接冻结QWen2-VL 模型，利用其输出，一样可以得到比较好的文本以及图像特征向量。</p>
+</li>
+<li><p>其次，将 VLA 模型对齐到特定的机器人形态（embodiments），文中说的比较含糊，我理解的是对于多个输出头，有多组训练数据，每个头在自己的训练数据上进行任务的训练以及参数梯度下降（这一过程中视觉编码器是冻结的）。考虑到prompt理解问题，文中对于训练数据单独处理。损失分为两部分<br>$$<br>L = L_{diff}+\alpha L_{ntp}<br>$$<br><strong>第一部分</strong>就是扩散损失，对应的就是输出的动作是否符合预期；<strong>第二部分</strong>是next token prediction 损失，文中对于prompt，例如“Folding all shirts in the basket.”， 利用其他模型，例如gemin2得到拆分后的子步骤如下图黄色框图所示，对应的就希望模型去预测下一个token，也就是将拆分后的子步骤描述作为目标语句进行预测，希望VLM自动的学到拆解复杂指令的能力（实现SayCan的效果）。这一步是对于训练数据的调整，对于训练优化目标也做了相应的调整，在训练过程中不仅仅只关注控制拟合情况，也关注其语言，图像理解的能力。（这一部分gemini2分解任务是手动实现的，劳动密集）</p>
+<p align="center">
+  <img src="../images/17.png" alt="" width="100%">
+</p></li>
+<li><p>最好，针对长时间跨度，精细任务，进一步训练。训练方法以及数据格式，与第二步实际上完全相同，只是任务更为复杂，例如叠衣服，打包快递；第二步训练后实际上已经可以在很多任务上得到比较好的表现，第三步的训练更像是为了特定的复杂任务进一步的微调，目标任务主要是长时间跨度的复杂任务，一些简单的任务的演示，在第三步中就不再继续训练了，因为已经取得了很好的训练效果。</p>
+</li>
+</ul>
+<h3 id="Experiment"><a href="#Experiment" class="headerlink" title="Experiment"></a>Experiment</h3><p>其他的一些实验文本数据，分解prompt</p>
+<p align="center">
+  <img src="../images/18.png" alt="" width="100%">
+</p>
+
+
+
+<p><strong>第一个实验</strong>：DexVLA只经过两阶段训练，同样的其他对比模型也用数据进行了微调，保证公平。实验对比有些夸张，叠衣服这样的复杂任务完成率低是可以理解的，但其他模型的成功率即使是在简单的pick任务上，得分也就只有0.2不到，感觉和作者的微调设置有关系。</p>
+<p align="center">
+  <img src="../images/19.png" alt="" width="100%">
+</p>
+
+
+<p><strong>第二个实验</strong>：两个非常复杂的任务，在两个全新的双臂机器人平台进行训练，比较迁移能力，只使用了100 demonstrations，本文的模型也取得了很高的成绩</p>
+<p align="center">
+  <img src="../images/20.png" alt="" width="100%">
+</p>
+
+
+
+<p>后续<strong>消融实验</strong>，也验证了第三阶段的训练的有效性以及更大的扩散策略（1B）的必要性。</p>
+<h3 id="Github-code"><a href="#Github-code" class="headerlink" title="Github code"></a>Github code</h3><p>由两部分组成，QWen2-VL以及一个扩散模型指导动作。训练分为三阶段，作者只提供了<strong>一阶段</strong>得到的扩散模型参数以及QWen-VL参数（一阶段Qwen就是原始参数），后续的二阶段，三阶段需要自己微调才可以实现使用。只提供了训练脚本sh文件。</p>
+<p>作为在双臂机器人的实验而言，二阶段已经可以做实验验证，简单的抓取动作都可以完成。</p>
+<p>第三阶段主要是作为更精细任务的进一步训练，本质上和第二阶段训练没有差别。区别主要在于训练的数据集任务更为复杂。</p>
+<h3 id="Question"><a href="#Question" class="headerlink" title="Question"></a>Question</h3><ul>
+<li>多输出头的代价函数如何设置，不同阶段的代价函数。对于新增的机器人需要新增一个head吗？对于新的双臂机器人，是否可以直接在已有的双头机器人输出头进行微调。</li>
+<li>第1阶段的训练过程，额外添加的ResNet50以及Distilbert是否也要参与训练，文中说道ResNet50是随机初始化的，作为image encoder而言，参数这样设置很不合理。</li>
+<li>我们的模型训练的时候，是否需要实现SayCan这样的功能呢？这个性质是好的，但是对训练数据提出了很高的要求。文中是通过将视频输入给Google Gemini2.0利用其视频理解功能，5s间隔自动生成每段视频的内容动作概述，作为训练label，时间成本会比较高。</li>
+<li>是否有足够的实验数据使我们可以在简单的任务上进行微调，推动后续任务。</li>
+</ul>
+<h3 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h3><p>本文的方法而言，虽然不是很端到端，因为需要加一个扩散策略，然后扩散策略还需要单独的训练，用了很多其他的网络，但确实可以提升数据的利用度，提高训练效率。这也是模仿学习相比于大数据训练的高效性体现，作者实际上在对比的每个任务上，都单独进行了微调，所以才能实现一个比较好的效果。</p>
+<p>本文在模型上没有特别的创新，但是在代价函数上给了一些启发，如何在训练动作的时候，额外的考虑语言以及图像理解能力不被弱化。这一点实际上很重要，有些模型例如Dino，宣称不需要微调，但实际上会发现简单的微调会使得性能下降的很严重。将这些VLM模型利用到控制相关任务中，训练过程引起的特征提取能力下降是</p>
+<h2 id="后续安排"><a href="#后续安排" class="headerlink" title="后续安排"></a>后续安排</h2><p>之前提到除了控制以外，还希望提供对于任务的分析，例如该任务可不可行这样的判断。但这一步前提实际上还是需要在双臂机器人上先实现基础的控制。这一步的实现，在我看来实际上可以直接提取reasoning token 去进行考虑，例如后续加MLP层进行判断，因为这个token本身就包含了对于任务以及场景的理解。</p>
+<p>针对我们的机器人微调，数据量照作者所说，需要至少100 demonstrations。用这个模型去做实验，包括在自己的机器人上部署，或者后续添加新的功能，相对来说调整会比较多。</p>
+<p align="center">
+  <img src="../images/21.png" alt="" width="100%">
+</p>
+
+
+
+<p>另一个模型，chatVLA似乎是提供了完整的训练好的开箱即用模型参数，但是模型是针对单臂训练的，将其应用到双臂机器人。</p>
+<p>此外还有清华大学开源的双臂机器人项目：<strong>RDT-1B</strong>: a Diffusion Foundation Model for Bimanual Manipulation，提供了初始训练的结果，可以进一步微调（作者也提供了他们的微调数据），但在一些简单任务上可以实现开箱即用。但只有Diffusion Transformer结构，没有VLA。</p>
+<p align="center">
+  <img src="../images/RDT.png" alt="" width="100%">
+</p>
+
+
+
+<p>此外还有英伟达GR00T N1.5，采用了与本文相同的模型结构，但控制是针对整个机器人而不是针对机械臂：</p>
+<p align="center">
+  <img src=".assets/Nvida.png" alt="" width="100%">
+</p>
+
+
+<h2 id="Appendix"><a href="#Appendix" class="headerlink" title="Appendix"></a>Appendix</h2><h3 id="M-RoPE：QWen2-VL多模态旋转编码"><a href="#M-RoPE：QWen2-VL多模态旋转编码" class="headerlink" title="M-RoPE：QWen2-VL多模态旋转编码"></a>M-RoPE：QWen2-VL多模态旋转编码</h3><blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/tardis/bd/art/647109286">十分钟读懂旋转编码（RoPE）</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/719388479">Qwen2-VL技术解析（二）- M-ROPE - 知乎</a></p>
+</blockquote>
+<p>旋转编码本质上，是将每个token，例如第$m$个token嵌入到512维度后，$x\in R^{512}$​，然后两两一组，例如x[0]与x[1]一组，进行一个旋转操作，操作的旋转矩阵<br>$$<br>\mathbf{R}(\theta) =<br>\begin{bmatrix}<br>\cos m\theta &amp; -\sin m\theta \<br>\sin m\theta &amp; \cos m\theta<br>\end{bmatrix}\quad<br>\theta = 10000^{-2(i-1)/d},i\in[1,2,…,d/2]<br>$$</p>
+<p>$$<br>\begin{bmatrix}<br>x_1’ \<br>x_2’<br>\end{bmatrix}<br>=<br>\begin{bmatrix}<br>\cos m\theta &amp; -\sin m \theta \<br>\sin m \theta &amp; \cos m \theta<br>\end{bmatrix}<br>\begin{bmatrix}<br>x_1 \<br>x_2<br>\end{bmatrix}<br>=<br>\begin{bmatrix}<br>x_1 \cos m\theta - x_2 \sin m\theta \<br>x_1 \sin m\theta + x_2 \cos m\theta<br>\end{bmatrix}<br>$$</p>
+<p>具体的示意图如下所示：，每个token两两分组，由于不同的token的m不一样，同一个token的不同位置i不一样，所以实现了不同位置的不同程度旋转。虽然这个是类似正弦形式的绝对位置编码，但由于其用在attention相乘中，自动的在m，n两个位置的token相乘过程中，构造了m-n的旋转角度，达到相对位置编码的目的。</p>
+<p align="center">
+  <img src="../images/23.jpg" alt="" width="80%">
+</p>
+
+<p align="center">
+  <img src="../images/25.svg" alt="" width="80%">
+</p>
+
+
+<p>对于2d旋转位置编码，与1d旋转位置编码，其实就是对角从2<em>2的旋转矩阵，变成了4</em>4的旋转矩阵：</p>
+<p align="center">
+  <img src="../images/24.jpg" alt="" width="80%">
+</p>
+
+
+<p>同理，QWen2.5中将时间，宽，高三个维度分离，实际上就是构造了6*6的旋转子空间。</p>
+<p align="center">
+  <img src="../images/22.png" alt="" width="80%">
+</p>
+
+
+<h3 id="Scable-Difussion-Policy（ScableDP）"><a href="#Scable-Difussion-Policy（ScableDP）" class="headerlink" title="Scable Difussion Policy（ScableDP）"></a>Scable Difussion Policy（ScableDP）</h3><blockquote>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/670555655">(8 条消息) Diffusion Policy—基于扩散模型的机器人动作生成策略 - 知乎</a></p>
+</blockquote>
+<p>扩散模型输出实际上是一系列的动作序列，这也是为什么扩散模型控制更为稳定的原因。对比BET与DP可以发现，输出多步动作。</p>
+<p align="center">
+  <img src="../images/25.jpg" alt="" width="80%">
+</p>
+
+
+<p>关于Action Space Scalabiltiy或者sequential correlation问题，就是机器人对未来动作的预测不应该只局限于眼前的一步两步动作，而应该更有前瞻性，可以往前预测数十步动作。针对这个问题，<strong>迟宬</strong>给了非常清晰的解释：数据预测有两种方法：</p>
+<ul>
+<li><strong>一</strong>是直接输出一个数值；</li>
+<li><strong>二</strong>是将可能的数值分成几个区间，进行离散预测。</li>
+</ul>
+<p>在预测Multi-Modal Action的时候，人们倾向于采用离散预测，将连续值问题转化为分类问题（OpenVLA） ，但这样做涉及的算力成本很高，尤其在处理高维空间时。此外，针对机器人控制问题，如果采用分类方法，每一步都需要预测下一步要执行的动作，而实际需求是希望一次性预测多步动作，这就涉及到了连续控制中的动作一致性问题。解决这个问题的挑战在于平衡成本和对高维连续控制的需求。假如一个动作化为7个自由度，一个自由度100个区间，就对应着100^7。如果采用这种方法，成本将会非常非常高。随着维度的增加，成本会呈指数级增长</p>
+<p>由于只能预测一步，所以OpenVLA的方法会出现不确定性，导致抖动（Action Inconsistent）。例如方向一下子左边，一下子右边。</p>
+<p>在Robot Learning领域，机器人动作执行主要有三种方法：</p>
+<ul>
+<li>直接回归：就是RL的方法，给图片输出动作</li>
+<li>分类预测：就是OpenVLA的方法</li>
+<li>生成式模型：扩散策略属于其中一种非常稳定的方法，也是扩散模型的一个非常重要的优势。远远强于gan这样的网络，不需要非常精细的调参。同时，这也解释了为什么像Stable Diffusion这样的方法，以及现在各种图像生成模型能够在如此庞大的数据集上进行训练，这是因为它们的训练非常稳定。</li>
+</ul>
+<p>首先回到最基础的扩散模型，Diffusion Models：</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/563661713">扩散模型之DDPM - 知乎</a>：该文章重点看</p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/624221952">超详细的扩散模型（Diffusion Models）原理+代码 - 知乎</a></p>
+<p><a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#forward-diffusion-process">What are Diffusion Models? | Lil’Log</a></p>
+</blockquote>
+<p>2020年，<strong>DDPM</strong>（Denoising Diffusion Probabilistic Model）被提出，被称为<a target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=226847260&content_type=Article&match_order=1&q=%E6%89%A9%E6%95%A3%E6%A8%A1%E5%9E%8B&zhida_source=entity">扩散模型</a>（Diffusion Model）。扩散模型分为两部分，前向过程与反向过程。前向过程又称为扩散，反向过程就是去噪。无论是前向过程还是反向过程都是一个参数化的<a target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=226847260&content_type=Article&match_order=1&q=%E9%A9%AC%E5%B0%94%E5%8F%AF%E5%A4%AB%E9%93%BE&zhida_source=entity">马尔可夫链</a>（Markov chain），其中反向过程可用于生成数据样本（它的作用类似GAN中的生成器）。实际上扩散模型的概念更广义的，DDPM是其提出的最原始标准形式。</p>
+<p align="center">
+  <img src="../images/26.jpg" alt="" width="80%">
+</p>
+
+
+<p>正向过程通过人为的β参数对图像添加噪声。</p>
+<p>逆向过程，希望通过网络进行拟合。q表示的实际的逆向过程，已知道xt和x0,倒推$x_{t-1}$。但实际拟合一个网络，网络输出是$x_t$以及时间步$t$，去拟合均值和方差然后得到$x_{t-1}$。假设$x_{t-1}$符合均值方差为$\mu_\theta,\Sigma_\theta$ 的分布。而$\mu_\theta,\Sigma_\theta$是用网络拟合得到的数值，网络的输入是$t$以及$x_t$</p>
+<p align="center">
+  <img src="../images/23.png" alt="" width="80%">
+</p>
+
+
+<p>实际网络只拟合均值，方差固定。反向过程中，方差通常是固定的（应该是简化）。论文通常不拟合均值，而是拟合噪声，然后用下面的公式，就得到了均值的值：</p>
+<p align="center">
+  <img src="../images/24.png" alt="" width="40%">
+</p>
+
+
+<p>因为 $t $和$ x_t$ 已知(实际上$\alpha$应该也是认为已知的，$\alpha$与前向过程的$\beta$有关系，$\beta$也认为已知)，只需使用神经网络拟合$ ϵ_θ(x_t,t)$ 。整个框图如下所示，Gaussian Diffusian 模块主要是生成随机噪声然后加到图片上。Unet就是预测反向的噪声，传给Gaussian Diffusion让他从图片中减去预测的噪声。</p>
+<p align="center">
+  <img src="../images/27.jpg" alt="" width="100%">
+</p>
+
+
+<p>Unet输入是时间t以及加噪声后的数据x_t，预测x_T回到x_0的噪声值。损失就是真实噪声与预测噪声之间的二范数差值。时间t使用正线位置编码，统一量化尺度。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+
+  
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+  </nav>
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Daniel Hu"
+      src="/images/headpotrait.jpg">
+  <p class="site-author-name" itemprop="name">Daniel Hu</p>
+  <div class="site-description" itemprop="description">Share Notes & Life</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">19</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/sep459" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;sep459" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Daniel Hu</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">141k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">2:09</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共85.2k字</span>
+  <span class="post-meta-divider">|</span>
+  本站总访问量<span id="busuanzi_value_site_pv"></span>次
+  <span class="post-meta-divider">|</span>
+  本站访客数<span id="busuanzi_value_site_uv"></span>人次
+  <span class="post-meta-divider">|</span>
+  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

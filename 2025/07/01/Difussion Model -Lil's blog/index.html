@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/s5.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/s5.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":{"enable":true,"caption":false},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="What are Diffusion Models?Date: July 11, 2021 | Estimated Reading Time: 31 min | Author: Lilian Weng Table of ContentsWhat are Diffusion Models?Forward diffusion processConnection with stochastic grad">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Overview of Diffusion Models">
+<meta property="og:url" content="http://example.com/2025/07/01/Difussion%20Model%20-Lil's%20blog/index.html">
+<meta property="og:site_name" content="Sep_459&#39;s Blog">
+<meta property="og:description" content="What are Diffusion Models?Date: July 11, 2021 | Estimated Reading Time: 31 min | Author: Lilian Weng Table of ContentsWhat are Diffusion Models?Forward diffusion processConnection with stochastic grad">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/generative-overview.png">
+<meta property="og:image" content="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/DDPM.png">
+<meta property="og:image" content="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/diffusion-example.png">
+<meta property="og:image" content="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/DDPM-algo.png">
+<meta property="og:image" content="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/diffusion-beta.png">
+<meta property="og:image" content="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/improved-DDPM-nll.png">
+<meta property="og:image" content="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/conditioned-DDPM.png">
+<meta property="og:image" content="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/DDIM-results.png">
+<meta property="og:image" content="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/progressive-distillation.png">
+<meta property="og:image" content="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/progressive-distillation-algo.png">
+<meta property="og:image" content="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/consistency-models.png">
+<meta property="og:image" content="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/consistency-models-exp.png">
+<meta property="og:image" content="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/image-distortion-rate.png">
+<meta property="og:image" content="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/latent-diffusion-arch.png">
+<meta property="og:image" content="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/cascaded-diffusion.png">
+<meta property="og:image" content="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/unCLIP.png">
+<meta property="og:image" content="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/U-net.png">
+<meta property="og:image" content="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/ControlNet.png">
+<meta property="og:image" content="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/DiT.png">
+<meta property="article:published_time" content="2025-07-01T00:23:42.000Z">
+<meta property="article:modified_time" content="2025-11-08T05:39:06.914Z">
+<meta property="article:author" content="Daniel Hu">
+<meta property="article:tag" content="Note">
+<meta property="article:tag" content="Diffusion Model">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/generative-overview.png">
+
+<link rel="canonical" href="http://example.com/2025/07/01/Difussion%20Model%20-Lil's%20blog/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Overview of Diffusion Models | Sep_459's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Sep_459's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Welcome to my website</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">16</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">2</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">19</span></a>
+
+  </li>
+        <li class="menu-item menu-item-相册">
+
+    <a href="/gallery/" rel="section"><i class="fa fa-camera fa-fw"></i>相册</a>
+
+  </li>
+        <li class="menu-item menu-item-美食">
+
+    <a href="/food/" rel="section"><i class="fa fa-utensils fa-fw"></i>美食</a>
+
+  </li>
+        <li class="menu-item menu-item-日常">
+
+    <a href="/daily/" rel="section"><i class="fa fa-book fa-fw"></i>日常</a>
+
+  </li>
+        <li class="menu-item menu-item-宠物日常">
+
+    <a href="/pet/" rel="section"><i class="fa fa-paw fa-fw"></i>宠物日常</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/sep459" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/07/01/Difussion%20Model%20-Lil's%20blog/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/headpotrait.jpg">
+      <meta itemprop="name" content="Daniel Hu">
+      <meta itemprop="description" content="Share Notes & Life">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sep_459's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Overview of Diffusion Models
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2025-07-01 08:23:42" itemprop="dateCreated datePublished" datetime="2025-07-01T08:23:42+08:00">2025-07-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-11-08 13:39:06" itemprop="dateModified" datetime="2025-11-08T13:39:06+08:00">2025-11-08</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>46k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>42 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="What-are-Diffusion-Models"><a href="#What-are-Diffusion-Models" class="headerlink" title="What are Diffusion Models?"></a>What are Diffusion Models?</h1><p>Date: July 11, 2021 | Estimated Reading Time: 31 min | Author: Lilian Weng</p>
+<details open="" style="box-sizing: border-box;"><summary accesskey="c" title="(Alt + C)" style="box-sizing: border-box; cursor: zoom-out; margin-inline-start: 20px;"><span class="details" style="box-sizing: border-box; display: inline; font-weight: 500;">Table of Contents</span></summary><div class="inner" style="box-sizing: border-box; margin: 0px 20px; padding: 10px 20px;"><ul style="box-sizing: border-box; padding: 0px; margin: 0px;"><li style="box-sizing: border-box;"><a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#what-are-diffusion-models" aria-label="What are Diffusion Models?" style="box-sizing: border-box; color: rgb(30, 30, 30); text-decoration: none;">What are Diffusion Models?</a><ul style="box-sizing: border-box; padding: 0px; margin: 0px; margin-inline-start: 24px;"><li style="box-sizing: border-box;"><a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#forward-diffusion-process" aria-label="Forward diffusion process" style="box-sizing: border-box; color: rgb(30, 30, 30); text-decoration: none;">Forward diffusion process</a><ul style="box-sizing: border-box; padding: 0px; margin: 0px; margin-inline-start: 24px;"><li style="box-sizing: border-box;"><a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#connection-with-stochastic-gradient-langevin-dynamics" aria-label="Connection with stochastic gradient Langevin dynamics" style="box-sizing: border-box; color: rgb(30, 30, 30); text-decoration: none;">Connection with stochastic gradient Langevin dynamics</a></li></ul></li><li style="box-sizing: border-box;"><a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#reverse-diffusion-process" aria-label="Reverse diffusion process" style="box-sizing: border-box; color: rgb(30, 30, 30); text-decoration: none;">Reverse diffusion process</a></li><li style="box-sizing: border-box;"><a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#parameterization-of-l_t-for-training-loss" aria-label="Parameterization of $L_t$ for Training Loss" style="box-sizing: border-box; color: rgb(30, 30, 30); text-decoration: none;">Parameterization of $L_t$ for Training Loss</a><ul style="box-sizing: border-box; padding: 0px; margin: 0px; margin-inline-start: 24px;"><li style="box-sizing: border-box;"><a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#simplification" aria-label="Simplification" style="box-sizing: border-box; color: rgb(30, 30, 30); text-decoration: none;">Simplification</a></li><li style="box-sizing: border-box;"><a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#connection-with-noise-conditioned-score-networks-ncsn" aria-label="Connection with noise-conditioned score networks (NCSN)" style="box-sizing: border-box; color: rgb(30, 30, 30); text-decoration: none;">Connection with noise-conditioned score networks (NCSN)</a></li></ul></li><li style="box-sizing: border-box;"><a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#parameterization-of-beta_t" aria-label="Parameterization of $\beta_t$" style="box-sizing: border-box; color: rgb(30, 30, 30); text-decoration: none;">Parameterization of $\beta_t$</a></li><li style="box-sizing: border-box;"><a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#parameterization-of-reverse-process-variance-boldsymbolsigma_theta" aria-label="Parameterization of reverse process variance $\boldsymbol{\Sigma}_\theta$" style="box-sizing: border-box; color: rgb(30, 30, 30); text-decoration: none;">Parameterization of reverse process variance $\boldsymbol{\Sigma}_\theta$</a></li></ul></li><li style="box-sizing: border-box;"><a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#conditioned-generation" aria-label="Conditioned Generation" style="box-sizing: border-box; color: rgb(30, 30, 30); text-decoration: none;">Conditioned Generation</a><ul style="box-sizing: border-box; padding: 0px; margin: 0px; margin-inline-start: 24px;"><li style="box-sizing: border-box;"><a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#classifier-guided-diffusion" aria-label="Classifier Guided Diffusion" style="box-sizing: border-box; color: rgb(30, 30, 30); text-decoration: none;">Classifier Guided Diffusion</a></li><li style="box-sizing: border-box;"><a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#classifier-free-guidance" aria-label="Classifier-Free Guidance" style="box-sizing: border-box; color: rgb(30, 30, 30); text-decoration: none;">Classifier-Free Guidance</a></li></ul></li><li style="box-sizing: border-box;"><a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#speed-up-diffusion-models" aria-label="Speed up Diffusion Models" style="box-sizing: border-box; color: rgb(30, 30, 30); text-decoration: none;">Speed up Diffusion Models</a><ul style="box-sizing: border-box; padding: 0px; margin: 0px; margin-inline-start: 24px;"><li style="box-sizing: border-box;"><a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#fewer-sampling-steps--distillation" aria-label="Fewer Sampling Steps &amp; Distillation" style="box-sizing: border-box; color: rgb(30, 30, 30); text-decoration: none;">Fewer Sampling Steps &amp; Distillation</a></li><li style="box-sizing: border-box;"><a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#latent-variable-space" aria-label="Latent Variable Space" style="box-sizing: border-box; color: rgb(30, 30, 30); text-decoration: none;">Latent Variable Space</a></li></ul></li><li style="box-sizing: border-box;"><a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#scale-up-generation-resolution-and-quality" aria-label="Scale up Generation Resolution and Quality" style="box-sizing: border-box; color: rgb(30, 30, 30); text-decoration: none;">Scale up Generation Resolution and Quality</a></li><li style="box-sizing: border-box;"><a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#model-architecture" aria-label="Model Architecture" style="box-sizing: border-box; color: rgb(30, 30, 30); text-decoration: none;">Model Architecture</a></li><li style="box-sizing: border-box;"><a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#quick-summary" aria-label="Quick Summary" style="box-sizing: border-box; color: rgb(30, 30, 30); text-decoration: none;">Quick Summary</a></li><li style="box-sizing: border-box;"><a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#citation" aria-label="Citation" style="box-sizing: border-box; color: rgb(30, 30, 30); text-decoration: none;">Citation</a></li><li style="box-sizing: border-box;"><a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#references" aria-label="References" style="box-sizing: border-box; color: rgb(30, 30, 30); text-decoration: none;">References</a></li></ul></div></details>
+
+<p>[Updated on 2021-09-19: Highly recommend this blog post on <a target="_blank" rel="noopener" href="https://yang-song.github.io/blog/2021/score/">score-based generative modeling</a> by Yang Song (author of several key papers in the references)].<br>[Updated on 2022-08-27: Added <a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#classifier-free-guidance">classifier-free guidance</a>, <a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#glide">GLIDE</a>, <a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#unclip">unCLIP</a> and <a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#imagen">Imagen</a>.<br>[Updated on 2022-08-31: Added <a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#ldm">latent diffusion model</a>.<br>[Updated on 2024-04-13: Added <a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#prog-distll">progressive distillation</a>, <a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#consistency">consistency models</a>, and the <a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#model-architecture">Model Architecture section</a>.</p>
+<p>So far, I’ve written about three types of generative models, <a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2017-08-20-gan/">GAN</a>, <a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2018-08-12-vae/">VAE</a>, and <a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2018-10-13-flow-models/">Flow-based</a> models. They have shown great success in generating high-quality samples, but each has some limitations of its own. GAN models are known for potentially unstable training and less diversity in generation due to their adversarial training nature. VAE relies on a surrogate loss. Flow models have to use specialized architectures to construct reversible transform.<span id="more"></span> </p>
+<p>Diffusion models are inspired by non-equilibrium 热力学. They define a Markov chain of diffusion steps to slowly add random noise to data and then learn to reverse the diffusion process to construct desired data samples from the noise. Unlike VAE or flow models, diffusion models are learned with a fixed procedure and the latent variable has high dimensionality (same as the original data).</p>
+<p><img src="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/generative-overview.png" alt="img">Overview of different types of generative models.</p>
+<h1 id="What-are-Diffusion-Models-1"><a href="#What-are-Diffusion-Models-1" class="headerlink" title="What are Diffusion Models?"></a>What are Diffusion Models?</h1><p>Several diffusion-based generative models have been proposed with similar ideas underneath, including <em>diffusion probabilistic models</em> (<a target="_blank" rel="noopener" href="https://arxiv.org/abs/1503.03585">Sohl-Dickstein et al., 2015</a>), <em>noise-conditioned score network</em> (<strong>NCSN</strong>; <a target="_blank" rel="noopener" href="https://arxiv.org/abs/1907.05600">Yang &amp; Ermon, 2019</a>), and <em>denoising diffusion probabilistic models</em> (<strong>DDPM</strong>; <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2006.11239">Ho et al. 2020</a>).</p>
+<h2 id="Forward-diffusion-process"><a href="#Forward-diffusion-process" class="headerlink" title="Forward diffusion process"></a>Forward diffusion process</h2><p>Given a data point sampled from a real data distribution $\mathbf{x}_0 \sim q(\mathbf{x})$, let us define a <em>forward diffusion process</em> in which we add small amount of Gaussian noise to the sample in $T$ steps, producing a sequence of noisy samples $\mathbf{x}_1, \dots, \mathbf{x}<em>T$. The step sizes are controlled by a variance schedule ${\beta_t \in (0, 1)}</em>{t=1}^T$.</p>
+<p>$$ q(\mathbf{x}<em>t \vert \mathbf{x}</em>{t-1}) = \mathcal{N}(\mathbf{x}<em>t; \sqrt{1 - \beta_t} \mathbf{x}</em>{t-1}, \beta_t\mathbf{I}) \quad q(\mathbf{x}_{1:T} \vert \mathbf{x}<em>0) = \prod^T</em>{t=1} q(\mathbf{x}<em>t \vert \mathbf{x}</em>{t-1}) $$</p>
+<p>The data sample $\mathbf{x}_0$ gradually loses its distinguishable features as the step $t$ becomes larger. Eventually when $T \to \infty$, $\mathbf{x}_T$ is equivalent to an isotropic Gaussian distribution.</p>
+<p><img src="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/DDPM.png" alt="img">The Markov chain of forward (reverse) diffusion process of generating a sample by slowly adding (removing) noise. (Image source: <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2006.11239">Ho et al. 2020</a> with a few additional annotations)</p>
+<p>A nice property of the above process is that we can sample $\mathbf{x}_t$ at any arbitrary time step $t$ in a closed form using <a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2018-08-12-vae/#reparameterization-trick">reparameterization trick</a>. Let $\alpha_t = 1 - \beta_t$ and $\bar{\alpha}<em>t = \prod</em>{i=1}^t \alpha_i$:</p>
+<p>$$ \begin{aligned} \mathbf{x}<em>t &amp;= \sqrt{\alpha_t}\mathbf{x}</em>{t-1} + \sqrt{1 - \alpha_t}\boldsymbol{\epsilon}<em>{t-1} &amp; \text{ ;where } \boldsymbol{\epsilon}</em>{t-1}, \boldsymbol{\epsilon}<em>{t-2}, \dots \sim \mathcal{N}(\mathbf{0}, \mathbf{I}) \ &amp;= \sqrt{\alpha_t \alpha</em>{t-1}} \mathbf{x}<em>{t-2} + \sqrt{1 - \alpha_t \alpha</em>{t-1}} \bar{\boldsymbol{\epsilon}}<em>{t-2} &amp; \text{ ;where } \bar{\boldsymbol{\epsilon}}</em>{t-2} \text{ merges two Gaussians (*).} \ &amp;= \dots \ &amp;= \sqrt{\bar{\alpha}_t}\mathbf{x}_0 + \sqrt{1 - \bar{\alpha}_t}\boldsymbol{\epsilon} \ q(\mathbf{x}_t \vert \mathbf{x}_0) &amp;= \mathcal{N}(\mathbf{x}_t; \sqrt{\bar{\alpha}_t} \mathbf{x}_0, (1 - \bar{\alpha}_t)\mathbf{I}) \end{aligned} $$</p>
+<p>(*) Recall that when we merge two Gaussians with different variance, $\mathcal{N}(\mathbf{0}, \sigma_1^2\mathbf{I})$ and $\mathcal{N}(\mathbf{0}, \sigma_2^2\mathbf{I})$, the new distribution is $\mathcal{N}(\mathbf{0}, (\sigma_1^2 + \sigma_2^2)\mathbf{I})$. Here the merged standard deviation is $\sqrt{(1 - \alpha_t) + \alpha_t (1-\alpha_{t-1})} = \sqrt{1 - \alpha_t\alpha_{t-1}}$.</p>
+<p>Usually, we can afford a larger update step when the sample gets noisier, so $\beta_1 &lt; \beta_2 &lt; \dots &lt; \beta_T$ and therefore $\bar{\alpha}_1 &gt; \dots &gt; \bar{\alpha}_T$.</p>
+<h3 id="Connection-with-stochastic-gradient-Langevin-dynamics"><a href="#Connection-with-stochastic-gradient-Langevin-dynamics" class="headerlink" title="Connection with stochastic gradient Langevin dynamics"></a>Connection with stochastic gradient Langevin dynamics</h3><p>Langevin dynamics is a concept from physics, developed for statistically modeling molecular systems. Combined with stochastic gradient descent, <em>stochastic gradient Langevin dynamics</em> (<a target="_blank" rel="noopener" href="https://www.stats.ox.ac.uk/~teh/research/compstats/WelTeh2011a.pdf">Welling &amp; Teh 2011</a>) can produce samples from a probability density $p(\mathbf{x})$ using only the gradients $\nabla_\mathbf{x} \log p(\mathbf{x})$ in a Markov chain of updates:</p>
+<p>$$ \mathbf{x}<em>t = \mathbf{x}</em>{t-1} + \frac{\delta}{2} \nabla_\mathbf{x} \log p(\mathbf{x}_{t-1}) + \sqrt{\delta} \boldsymbol{\epsilon}_t ,\quad\text{where } \boldsymbol{\epsilon}_t \sim \mathcal{N}(\mathbf{0}, \mathbf{I}) $$</p>
+<p>where $\delta$ is the step size. When $T \to \infty, \epsilon \to 0$, $\mathbf{x}_T$ equals to the true probability density $p(\mathbf{x})$.</p>
+<p>Compared to standard SGD, stochastic gradient Langevin dynamics injects Gaussian noise into the parameter updates to avoid collapses into local minima.</p>
+<h2 id="Reverse-diffusion-process"><a href="#Reverse-diffusion-process" class="headerlink" title="Reverse diffusion process"></a>Reverse diffusion process</h2><p>If we can reverse the above process and sample from $q(\mathbf{x}_{t-1} \vert \mathbf{x}_t)$, we will be able to recreate the true sample from a Gaussian noise input, $\mathbf{x}<em>T \sim \mathcal{N}(\mathbf{0}, \mathbf{I})$. Note that if $\beta_t$ is small enough, $q(\mathbf{x}</em>{t-1} \vert \mathbf{x}<em>t)$ will also be Gaussian. Unfortunately, we cannot easily estimate $q(\mathbf{x}</em>{t-1} \vert \mathbf{x}_t)$ because it needs to use the entire dataset and therefore we need to learn a model $p_\theta$ to approximate these conditional probabilities in order to run the <em>reverse diffusion process</em>.</p>
+<p>$$ p_\theta(\mathbf{x}<em>{0:T}) = p(\mathbf{x}<em>T) \prod^T</em>{t=1} p_\theta(\mathbf{x}</em>{t-1} \vert \mathbf{x}<em>t) \quad p_\theta(\mathbf{x}</em>{t-1} \vert \mathbf{x}<em>t) = \mathcal{N}(\mathbf{x}</em>{t-1}; \boldsymbol{\mu}_\theta(\mathbf{x}_t, t), \boldsymbol{\Sigma}_\theta(\mathbf{x}_t, t)) $$</p>
+<p><img src="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/diffusion-example.png" alt="img">An example of training a diffusion model for modeling a 2D swiss roll data. (Image source: <a target="_blank" rel="noopener" href="https://arxiv.org/abs/1503.03585">Sohl-Dickstein et al., 2015</a>)</p>
+<p>It is noteworthy that the reverse conditional probability is tractable when conditioned on $\mathbf{x}_0$:</p>
+<p>$$ q(\mathbf{x}_{t-1} \vert \mathbf{x}_t, \mathbf{x}<em>0) = \mathcal{N}(\mathbf{x}</em>{t-1}; \color{blue}{\tilde{\boldsymbol{\mu}}}(\mathbf{x}_t, \mathbf{x}_0), \color{red}{\tilde{\beta}_t} \mathbf{I}) $$</p>
+<p>Using Bayes’ rule, we have:</p>
+<p>$$ \begin{aligned} q(\mathbf{x}_{t-1} \vert \mathbf{x}_t, \mathbf{x}_0) &amp;= q(\mathbf{x}<em>t \vert \mathbf{x}</em>{t-1}, \mathbf{x}<em>0) \frac{ q(\mathbf{x}</em>{t-1} \vert \mathbf{x}_0) }{ q(\mathbf{x}<em>t \vert \mathbf{x}<em>0) } \ &amp;\propto \exp \Big(-\frac{1}{2} \big(\frac{(\mathbf{x}<em>t - \sqrt{\alpha_t} \mathbf{x}</em>{t-1})^2}{\beta_t} + \frac{(\mathbf{x}</em>{t-1} - \sqrt{\bar{\alpha}</em>{t-1}} \mathbf{x}<em>0)^2}{1-\bar{\alpha}</em>{t-1}} - \frac{(\mathbf{x}_t - \sqrt{\bar{\alpha}<em>t} \mathbf{x}<em>0)^2}{1-\bar{\alpha}<em>t} \big) \Big) \ &amp;= \exp \Big(-\frac{1}{2} \big(\frac{\mathbf{x}<em>t^2 - 2\sqrt{\alpha_t} \mathbf{x}<em>t \color{blue}{\mathbf{x}</em>{t-1}} \color{black}{+ \alpha_t} \color{red}{\mathbf{x}</em>{t-1}^2} }{\beta_t} + \frac{ \color{red}{\mathbf{x}</em>{t-1}^2} \color{black}{- 2 \sqrt{\bar{\alpha}</em>{t-1}} \mathbf{x}<em>0} \color{blue}{\mathbf{x}</em>{t-1}} \color{black}{+ \bar{\alpha}</em>{t-1} \mathbf{x}<em>0^2} }{1-\bar{\alpha}</em>{t-1}} - \frac{(\mathbf{x}_t - \sqrt{\bar{\alpha}<em>t} \mathbf{x}<em>0)^2}{1-\bar{\alpha}<em>t} \big) \Big) \ &amp;= \exp\Big( -\frac{1}{2} \big( \color{red}{(\frac{\alpha_t}{\beta_t} + \frac{1}{1 - \bar{\alpha}</em>{t-1}})} \mathbf{x}</em>{t-1}^2 - \color{blue}{(\frac{2\sqrt{\alpha_t}}{\beta_t} \mathbf{x}<em>t + \frac{2\sqrt{\bar{\alpha}</em>{t-1}}}{1 - \bar{\alpha}</em>{t-1}} \mathbf{x}<em>0)} \mathbf{x}</em>{t-1} \color{black}{ + C(\mathbf{x}_t, \mathbf{x}_0) \big) \Big)} \end{aligned} $$</p>
+<p>where $C(\mathbf{x}_t, \mathbf{x}<em>0)$ is some function not involving $\mathbf{x}</em>{t-1}$ and details are omitted. Following the standard Gaussian density function, the mean and variance can be parameterized as follows (recall that $\alpha_t = 1 - \beta_t$ and $\bar{\alpha}<em>t = \prod</em>{i=1}^t \alpha_i$):</p>
+<p>$$ \begin{aligned} \tilde{\beta}<em>t &amp;= 1/(\frac{\alpha_t}{\beta_t} + \frac{1}{1 - \bar{\alpha}</em>{t-1}}) = 1/(\frac{\alpha_t - \bar{\alpha}<em>t + \beta_t}{\beta_t(1 - \bar{\alpha}</em>{t-1})}) = \color{green}{\frac{1 - \bar{\alpha}_{t-1}}{1 - \bar{\alpha}_t} \cdot \beta_t} \ \tilde{\boldsymbol{\mu}}_t (\mathbf{x}<em>t, \mathbf{x}<em>0) &amp;= (\frac{\sqrt{\alpha_t}}{\beta_t} \mathbf{x}<em>t + \frac{\sqrt{\bar{\alpha}</em>{t-1} }}{1 - \bar{\alpha}</em>{t-1}} \mathbf{x}<em>0)/(\frac{\alpha_t}{\beta_t} + \frac{1}{1 - \bar{\alpha}</em>{t-1}}) \ &amp;= (\frac{\sqrt{\alpha_t}}{\beta_t} \mathbf{x}<em>t + \frac{\sqrt{\bar{\alpha}</em>{t-1} }}{1 - \bar{\alpha}</em>{t-1}} \mathbf{x}<em>0) \color{green}{\frac{1 - \bar{\alpha}</em>{t-1}}{1 - \bar{\alpha}<em>t} \cdot \beta_t} \ &amp;= \frac{\sqrt{\alpha_t}(1 - \bar{\alpha}</em>{t-1})}{1 - \bar{\alpha}_t} \mathbf{x}<em>t + \frac{\sqrt{\bar{\alpha}</em>{t-1}}\beta_t}{1 - \bar{\alpha}_t} \mathbf{x}_0\ \end{aligned} $$</p>
+<p>Thanks to the <a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#nice">nice property</a>, we can represent $\mathbf{x}_0 = \frac{1}{\sqrt{\bar{\alpha}_t}}(\mathbf{x}_t - \sqrt{1 - \bar{\alpha}_t}\boldsymbol{\epsilon}_t)$ and plug it into the above equation and obtain:</p>
+<p>这一步是为了得到均值的表达式，x0和xt以及方差的表达式，上一段直接就给出了。</p>
+<p>$$ \begin{aligned} \tilde{\boldsymbol{\mu}}<em>t &amp;= \frac{\sqrt{\alpha_t}(1 - \bar{\alpha}</em>{t-1})}{1 - \bar{\alpha}_t} \mathbf{x}<em>t + \frac{\sqrt{\bar{\alpha}</em>{t-1}}\beta_t}{1 - \bar{\alpha}_t} \frac{1}{\sqrt{\bar{\alpha}_t}}(\mathbf{x}_t - \sqrt{1 - \bar{\alpha}_t}\boldsymbol{\epsilon}_t) \ &amp;= \color{cyan}{\frac{1}{\sqrt{\alpha_t}} \Big( \mathbf{x}_t - \frac{1 - \alpha_t}{\sqrt{1 - \bar{\alpha}_t}} \boldsymbol{\epsilon}_t \Big)} \end{aligned} $$</p>
+<p>As demonstrated in Fig. 2., such a setup is very similar to <a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2018-08-12-vae/">VAE</a> and thus we can use the variational lower bound to optimize the negative log-likelihood.<strong>可以用变分下界优化负对数似然</strong></p>
+<p>$$ \begin{aligned} - \log p_\theta(\mathbf{x}<em>0) &amp;\leq - \log p_\theta(\mathbf{x}<em>0) + D_\text{KL}(q(\mathbf{x}</em>{1:T}\vert\mathbf{x}<em>0) | p_\theta(\mathbf{x}</em>{1:T}\vert\mathbf{x}<em>0) ) &amp; \small{\text{; KL is non-negative}}\ &amp;= - \log p_\theta(\mathbf{x}<em>0) + \mathbb{E}</em>{\mathbf{x}</em>{1:T}\sim q(\mathbf{x}</em>{1:T} \vert \mathbf{x}<em>0)} \Big[ \log\frac{q(\mathbf{x}</em>{1:T}\vert\mathbf{x}<em>0)}{p_\theta(\mathbf{x}</em>{0:T}) / p_\theta(\mathbf{x}<em>0)} \Big] \ &amp;= - \log p_\theta(\mathbf{x}<em>0) + \mathbb{E}<em>q \Big[ \log\frac{q(\mathbf{x}</em>{1:T}\vert\mathbf{x}<em>0)}{p_\theta(\mathbf{x}</em>{0:T})} + \log p_\theta(\mathbf{x}<em>0) \Big] \ &amp;= \mathbb{E}<em>q \Big[ \log \frac{q(\mathbf{x}</em>{1:T}\vert\mathbf{x}<em>0)}{p_\theta(\mathbf{x}</em>{0:T})} \Big] \ \text{Let }L_\text{VLB} &amp;= \mathbb{E}</em>{q(\mathbf{x}</em>{0:T})} \Big[ \log \frac{q(\mathbf{x}</em>{1:T}\vert\mathbf{x}<em>0)}{p_\theta(\mathbf{x}</em>{0:T})} \Big] \geq - \mathbb{E}_{q(\mathbf{x}_0)} \log p_\theta(\mathbf{x}_0) \end{aligned} $$</p>
+<p>It is also straightforward to get the same result using Jensen’s inequality. Say we want to minimize the cross entropy as the learning objective, 将交叉熵作为学习目标，发现交叉熵小于之前的变分下界</p>
+<p>$$ \begin{aligned} L_\text{CE} &amp;= - \mathbb{E}<em>{q(\mathbf{x}<em>0)} \log p_\theta(\mathbf{x}<em>0) \ &amp;= - \mathbb{E}</em>{q(\mathbf{x}<em>0)} \log \Big( \int p_\theta(\mathbf{x}</em>{0:T}) d\mathbf{x}</em>{1:T} \Big) \ &amp;= - \mathbb{E}</em>{q(\mathbf{x}<em>0)} \log \Big( \int q(\mathbf{x}</em>{1:T} \vert \mathbf{x}<em>0) \frac{p_\theta(\mathbf{x}</em>{0:T})}{q(\mathbf{x}<em>{1:T} \vert \mathbf{x}</em>{0})} d\mathbf{x}<em>{1:T} \Big) \ &amp;= - \mathbb{E}</em>{q(\mathbf{x}<em>0)} \log \Big( \mathbb{E}</em>{q(\mathbf{x}<em>{1:T} \vert \mathbf{x}<em>0)} \frac{p_\theta(\mathbf{x}</em>{0:T})}{q(\mathbf{x}</em>{1:T} \vert \mathbf{x}<em>{0})} \Big) \ &amp;\leq - \mathbb{E}</em>{q(\mathbf{x}<em>{0:T})} \log \frac{p_\theta(\mathbf{x}</em>{0:T})}{q(\mathbf{x}<em>{1:T} \vert \mathbf{x}</em>{0})} \ &amp;= \mathbb{E}<em>{q(\mathbf{x}</em>{0:T})}\Big[\log \frac{q(\mathbf{x}<em>{1:T} \vert \mathbf{x}</em>{0})}{p_\theta(\mathbf{x}_{0:T})} \Big] = L_\text{VLB} \end{aligned} $$</p>
+<p>To convert each term in the equation to be analytically computable, the objective can be further rewritten to be a combination of several KL-divergence and entropy terms (See the detailed step-by-step process in Appendix B in <a target="_blank" rel="noopener" href="https://arxiv.org/abs/1503.03585">Sohl-Dickstein et al., 2015</a>):为了便于计算，将函数的一些项重写为KL散度以及熵</p>
+<p>$$ \begin{aligned} L_\text{VLB} &amp;= \mathbb{E}<em>{q(\mathbf{x}</em>{0:T})} \Big[ \log\frac{q(\mathbf{x}<em>{1:T}\vert\mathbf{x}<em>0)}{p_\theta(\mathbf{x}</em>{0:T})} \Big] \ &amp;= \mathbb{E}<em>q \Big[ \log\frac{\prod</em>{t=1}^T q(\mathbf{x}<em>t\vert\mathbf{x}</em>{t-1})}{ p_\theta(\mathbf{x}<em>T) \prod</em>{t=1}^T p_\theta(\mathbf{x}</em>{t-1} \vert\mathbf{x}_t) } \Big] \ &amp;= \mathbb{E}<em>q \Big[ -\log p_\theta(\mathbf{x}<em>T) + \sum</em>{t=1}^T \log \frac{q(\mathbf{x}<em>t\vert\mathbf{x}</em>{t-1})}{p_\theta(\mathbf{x}</em>{t-1} \vert\mathbf{x}_t)} \Big] \ &amp;= \mathbb{E}<em>q \Big[ -\log p_\theta(\mathbf{x}<em>T) + \sum</em>{t=2}^T \log \frac{q(\mathbf{x}<em>t\vert\mathbf{x}</em>{t-1})}{p_\theta(\mathbf{x}</em>{t-1} \vert\mathbf{x}_t)} + \log\frac{q(\mathbf{x}_1 \vert \mathbf{x}_0)}{p_\theta(\mathbf{x}_0 \vert \mathbf{x}_1)} \Big] \ &amp;= \mathbb{E}<em>q \Big[ -\log p_\theta(\mathbf{x}<em>T) + \sum</em>{t=2}^T \log \Big( \frac{q(\mathbf{x}</em>{t-1} \vert \mathbf{x}_t, \mathbf{x}<em>0)}{p_\theta(\mathbf{x}</em>{t-1} \vert\mathbf{x}_t)}\cdot \frac{q(\mathbf{x}_t \vert \mathbf{x}<em>0)}{q(\mathbf{x}</em>{t-1}\vert\mathbf{x}_0)} \Big) + \log \frac{q(\mathbf{x}_1 \vert \mathbf{x}_0)}{p_\theta(\mathbf{x}_0 \vert \mathbf{x}_1)} \Big] \ &amp;= \mathbb{E}<em>q \Big[ -\log p_\theta(\mathbf{x}<em>T) + \sum</em>{t=2}^T \log \frac{q(\mathbf{x}</em>{t-1} \vert \mathbf{x}_t, \mathbf{x}<em>0)}{p_\theta(\mathbf{x}</em>{t-1} \vert\mathbf{x}<em>t)} + \sum</em>{t=2}^T \log \frac{q(\mathbf{x}_t \vert \mathbf{x}<em>0)}{q(\mathbf{x}</em>{t-1} \vert \mathbf{x}_0)} + \log\frac{q(\mathbf{x}_1 \vert \mathbf{x}_0)}{p_\theta(\mathbf{x}_0 \vert \mathbf{x}_1)} \Big] \ &amp;= \mathbb{E}<em>q \Big[ -\log p_\theta(\mathbf{x}<em>T) + \sum</em>{t=2}^T \log \frac{q(\mathbf{x}</em>{t-1} \vert \mathbf{x}_t, \mathbf{x}<em>0)}{p_\theta(\mathbf{x}</em>{t-1} \vert\mathbf{x}_t)} + \log\frac{q(\mathbf{x}_T \vert \mathbf{x}_0)}{q(\mathbf{x}_1 \vert \mathbf{x}_0)} + \log \frac{q(\mathbf{x}_1 \vert \mathbf{x}_0)}{p_\theta(\mathbf{x}_0 \vert \mathbf{x}_1)} \Big]\ &amp;= \mathbb{E}_q \Big[ \log\frac{q(\mathbf{x}_T \vert \mathbf{x}<em>0)}{p_\theta(\mathbf{x}<em>T)} + \sum</em>{t=2}^T \log \frac{q(\mathbf{x}</em>{t-1} \vert \mathbf{x}_t, \mathbf{x}<em>0)}{p_\theta(\mathbf{x}</em>{t-1} \vert\mathbf{x}_t)} - \log p_\theta(\mathbf{x}_0 \vert \mathbf{x}_1) \Big] \ &amp;= \mathbb{E}_q [\underbrace{D_\text{KL}(q(\mathbf{x}<em>T \vert \mathbf{x}<em>0) \parallel p_\theta(\mathbf{x}<em>T))}</em>{L_T} + \sum</em>{t=2}^T \underbrace{D_\text{KL}(q(\mathbf{x}</em>{t-1} \vert \mathbf{x}<em>t, \mathbf{x}<em>0) \parallel p_\theta(\mathbf{x}</em>{t-1} \vert\mathbf{x}<em>t))}</em>{L</em>{t-1}} \underbrace{- \log p_\theta(\mathbf{x}_0 \vert \mathbf{x}<em>1)}</em>{L_0} ] \end{aligned} $$</p>
+<p>Let’s label each component in the variational lower bound loss separately:发现其中的每一项都是对比真实的高斯分布以及网络输出，其中LT无需计算，因为没有可优化的参数。</p>
+<p>$$ \begin{aligned} L_\text{VLB} &amp;= L_T + L_{T-1} + \dots + L_0 \ \text{where } L_T &amp;= D_\text{KL}(q(\mathbf{x}_T \vert \mathbf{x}_0) \parallel p_\theta(\mathbf{x}_T)) \ L_t &amp;= D_\text{KL}(q(\mathbf{x}<em>t \vert \mathbf{x}</em>{t+1}, \mathbf{x}_0) \parallel p_\theta(\mathbf{x}<em>t \vert\mathbf{x}</em>{t+1})) \text{ for }1 \leq t \leq T-1 \ L_0 &amp;= - \log p_\theta(\mathbf{x}_0 \vert \mathbf{x}_1) \end{aligned} $$</p>
+<p>Every KL term in $L_\text{VLB}$ (except for $L_0$) compares two Gaussian distributions and therefore they can be computed in <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Kullback%E2%80%93Leibler_divergence#Multivariate_normal_distributions">closed form</a>. $L_T$ is constant and can be ignored during training because $q$ has no learnable parameters and $\mathbf{x}_T$ is a Gaussian noise. <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2006.11239">Ho et al. 2020</a> models $L_0$ using a separate discrete decoder derived from $\mathcal{N}(\mathbf{x}_0; \boldsymbol{\mu}_\theta(\mathbf{x}_1, 1), \boldsymbol{\Sigma}_\theta(\mathbf{x}_1, 1))$.</p>
+<h2 id="Parameterization-of-L-t-for-Training-Loss"><a href="#Parameterization-of-L-t-for-Training-Loss" class="headerlink" title="Parameterization of $L_t$ for Training Loss"></a>Parameterization of $L_t$ for Training Loss</h2><p>Recall that we need to learn a neural network to approximate the conditioned probability distributions in the reverse diffusion process, $p_\theta(\mathbf{x}_{t-1} \vert \mathbf{x}<em>t) = \mathcal{N}(\mathbf{x}</em>{t-1}; \boldsymbol{\mu}_\theta(\mathbf{x}_t, t), \boldsymbol{\Sigma}_\theta(\mathbf{x}_t, t))$. We would like to train $\boldsymbol{\mu}_\theta$ to predict $\tilde{\boldsymbol{\mu}}_t = \frac{1}{\sqrt{\alpha_t}} \Big( \mathbf{x}_t - \frac{1 - \alpha_t}{\sqrt{1 - \bar{\alpha}_t}} \boldsymbol{\epsilon}_t \Big)$. Because $\mathbf{x}_t$ is available as input at training time, we can reparameterize the Gaussian noise term instead to make it predict $\boldsymbol{\epsilon}_t$ from the input $\mathbf{x}_t$ at time step $t$:</p>
+<p>$$ \begin{aligned} \boldsymbol{\mu}_\theta(\mathbf{x}_t, t) &amp;= \color{cyan}{\frac{1}{\sqrt{\alpha_t}} \Big( \mathbf{x}_t - \frac{1 - \alpha_t}{\sqrt{1 - \bar{\alpha}_t}} \boldsymbol{\epsilon}<em>\theta(\mathbf{x}<em>t, t) \Big)} \ \text{Thus }\mathbf{x}</em>{t-1} &amp;= \mathcal{N}(\mathbf{x}</em>{t-1}; \frac{1}{\sqrt{\alpha_t}} \Big( \mathbf{x}_t - \frac{1 - \alpha_t}{\sqrt{1 - \bar{\alpha}_t}} \boldsymbol{\epsilon}_\theta(\mathbf{x}_t, t) \Big), \boldsymbol{\Sigma}_\theta(\mathbf{x}_t, t)) \end{aligned} $$</p>
+<p>The loss term $L_t$ is parameterized to minimize the difference from $\tilde{\boldsymbol{\mu}}$ :</p>
+<p>$$ \begin{aligned} L_t &amp;= \mathbb{E}_{\mathbf{x}_0, \boldsymbol{\epsilon}} \Big[\frac{1}{2 | \boldsymbol{\Sigma}_\theta(\mathbf{x}_t, t) |^2_2} | \color{blue}{\tilde{\boldsymbol{\mu}}_t(\mathbf{x}_t, \mathbf{x}_0)} - \color{green}{\boldsymbol{\mu}_\theta(\mathbf{x}<em>t, t)} |^2 \Big] \ &amp;= \mathbb{E}</em>{\mathbf{x}_0, \boldsymbol{\epsilon}} \Big[\frac{1}{2 |\boldsymbol{\Sigma}_\theta |^2_2} | \color{blue}{\frac{1}{\sqrt{\alpha_t}} \Big( \mathbf{x}_t - \frac{1 - \alpha_t}{\sqrt{1 - \bar{\alpha}_t}} \boldsymbol{\epsilon}_t \Big)} - \color{green}{\frac{1}{\sqrt{\alpha_t}} \Big( \mathbf{x}_t - \frac{1 - \alpha_t}{\sqrt{1 - \bar{\alpha}_t}} \boldsymbol{\boldsymbol{\epsilon}}_\theta(\mathbf{x}<em>t, t) \Big)} |^2 \Big] \ &amp;= \mathbb{E}</em>{\mathbf{x}_0, \boldsymbol{\epsilon}} \Big[\frac{ (1 - \alpha_t)^2 }{2 \alpha_t (1 - \bar{\alpha}_t) | \boldsymbol{\Sigma}_\theta |^2_2} |\boldsymbol{\epsilon}_t - \boldsymbol{\epsilon}_\theta(\mathbf{x}<em>t, t)|^2 \Big] \ &amp;= \mathbb{E}</em>{\mathbf{x}_0, \boldsymbol{\epsilon}} \Big[\frac{ (1 - \alpha_t)^2 }{2 \alpha_t (1 - \bar{\alpha}_t) | \boldsymbol{\Sigma}_\theta |^2_2} |\boldsymbol{\epsilon}_t - \boldsymbol{\epsilon}_\theta(\sqrt{\bar{\alpha}_t}\mathbf{x}_0 + \sqrt{1 - \bar{\alpha}_t}\boldsymbol{\epsilon}_t, t)|^2 \Big] \end{aligned} $$</p>
+<p>可以看到实际上是比较实际的扰动以及预测的网络输出噪声之间的差距</p>
+<h3 id="Simplification"><a href="#Simplification" class="headerlink" title="Simplification"></a>Simplification</h3><p>Empirically, <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2006.11239">Ho et al. (2020)</a> found that training the diffusion model works better with a simplified objective that ignores the weighting term:</p>
+<p>$$ \begin{aligned} L_t^\text{simple} &amp;= \mathbb{E}_{t \sim [1, T], \mathbf{x}_0, \boldsymbol{\epsilon}_t} \Big[|\boldsymbol{\epsilon}_t - \boldsymbol{\epsilon}_\theta(\mathbf{x}<em>t, t)|^2 \Big] \ &amp;= \mathbb{E}</em>{t \sim [1, T], \mathbf{x}_0, \boldsymbol{\epsilon}_t} \Big[|\boldsymbol{\epsilon}_t - \boldsymbol{\epsilon}_\theta(\sqrt{\bar{\alpha}_t}\mathbf{x}_0 + \sqrt{1 - \bar{\alpha}_t}\boldsymbol{\epsilon}_t, t)|^2 \Big] \end{aligned} $$</p>
+<p>The final simple objective is:优化目标就是Lsimple</p>
+<p>$$ L_\text{simple} = L_t^\text{simple} + C $$</p>
+<p>where $C$ is a constant not depending on $\theta$.</p>
+<p><img src="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/DDPM-algo.png" alt="img">The training and sampling algorithms in DDPM (Image source: <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2006.11239">Ho et al. 2020</a>)</p>
+<h3 id="Connection-with-noise-conditioned-score-networks-NCSN"><a href="#Connection-with-noise-conditioned-score-networks-NCSN" class="headerlink" title="Connection with noise-conditioned score networks (NCSN)"></a>Connection with noise-conditioned score networks (NCSN)</h3><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1907.05600">Song &amp; Ermon (2019)</a> proposed a score-based generative modeling method where samples are produced via <a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#connection-with-stochastic-gradient-langevin-dynamics">Langevin dynamics</a> using gradients of the data distribution estimated with score matching. The score of each sample $\mathbf{x}$’s density probability is defined as its gradient $\nabla_{\mathbf{x}} \log q(\mathbf{x})$. A score network $\mathbf{s}_\theta: \mathbb{R}^D \to \mathbb{R}^D$ is trained to estimate it, $\mathbf{s}<em>\theta(\mathbf{x}) \approx \nabla</em>{\mathbf{x}} \log q(\mathbf{x})$.</p>
+<p>To make it scalable with high-dimensional data in the deep learning setting, they proposed to use either <em>denoising score matching</em> (<a target="_blank" rel="noopener" href="http://www.iro.umontreal.ca/~vincentp/Publications/smdae_techreport.pdf">Vincent, 2011</a>) or <em>sliced score matching</em> (use random projections; <a target="_blank" rel="noopener" href="https://arxiv.org/abs/1905.07088">Song et al., 2019</a>). Denosing score matching adds a pre-specified small noise to the data $q(\tilde{\mathbf{x}} \vert \mathbf{x})$ and estimates $q(\tilde{\mathbf{x}})$ with score matching.</p>
+<p>Recall that Langevin dynamics can sample data points from a probability density distribution using only the score $\nabla_{\mathbf{x}} \log q(\mathbf{x})$ in an iterative process.</p>
+<p>However, according to the manifold hypothesis, most of the data is expected to concentrate in a low dimensional manifold, even though the observed data might look only arbitrarily high-dimensional. It brings a negative effect on score estimation since the data points cannot cover the whole space. In regions where data density is low, the score estimation is less reliable. After adding a small Gaussian noise to make the perturbed data distribution cover the full space $\mathbb{R}^D$, the training of the score estimator network becomes more stable. <a target="_blank" rel="noopener" href="https://arxiv.org/abs/1907.05600">Song &amp; Ermon (2019)</a> improved it by perturbing the data with the noise of <em>different levels</em> and train a noise-conditioned score network to <em>jointly</em> estimate the scores of all the perturbed data at different noise levels.</p>
+<p>The schedule of increasing noise levels resembles the forward diffusion process. If we use the diffusion process annotation, the score approximates $\mathbf{s}_\theta(\mathbf{x}<em>t, t) \approx \nabla</em>{\mathbf{x}<em>t} \log q(\mathbf{x}<em>t)$. Given a Gaussian distribution $\mathbf{x} \sim \mathcal{N}(\mathbf{\mu}, \sigma^2 \mathbf{I})$, we can write the derivative of the logarithm of its density function as $\nabla</em>{\mathbf{x}}\log p(\mathbf{x}) = \nabla</em>{\mathbf{x}} \Big(-\frac{1}{2\sigma^2}(\mathbf{x} - \boldsymbol{\mu})^2 \Big) = - \frac{\mathbf{x} - \boldsymbol{\mu}}{\sigma^2} = - \frac{\boldsymbol{\epsilon}}{\sigma}$ where $\boldsymbol{\epsilon} \sim \mathcal{N}(\boldsymbol{0}, \mathbf{I})$. <a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#nice">Recall</a> that $q(\mathbf{x}_t \vert \mathbf{x}_0) \sim \mathcal{N}(\sqrt{\bar{\alpha}_t} \mathbf{x}_0, (1 - \bar{\alpha}_t)\mathbf{I})$ and therefore,</p>
+<p>$$ \mathbf{s}_\theta(\mathbf{x}<em>t, t) \approx \nabla</em>{\mathbf{x}_t} \log q(\mathbf{x}<em>t) = \mathbb{E}</em>{q(\mathbf{x}<em>0)} [\nabla</em>{\mathbf{x}_t} \log q(\mathbf{x}_t \vert \mathbf{x}<em>0)] = \mathbb{E}</em>{q(\mathbf{x}_0)} \Big[ - \frac{\boldsymbol{\epsilon}_\theta(\mathbf{x}_t, t)}{\sqrt{1 - \bar{\alpha}_t}} \Big] = - \frac{\boldsymbol{\epsilon}_\theta(\mathbf{x}_t, t)}{\sqrt{1 - \bar{\alpha}_t}} $$</p>
+<h2 id="Parameterization-of-beta-t"><a href="#Parameterization-of-beta-t" class="headerlink" title="Parameterization of $\beta_t$"></a>Parameterization of $\beta_t$</h2><p>The forward variances （也就是beta，线性增加）are set to be a sequence of linearly increasing constants in <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2006.11239">Ho et al. (2020)</a>, from $\beta_1=10^{-4}$ to $\beta_T=0.02$. They are relatively small compared to the normalized image pixel values between $[-1, 1]$. Diffusion models in their experiments showed high-quality samples but still could not achieve competitive model log-likelihood as other generative models.</p>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2102.09672">Nichol &amp; Dhariwal (2021)</a> proposed several improvement techniques to help diffusion models to obtain lower NLL.（负对数似然） （其他论文提出的一些改进，不适用线性的beta，而是正弦函数形式的）One of the improvements is to use a cosine-based variance schedule. The choice of the scheduling function can be arbitrary, as long as it provides a near-linear drop in the middle of the training process and subtle changes around $t=0$ and $t=T$.（只要求开始和结束部分，比较平稳就行了）</p>
+<p>$$ \beta_t = \text{clip}(1-\frac{\bar{\alpha}<em>t}{\bar{\alpha}</em>{t-1}}, 0.999) \quad\bar{\alpha}_t = \frac{f(t)}{f(0)}\quad\text{where }f(t)=\cos\Big(\frac{t/T+s}{1+s}\cdot\frac{\pi}{2}\Big)^2 $$</p>
+<p>where the small offset $s$ is to prevent $\beta_t$ from being too small when close to $t=0$.</p>
+<p><img src="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/diffusion-beta.png" alt="img">Comparison of linear and cosine-based scheduling of $\beta_t$ during training. (Image source: <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2102.09672">Nichol &amp; Dhariwal, 2021</a>)</p>
+<h2 id="Parameterization-of-reverse-process-variance-boldsymbol-Sigma-theta"><a href="#Parameterization-of-reverse-process-variance-boldsymbol-Sigma-theta" class="headerlink" title="Parameterization of reverse process variance $\boldsymbol{\Sigma}_\theta$"></a>Parameterization of reverse process variance $\boldsymbol{\Sigma}_\theta$</h2><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2006.11239">Ho et al. (2020)</a> chose to fix $\beta_t$ as constants instead of making them learnable and set $\boldsymbol{\Sigma}_\theta(\mathbf{x}_t, t) = \sigma^2_t \mathbf{I}$ , where $\sigma_t$ is not learned but set to $\beta_t$ or $\tilde{\beta}<em>t = \frac{1 - \bar{\alpha}</em>{t-1}}{1 - \bar{\alpha}_t} \cdot \beta_t$. Because they found that learning a diagonal variance $\boldsymbol{\Sigma}_\theta$ leads to unstable training and poorer sample quality.</p>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2102.09672">Nichol &amp; Dhariwal (2021)</a> proposed to learn $\boldsymbol{\Sigma}_\theta(\mathbf{x}_t, t)$ as an interpolation between $\beta_t$ and $\tilde{\beta}_t$ by model predicting a mixing vector $\mathbf{v}$ :另一篇论文学习一个向量v，使得估计的方差矩阵在两个值$\beta_t$ and $\tilde{\beta}_t$ 之间</p>
+<p>$$ \boldsymbol{\Sigma}_\theta(\mathbf{x}_t, t) = \exp(\mathbf{v} \log \beta_t + (1-\mathbf{v}) \log \tilde{\beta}_t) $$</p>
+<p>为了引入这部分的影响，21年这个作者还额外引入了一个损失项</p>
+<p>However, the simple objective $L_\text{simple}$ does not depend on $\boldsymbol{\Sigma}_\theta$ . To add the dependency, they constructed a hybrid objective $L_\text{hybrid} = L_\text{simple} + \lambda L_\text{VLB}$ where $\lambda=0.001$ is small and stop gradient on $\boldsymbol{\mu}_\theta$ in the $L_\text{VLB}$ term such that $L_\text{VLB}$ only guides the learning of $\boldsymbol{\Sigma}_\theta$. Empirically they observed that $L_\text{VLB}$ is pretty challenging to optimize likely due to noisy gradients, so they proposed to use a time-averaging smoothed version of $L_\text{VLB}$ with importance sampling.发现还是很难优化，</p>
+<p><img src="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/improved-DDPM-nll.png" alt="img">Comparison of negative log-likelihood of improved DDPM with other likelihood-based generative models. NLL is reported in the unit of bits/dim. (Image source: <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2102.09672">Nichol &amp; Dhariwal, 2021</a>)</p>
+<h1 id="Conditioned-Generation"><a href="#Conditioned-Generation" class="headerlink" title="Conditioned Generation"></a>Conditioned Generation</h1><p>While training generative models on images with conditioning information such as ImageNet dataset, it is common to generate samples conditioned on class labels or a piece of descriptive text.</p>
+<h2 id="Classifier-Guided-Diffusion"><a href="#Classifier-Guided-Diffusion" class="headerlink" title="Classifier Guided Diffusion"></a>Classifier Guided Diffusion</h2><p>To explicit incorporate class information into the diffusion process, <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2105.05233">Dhariwal &amp; Nichol (2021)</a> trained a classifier $f_\phi(y \vert \mathbf{x}_t, t)$ on noisy image $\mathbf{x}_t$ and use gradients $\nabla_\mathbf{x} \log f_\phi(y \vert \mathbf{x}<em>t)$ to guide the diffusion sampling process toward the conditioning information $y$ (e.g. a target class label) by altering the noise prediction. <a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#score">Recall</a> that $\nabla</em>{\mathbf{x}_t} \log q(\mathbf{x}_t) = - \frac{1}{\sqrt{1 - \bar{\alpha}_t}} \boldsymbol{\epsilon}_\theta(\mathbf{x}_t, t)$ and we can write the score function for the joint distribution $q(\mathbf{x}_t, y)$ as following,</p>
+<p>$$ \begin{aligned} \nabla_{\mathbf{x}_t} \log q(\mathbf{x}<em>t, y) &amp;= \nabla</em>{\mathbf{x}_t} \log q(\mathbf{x}<em>t) + \nabla</em>{\mathbf{x}_t} \log q(y \vert \mathbf{x}_t) \ &amp;\approx - \frac{1}{\sqrt{1 - \bar{\alpha}_t}} \boldsymbol{\epsilon}_\theta(\mathbf{x}<em>t, t) + \nabla</em>{\mathbf{x}_t} \log f_\phi(y \vert \mathbf{x}_t) \ &amp;= - \frac{1}{\sqrt{1 - \bar{\alpha}_t}} (\boldsymbol{\epsilon}_\theta(\mathbf{x}_t, t) - \sqrt{1 - \bar{\alpha}<em>t} \nabla</em>{\mathbf{x}_t} \log f_\phi(y \vert \mathbf{x}_t)) \end{aligned} $$</p>
+<p>Thus, a new classifier-guided predictor $\bar{\boldsymbol{\epsilon}}_\theta$ would take the form as following,</p>
+<p>$$ \bar{\boldsymbol{\epsilon}}_\theta(\mathbf{x}_t, t) = \boldsymbol{\epsilon}_\theta(x_t, t) - \sqrt{1 - \bar{\alpha}<em>t} \nabla</em>{\mathbf{x}_t} \log f_\phi(y \vert \mathbf{x}_t) $$</p>
+<p>To control the strength of the classifier guidance, we can add a weight $w$ to the delta part,</p>
+<p>$$ \bar{\boldsymbol{\epsilon}}_\theta(\mathbf{x}_t, t) = \boldsymbol{\epsilon}_\theta(x_t, t) - \sqrt{1 - \bar{\alpha}<em>t} ; w \nabla</em>{\mathbf{x}_t} \log f_\phi(y \vert \mathbf{x}_t) $$</p>
+<p>The resulting <em>ablated diffusion model</em> (<strong>ADM</strong>) and the one with additional classifier guidance (<strong>ADM-G</strong>) are able to achieve better results than SOTA generative models (e.g. BigGAN).</p>
+<p><img src="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/conditioned-DDPM.png" alt="img">The algorithms use guidance from a classifier to run conditioned generation with DDPM and DDIM. (Image source: <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2105.05233">Dhariwal &amp; Nichol, 2021</a>])</p>
+<p>Additionally with some modifications on the U-Net architecture, <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2105.05233">Dhariwal &amp; Nichol (2021)</a> showed performance better than GAN with diffusion models. The architecture modifications include larger model depth/width, more attention heads, multi-resolution attention, BigGAN residual blocks for up/downsampling, residual connection rescale by $1/\sqrt{2}$ and adaptive group normalization (AdaGN).</p>
+<h2 id="Classifier-Free-Guidance"><a href="#Classifier-Free-Guidance" class="headerlink" title="Classifier-Free Guidance"></a>Classifier-Free Guidance</h2><p>Without an independent classifier $f_\phi$, it is still possible to run conditional diffusion steps by incorporating the scores from a conditional and an unconditional diffusion model (<a target="_blank" rel="noopener" href="https://openreview.net/forum?id=qw8AKxfYbI">Ho &amp; Salimans, 2021</a>). Let unconditional denoising diffusion model $p_\theta(\mathbf{x})$ parameterized through a score estimator $\boldsymbol{\epsilon}_\theta(\mathbf{x}_t, t)$ and the conditional model $p_\theta(\mathbf{x} \vert y)$ parameterized through $\boldsymbol{\epsilon}_\theta(\mathbf{x}_t, t, y)$. These two models can be learned via a single neural network. Precisely, a conditional diffusion model $p_\theta(\mathbf{x} \vert y)$ is trained on paired data $(\mathbf{x}, y)$, where the conditioning information $y$ gets discarded periodically at random such that the model knows how to generate images unconditionally as well, i.e. $\boldsymbol{\epsilon}_\theta(\mathbf{x}_t, t) = \boldsymbol{\epsilon}_\theta(\mathbf{x}_t, t, y=\varnothing)$.</p>
+<p>The gradient of an implicit classifier can be represented with conditional and unconditional score estimators. Once plugged into the classifier-guided modified score, the score contains no dependency on a separate classifier.</p>
+<p>$$ \begin{aligned} \nabla_{\mathbf{x}_t} \log p(y \vert \mathbf{x}<em>t) &amp;= \nabla</em>{\mathbf{x}_t} \log p(\mathbf{x}<em>t \vert y) - \nabla</em>{\mathbf{x}_t} \log p(\mathbf{x}_t) \ &amp;= - \frac{1}{\sqrt{1 - \bar{\alpha}_t}}\Big( \boldsymbol{\epsilon}_\theta(\mathbf{x}_t, t, y) - \boldsymbol{\epsilon}_\theta(\mathbf{x}_t, t) \Big) \ \bar{\boldsymbol{\epsilon}}_\theta(\mathbf{x}_t, t, y) &amp;= \boldsymbol{\epsilon}_\theta(\mathbf{x}_t, t, y) - \sqrt{1 - \bar{\alpha}<em>t} ; w \nabla</em>{\mathbf{x}_t} \log p(y \vert \mathbf{x}_t) \ &amp;= \boldsymbol{\epsilon}_\theta(\mathbf{x}_t, t, y) + w \big(\boldsymbol{\epsilon}_\theta(\mathbf{x}_t, t, y) - \boldsymbol{\epsilon}_\theta(\mathbf{x}_t, t) \big) \ &amp;= (w+1) \boldsymbol{\epsilon}_\theta(\mathbf{x}_t, t, y) - w \boldsymbol{\epsilon}_\theta(\mathbf{x}_t, t) \end{aligned} $$</p>
+<p>Their experiments showed that classifier-free guidance can achieve a good balance between FID (distinguish between synthetic and generated images) and IS (quality and diversity).</p>
+<p>The guided diffusion model, GLIDE (<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2112.10741">Nichol, Dhariwal &amp; Ramesh, et al. 2022</a>), explored both guiding strategies, CLIP guidance and classifier-free guidance, and found that the latter is more preferred. They hypothesized that it is because CLIP guidance exploits the model with adversarial examples towards the CLIP model, rather than optimize the better matched images generation.</p>
+<h1 id="Speed-up-Diffusion-Models加速"><a href="#Speed-up-Diffusion-Models加速" class="headerlink" title="Speed up Diffusion Models加速"></a>Speed up Diffusion Models加速</h1><p>It is very slow to generate a sample from DDPM by following the Markov chain of the reverse diffusion process, as $T$ can be up to one or a few thousand steps. One data point from <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2010.02502">Song et al. (2020)</a>: “For example, it takes around 20 hours to sample 50k images of size 32 × 32 from a DDPM, but less than a minute to do so from a GAN on an Nvidia 2080 Ti GPU.” 速度很慢，同样的图像生成需要20小时，gan只需要不到一分钟</p>
+<h2 id="Fewer-Sampling-Steps-amp-Distillation"><a href="#Fewer-Sampling-Steps-amp-Distillation" class="headerlink" title="Fewer Sampling Steps &amp; Distillation"></a>Fewer Sampling Steps &amp; Distillation</h2><p>One simple way is to run a strided sampling schedule (<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2102.09672">Nichol &amp; Dhariwal, 2021</a>) by taking the sampling update every $\lceil T/S \rceil$ steps to reduce the process from $T$ to $S$ steps. The new sampling schedule for generation is ${\tau_1, \dots, \tau_S}$ where $\tau_1 &lt; \tau_2 &lt; \dots &lt;\tau_S \in [1, T]$ and $S &lt; T$.</p>
+<p>For another approach, let’s rewrite $q_\sigma(\mathbf{x}_{t-1} \vert \mathbf{x}_t, \mathbf{x}_0)$ to be parameterized by a desired standard deviation $\sigma_t$ according to the <a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#nice">nice property</a>:</p>
+<p>$$ \begin{aligned} \mathbf{x}<em>{t-1} &amp;= \sqrt{\bar{\alpha}</em>{t-1}}\mathbf{x}<em>0 + \sqrt{1 - \bar{\alpha}</em>{t-1}}\boldsymbol{\epsilon}<em>{t-1} &amp; \ &amp;= \sqrt{\bar{\alpha}</em>{t-1}}\mathbf{x}<em>0 + \sqrt{1 - \bar{\alpha}</em>{t-1} - \sigma_t^2} \boldsymbol{\epsilon}<em>t + \sigma_t\boldsymbol{\epsilon} &amp; \ &amp;= \sqrt{\bar{\alpha}</em>{t-1}} \Big( \frac{\mathbf{x}_t - \sqrt{1 - \bar{\alpha}_t} \epsilon^{(t)}_\theta(\mathbf{x}_t)}{\sqrt{\bar{\alpha}<em>t}} \Big) + \sqrt{1 - \bar{\alpha}</em>{t-1} - \sigma_t^2} \epsilon^{(t)}_\theta(\mathbf{x}<em>t) + \sigma_t\boldsymbol{\epsilon} \ q_\sigma(\mathbf{x}</em>{t-1} \vert \mathbf{x}<em>t, \mathbf{x}<em>0) &amp;= \mathcal{N}(\mathbf{x}</em>{t-1}; \sqrt{\bar{\alpha}</em>{t-1}} \Big( \frac{\mathbf{x}_t - \sqrt{1 - \bar{\alpha}_t} \epsilon^{(t)}_\theta(\mathbf{x}_t)}{\sqrt{\bar{\alpha}<em>t}} \Big) + \sqrt{1 - \bar{\alpha}</em>{t-1} - \sigma_t^2} \epsilon^{(t)}_\theta(\mathbf{x}_t), \sigma_t^2 \mathbf{I}) \end{aligned} $$</p>
+<p>where the model $\epsilon^{(t)}_\theta(.)$ predicts the $\epsilon_t$ from $\mathbf{x}_t$.</p>
+<p>Recall that in $q(\mathbf{x}_{t-1} \vert \mathbf{x}_t, \mathbf{x}<em>0) = \mathcal{N}(\mathbf{x}</em>{t-1}; \tilde{\boldsymbol{\mu}}(\mathbf{x}_t, \mathbf{x}_0), \tilde{\beta}_t \mathbf{I})$, therefore we have:</p>
+<p>$$ \tilde{\beta}<em>t = \sigma_t^2 = \frac{1 - \bar{\alpha}</em>{t-1}}{1 - \bar{\alpha}_t} \cdot \beta_t $$</p>
+<p>Let $\sigma_t^2 = \eta \cdot \tilde{\beta}_t$ such that we can adjust $\eta \in \mathbb{R}^+$ as a hyperparameter to control the sampling stochasticity. The special case of $\eta = 0$ makes the sampling process <em>deterministic</em>. Such a model is named the <em>denoising diffusion implicit model</em> (<strong>DDIM</strong>; <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2010.02502">Song et al., 2020</a>). DDIM has the same marginal noise distribution but deterministically maps noise back to the original data samples.</p>
+<p>During generation, we don’t have to follow the whole chain $t=1,\dots,T$, but rather a subset of steps. Let’s denote $s &lt; t$ as two steps in this accelerated trajectory. The DDIM update step is:</p>
+<p>$$ q_{\sigma, s &lt; t}(\mathbf{x}_s \vert \mathbf{x}_t, \mathbf{x}_0) = \mathcal{N}(\mathbf{x}_s; \sqrt{\bar{\alpha}_s} \Big( \frac{\mathbf{x}_t - \sqrt{1 - \bar{\alpha}_t} \epsilon^{(t)}_\theta(\mathbf{x}_t)}{\sqrt{\bar{\alpha}_t}} \Big) + \sqrt{1 - \bar{\alpha}_s - \sigma_t^2} \epsilon^{(t)}_\theta(\mathbf{x}_t), \sigma_t^2 \mathbf{I}) $$</p>
+<p>While all the models are trained with $T=1000$ diffusion steps in the experiments, they observed that DDIM ($\eta=0$) can produce the best quality samples when $S$ is small, while DDPM ($\eta=1$) performs much worse on small $S$. DDPM does perform better when we can afford to run the full reverse Markov diffusion steps ($S=T=1000$). With DDIM, it is possible to train the diffusion model up to any arbitrary number of forward steps but only sample from a subset of steps in the generative process.</p>
+<p><img src="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/DDIM-results.png" alt="img">FID scores on CIFAR10 and CelebA datasets by diffusion models of different settings, including $\color{cyan}{\text{DDIM}}$ ($\eta=0$) and $\color{orange}{\text{DDPM}}$ ($\hat{\sigma}$). (Image source: <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2010.02502">Song et al., 2020</a>)</p>
+<p>Compared to DDPM, DDIM is able to:</p>
+<ol>
+<li>Generate higher-quality samples using a much fewer number of steps.</li>
+<li>Have “consistency” property since the generative process is deterministic, meaning that multiple samples conditioned on the same latent variable should have similar high-level features.</li>
+<li>Because of the consistency, DDIM can do semantically meaningful interpolation in the latent variable.</li>
+</ol>
+<p><img src="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/progressive-distillation.png" alt="img">Progressive distillation can reduce the diffusion sampling steps by half in each iteration. (Image source: <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2202.00512">Salimans &amp; Ho, 2022</a>)</p>
+<p><strong>Progressive Distillation</strong> (<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2202.00512">Salimans &amp; Ho, 2022</a>) is a method for distilling trained deterministic samplers into new models of halved sampling steps. The student model is initialized from the teacher model and denoises towards a target where one student DDIM step matches 2 teacher steps, instead of using the original sample $\mathbf{x}_0$ as the denoise target. In every progressive distillation iteration, we can half the sampling steps.</p>
+<p><img src="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/progressive-distillation-algo.png" alt="img">Comparison of Algorithm 1 (diffusion model training) and Algorithm 2 (progressive distillation) side-by-side, where the relative changes in progressive distillation are highlighted in green.<br>(Image source: <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2202.00512">Salimans &amp; Ho, 2022</a>)</p>
+<p><strong>Consistency Models</strong> (<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2303.01469">Song et al. 2023</a>) learns to map any intermediate noisy data points $\mathbf{x}_t, t &gt; 0$ on the diffusion sampling trajectory back to its origin $\mathbf{x}_0$ directly. It is named as <em>consistency</em> model because of its <em>self-consistency</em> property as any data points on the same trajectory is mapped to the same origin.</p>
+<p><img src="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/consistency-models.png" alt="img">Consistency models learn to map any data point on the trajectory back to its origin. (Image source: <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2303.01469">Song et al., 2023</a>)</p>
+<p>Given a trajectory ${\mathbf{x}_t \vert t \in [\epsilon, T]}$ , the <em>consistency function</em> $f$ is defined as $f: (\mathbf{x}_t, t) \mapsto \mathbf{x}_\epsilon$ and the equation $f(\mathbf{x}<em>t, t) = f(\mathbf{x}</em>{t’}, t’) = \mathbf{x}_\epsilon$ holds true for all $t, t’ \in [\epsilon, T]$. When $t=\epsilon$, $f$ is an identify function. The model can be parameterized as follows, where $c_\text{skip}(t)$ and $c_\text{out}(t)$ functions are designed in a way that $c_\text{skip}(\epsilon) = 1, c_\text{out}(\epsilon) = 0$:</p>
+<p>$$ f_\theta(\mathbf{x}, t) = c_\text{skip}(t)\mathbf{x} + c_\text{out}(t) F_\theta(\mathbf{x}, t) $$</p>
+<p>It is possible for the consistency model to generate samples in a single step, while still maintaining the flexibility of trading computation for better quality following a multi-step sampling process.</p>
+<p>The paper introduced two ways to train consistency models:</p>
+<ol>
+<li><p><strong>Consistency Distillation (CD)</strong>: Distill a diffusion model into a consistency model by minimizing the difference between model outputs for pairs generated out of the same trajectory. This enables a much cheaper sampling evaluation. The consistency distillation loss is:</p>
+<p>$$ \begin{aligned} \mathcal{L}^N_\text{CD} (\theta, \theta^-; \phi) &amp;= \mathbb{E} [\lambda(t_n)d(f_\theta(\mathbf{x}<em>{t</em>{n+1}}, t_{n+1}), f_{\theta^-}(\hat{\mathbf{x}}^\phi_{t_n}, t_n)] \ \hat{\mathbf{x}}^\phi_{t_n} &amp;= \mathbf{x}<em>{t</em>{n+1}} - (t_n - t_{n+1}) \Phi(\mathbf{x}<em>{t</em>{n+1}}, t_{n+1}; \phi) \end{aligned} $$</p>
+<p>where</p>
+<ul>
+<li>$\Phi(.;\phi)$ is the update function of a one-step <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Ordinary_differential_equation">ODE</a> solver;</li>
+<li>$n \sim \mathcal{U}[1, N-1]$, has an uniform distribution over $1, \dots, N-1$;</li>
+<li>The network parameters $\theta^-$ is EMA version of $\theta$ which greatly stabilizes the training (just like in <a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2018-02-19-rl-overview/#deep-q-network">DQN</a> or <a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-05-31-contrastive/#moco--moco-v2">momentum</a> contrastive learning);</li>
+<li>$d(.,.)$ is a positive distance metric function that satisfies $\forall \mathbf{x}, \mathbf{y}: d(\mathbf{x}, \mathbf{y}) \geq 0$ and $d(\mathbf{x}, \mathbf{y}) = 0$ if and only if $\mathbf{x} = \mathbf{y}$ such as $\ell_2$, $\ell_1$ or <a target="_blank" rel="noopener" href="https://arxiv.org/abs/1801.03924">LPIPS</a> (learned perceptual image patch similarity) distance;</li>
+<li>$\lambda(.) \in \mathbb{R}^+$ is a positive weighting function and the paper sets $\lambda(t_n)=1$.</li>
+</ul>
+</li>
+<li><p><strong>Consistency Training (CT)</strong>: The other option is to train a consistency model independently. Note that in CD, a pre-trained score model $s_\phi(\mathbf{x}, t)$ is used to approximate the ground truth score $\nabla\log p_t(\mathbf{x})$ but in CT we need a way to estimate this score function and it turns out an unbiased estimator of $\nabla\log p_t(\mathbf{x})$ exists as $-\frac{\mathbf{x}_t - \mathbf{x}}{t^2}$. The CT loss is defined as follows:</p>
+</li>
+</ol>
+<p>$$ \mathcal{L}^N_\text{CT} (\theta, \theta^-; \phi) = \mathbb{E} [\lambda(t_n)d(f_\theta(\mathbf{x} + t_{n+1} \mathbf{z},;t_{n+1}), f_{\theta^-}(\mathbf{x} + t_n \mathbf{z},;t_n)] \text{ where }\mathbf{z} \in \mathcal{N}(\mathbf{0}, \mathbf{I}) $$</p>
+<p>According to the experiments in the paper, they found,</p>
+<ul>
+<li>Heun ODE solver works better than Euler’s first-order solver, since higher order ODE solvers have smaller estimation errors with the same $N$.</li>
+<li>Among different options of the distance metric function $d(.)$, the LPIPS metric works better than $\ell_1$ and $\ell_2$ distance.</li>
+<li>Smaller $N$ leads to faster convergence but worse samples, whereas larger $N$ leads to slower convergence but better samples upon convergence.</li>
+</ul>
+<p><img src="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/consistency-models-exp.png" alt="img">Comparison of consistency models’ performance under different configurations. The best configuration for CD is LPIPS distance metric, Heun ODE solver, and $N=18$. (Image source: <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2303.01469">Song et al., 2023</a>)</p>
+<h2 id="Latent-Variable-Space"><a href="#Latent-Variable-Space" class="headerlink" title="Latent Variable Space"></a>Latent Variable Space</h2><p><em>Latent diffusion model</em> (<strong>LDM</strong>; <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2112.10752">Rombach &amp; Blattmann, et al. 2022</a>) runs the diffusion process in the latent space instead of pixel space, making training cost lower and inference speed faster. It is motivated by the observation that most bits of an image contribute to perceptual details and the semantic and conceptual composition still remains after aggressive compression. LDM loosely decomposes the perceptual compression and semantic compression with generative modeling learning by first trimming off pixel-level redundancy with autoencoder and then manipulating / generating semantic concepts with diffusion process on learned latent.</p>
+<p><img src="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/image-distortion-rate.png" alt="img">The plot for tradeoff between compression rate and distortion, illustrating two-stage compressions - perceptual and semantic compression. (Image source: <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2112.10752">Rombach &amp; Blattmann, et al. 2022</a>)</p>
+<p>The perceptual compression process relies on an autoencoder model. An encoder $\mathcal{E}$ is used to compress the input image $\mathbf{x} \in \mathbb{R}^{H \times W \times 3}$ to a smaller 2D latent vector $\mathbf{z} = \mathcal{E}(\mathbf{x}) \in \mathbb{R}^{h \times w \times c}$ , where the downsampling rate $f=H/h=W/w=2^m, m \in \mathbb{N}$. Then an decoder $\mathcal{D}$ reconstructs the images from the latent vector, $\tilde{\mathbf{x}} = \mathcal{D}(\mathbf{z})$. The paper explored two types of regularization in autoencoder training to avoid arbitrarily high-variance in the latent spaces.</p>
+<ul>
+<li><em>KL-reg</em>: A small KL penalty towards a standard normal distribution over the learned latent, similar to <a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2018-08-12-vae/">VAE</a>.</li>
+<li><em>VQ-reg</em>: Uses a vector quantization layer within the decoder, like <a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2018-08-12-vae/#vq-vae-and-vq-vae-2">VQVAE</a> but the quantization layer is absorbed by the decoder.</li>
+</ul>
+<p>The diffusion and denoising processes happen on the latent vector $\mathbf{z}$. The denoising model is a time-conditioned U-Net, augmented with the cross-attention mechanism to handle flexible conditioning information for image generation (e.g. class labels, semantic maps, blurred variants of an image). The design is equivalent to fuse representation of different modality into the model with a cross-attention mechanism. Each type of conditioning information is paired with a domain-specific encoder $\tau_\theta$ to project the conditioning input $y$ to an intermediate representation that can be mapped into cross-attention component, $\tau_\theta(y) \in \mathbb{R}^{M \times d_\tau}$:</p>
+<p>$$ \begin{aligned} &amp;\text{Attention}(\mathbf{Q}, \mathbf{K}, \mathbf{V}) = \text{softmax}\Big(\frac{\mathbf{Q}\mathbf{K}^\top}{\sqrt{d}}\Big) \cdot \mathbf{V} \ &amp;\text{where }\mathbf{Q} = \mathbf{W}^{(i)}_Q \cdot \varphi_i(\mathbf{z}_i),; \mathbf{K} = \mathbf{W}^{(i)}_K \cdot \tau_\theta(y),; \mathbf{V} = \mathbf{W}^{(i)}_V \cdot \tau_\theta(y) \ &amp;\text{and } \mathbf{W}^{(i)}_Q \in \mathbb{R}^{d \times d^i_\epsilon},; \mathbf{W}^{(i)}_K, \mathbf{W}^{(i)}_V \in \mathbb{R}^{d \times d_\tau},; \varphi_i(\mathbf{z}_i) \in \mathbb{R}^{N \times d^i_\epsilon},; \tau_\theta(y) \in \mathbb{R}^{M \times d_\tau} \end{aligned} $$</p>
+<p><img src="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/latent-diffusion-arch.png" alt="img">The architecture of the latent diffusion model (LDM). (Image source: <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2112.10752">Rombach &amp; Blattmann, et al. 2022</a>)</p>
+<h1 id="Scale-up-Generation-Resolution-and-Quality"><a href="#Scale-up-Generation-Resolution-and-Quality" class="headerlink" title="Scale up Generation Resolution and Quality"></a>Scale up Generation Resolution and Quality</h1><p>To generate high-quality images at high resolution, <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2106.15282">Ho et al. (2021)</a> proposed to use a pipeline of multiple diffusion models at increasing resolutions. <em>Noise conditioning augmentation</em> between pipeline models is crucial to the final image quality, which is to apply strong data augmentation to the conditioning input $\mathbf{z}$ of each super-resolution model $p_\theta(\mathbf{x} \vert \mathbf{z})$. The conditioning noise helps reduce compounding error in the pipeline setup. <em>U-net</em> is a common choice of model architecture in diffusion modeling for high-resolution image generation.</p>
+<p><img src="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/cascaded-diffusion.png" alt="img">A cascaded pipeline of multiple diffusion models at increasing resolutions. (Image source: <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2106.15282">Ho et al. 2021</a>])</p>
+<p>They found the most effective noise is to apply Gaussian noise at low resolution and Gaussian blur at high resolution. In addition, they also explored two forms of conditioning augmentation that require small modification to the training process. Note that conditioning noise is only applied to training but not at inference.</p>
+<ul>
+<li>Truncated conditioning augmentation stops the diffusion process early at step $t &gt; 0$ for low resolution.</li>
+<li>Non-truncated conditioning augmentation runs the full low resolution reverse process until step 0 but then corrupt it by $\mathbf{z}_t \sim q(\mathbf{x}_t \vert \mathbf{x}_0)$ and then feeds the corrupted $\mathbf{z}_t$ s into the super-resolution model.</li>
+</ul>
+<p>The two-stage diffusion model <strong>unCLIP</strong> (<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2204.06125">Ramesh et al. 2022</a>) heavily utilizes the CLIP text encoder to produce text-guided images at high quality. Given a pretrained CLIP model $\mathbf{c}$ and paired training data for the diffusion model, $(\mathbf{x}, y)$, where $x$ is an image and $y$ is the corresponding caption, we can compute the CLIP text and image embedding, $\mathbf{c}^t(y)$ and $\mathbf{c}^i(\mathbf{x})$, respectively. The unCLIP learns two models in parallel:</p>
+<ul>
+<li>A prior model $P(\mathbf{c}^i \vert y)$: outputs CLIP image embedding $\mathbf{c}^i$ given the text $y$.</li>
+<li>A decoder $P(\mathbf{x} \vert \mathbf{c}^i, [y])$: generates the image $\mathbf{x}$ given CLIP image embedding $\mathbf{c}^i$ and optionally the original text $y$.</li>
+</ul>
+<p>These two models enable conditional generation, because</p>
+<p>$$ \underbrace{P(\mathbf{x} \vert y) = P(\mathbf{x}, \mathbf{c}^i \vert y)}_{\mathbf{c}^i\text{ is deterministic given }\mathbf{x}} = P(\mathbf{x} \vert \mathbf{c}^i, y)P(\mathbf{c}^i \vert y) $$</p>
+<p><img src="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/unCLIP.png" alt="img">The architecture of unCLIP. (Image source: <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2204.06125">Ramesh et al. 2022</a>])</p>
+<p>unCLIP follows a two-stage image generation process:</p>
+<ol>
+<li>Given a text $y$, a CLIP model is first used to generate a text embedding $\mathbf{c}^t(y)$. Using CLIP latent space enables zero-shot image manipulation via text.</li>
+<li>A diffusion or autoregressive prior $P(\mathbf{c}^i \vert y)$ processes this CLIP text embedding to construct an image prior and then a diffusion decoder $P(\mathbf{x} \vert \mathbf{c}^i, [y])$ generates an image, conditioned on the prior. This decoder can also generate image variations conditioned on an image input, preserving its style and semantics.</li>
+</ol>
+<p>Instead of CLIP model, <strong>Imagen</strong> (<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2205.11487">Saharia et al. 2022</a>) uses a pre-trained large LM (i.e. a frozen T5-XXL text encoder) to encode text for image generation. There is a general trend that larger model size can lead to better image quality and text-image alignment. They found that T5-XXL and CLIP text encoder achieve similar performance on MS-COCO, but human evaluation prefers T5-XXL on DrawBench (a collection of prompts covering 11 categories).</p>
+<p>When applying classifier-free guidance, increasing $w$ may lead to better image-text alignment but worse image fidelity. They found that it is due to train-test mismatch, that is to say, because training data $\mathbf{x}$ stays within the range $[-1, 1]$, the test data should be so too. Two thresholding strategies are introduced:</p>
+<ul>
+<li>Static thresholding: clip $\mathbf{x}$ prediction to $[-1, 1]$</li>
+<li>Dynamic thresholding: at each sampling step, compute $s$ as a certain percentile absolute pixel value; if $s &gt; 1$, clip the prediction to $[-s, s]$ and divide by $s$.</li>
+</ul>
+<p>Imagen modifies several designs in U-net to make it <em>efficient U-Net</em>.</p>
+<ul>
+<li>Shift model parameters from high resolution blocks to low resolution by adding more residual locks for the lower resolutions;</li>
+<li>Scale the skip connections by $1/\sqrt{2}$</li>
+<li>Reverse the order of downsampling (move it before convolutions) and upsampling operations (move it after convolution) in order to improve the speed of forward pass.</li>
+</ul>
+<p>They found that noise conditioning augmentation, dynamic thresholding and efficient U-Net are critical for image quality, but scaling text encoder size is more important than U-Net size.</p>
+<h1 id="Model-Architecture"><a href="#Model-Architecture" class="headerlink" title="Model Architecture"></a>Model Architecture</h1><p>There are two common backbone architecture choices for diffusion models: U-Net and Transformer.</p>
+<p><strong>U-Net</strong> (<a target="_blank" rel="noopener" href="https://arxiv.org/abs/1505.04597">Ronneberger, et al. 2015</a>) consists of a downsampling stack and an upsampling stack.</p>
+<ul>
+<li><em>Downsampling</em>: Each step consists of the repeated application of two 3x3 convolutions (unpadded convolutions), each followed by a ReLU and a 2x2 max pooling with stride 2. At each downsampling step, the number of feature channels is doubled.</li>
+<li><em>Upsampling</em>: Each step consists of an upsampling of the feature map followed by a 2x2 convolution and each halves the number of feature channels.</li>
+<li><em>Shortcuts</em>: Shortcut connections result in a concatenation with the corresponding layers of the downsampling stack and provide the essential high-resolution features to the upsampling process.</li>
+</ul>
+<p><img src="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/U-net.png" alt="img">The U-net architecture. Each blue square is a feature map with the number of channels labeled on top and the height x width dimension labeled on the left bottom side. The gray arrows mark the shortcut connections. (Image source: <a target="_blank" rel="noopener" href="https://arxiv.org/abs/1505.04597">Ronneberger, 2015</a>)</p>
+<p>To enable image generation conditioned on additional images for composition info like Canny edges, Hough lines, user scribbles, human post skeletons, segmentation maps, depths and normals, <strong>ControlNet</strong> (<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2302.05543">Zhang et al. 2023</a> introduces architectural changes via adding a “sandwiched” zero convolution layers of a trainable copy of the original model weights into each encoder layer of the U-Net. Precisely, given a neural network block $\mathcal{F}_\theta(.)$, ControlNet does the following:</p>
+<ol>
+<li>First, freeze the original parameters $\theta$ of the original block</li>
+<li>Clone it to be a copy with trainable parameters $\theta_c$ and an additional conditioning vector $\mathbf{c}$.</li>
+<li>Use two zero convolution layers, denoted as $\mathcal{Z}<em>{\theta</em>{z1}}(.;.)$ and $\mathcal{Z}<em>{\theta</em>{z2}}(.;.)$, which is 1x1 convo layers with both weights and biases initialized to be zeros, to connect these two blocks. Zero convolutions protect this back-bone by eliminating random noise as gradients in the initial training steps.</li>
+<li>The final output is: $\mathbf{y}<em>c = \mathcal{F}<em>\theta(\mathbf{x}) + \mathcal{Z}</em>{\theta</em>{z2}}(\mathcal{F}<em>{\theta_c}(\mathbf{x} + \mathcal{Z}</em>{\theta_{z1}}(\mathbf{c})))$</li>
+</ol>
+<p><img src="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/ControlNet.png" alt="img">The ControlNet architecture. (Image source: <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2302.05543">Zhang et al. 2023</a>)</p>
+<p><strong>Diffusion Transformer</strong> (<strong>DiT</strong>; <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2212.09748">Peebles &amp; Xie, 2023</a>) for diffusion modeling operates on latent patches, using the same design space of <a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#ldm">LDM</a> (Latent Diffusion Model)]. DiT has the following setup:</p>
+<ol>
+<li>Take the latent representation of an input $\mathbf{z}$ as input to DiT.</li>
+<li>“Patchify” the noise latent of size $I \times I \times C$ into patches of size $p$ and convert it into a sequence of patches of size $(I/p)^2$.</li>
+<li>Then this sequence of tokens go through Transformer blocks. They are exploring three different designs for how to do generation conditioned on contextual information like timestep $t$ or class label $c$. Among three designs, <em>adaLN (Adaptive layer norm)-Zero</em> works out the best, better than in-context conditioning and cross-attention block. The scale and shift parameters, $\gamma$ and $\beta$, are regressed from the sum of the embedding vectors of $t$ and $c$. The dimension-wise scaling parameters $\alpha$ is also regressed and applied immediately prior to any residual connections within the DiT block.</li>
+<li>The transformer decoder outputs noise predictions and an output diagonal covariance prediction.</li>
+</ol>
+<p><img src="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/DiT.png" alt="img">The Diffusion Transformer (DiT) architecture.<br>(Image source: <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2212.09748">Peebles &amp; Xie, 2023</a>)</p>
+<p>Transformer architecture can be easily scaled up and it is well known for that. This is one of the biggest benefits of DiT as its performance scales up with more compute and larger DiT models are more compute efficient according to the experiments.</p>
+<h1 id="Quick-Summary"><a href="#Quick-Summary" class="headerlink" title="Quick Summary"></a>Quick Summary</h1><ul>
+<li><strong>Pros</strong>: Tractability and flexibility are two conflicting objectives in generative modeling. Tractable models can be analytically evaluated and cheaply fit data (e.g. via a Gaussian or Laplace), but they cannot easily describe the structure in rich datasets. Flexible models can fit arbitrary structures in data, but evaluating, training, or sampling from these models is usually expensive. Diffusion models are both analytically tractable and flexible</li>
+<li><strong>Cons</strong>: Diffusion models rely on a long Markov chain of diffusion steps to generate samples, so it can be quite expensive in terms of time and compute. New methods have been proposed to make the process much faster, but the sampling is still slower than GAN.</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Daniel Hu
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://example.com/2025/07/01/Difussion%20Model%20-Lil's%20blog/" title="Overview of Diffusion Models">http://example.com/2025/07/01/Difussion Model -Lil's blog/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/Note/" rel="tag"><i class="fa fa-tag"></i> Note</a>
+              <a href="/tags/Diffusion-Model/" rel="tag"><i class="fa fa-tag"></i> Diffusion Model</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/06/24/20250624-DexVLA%20%E8%AE%BA%E6%96%87/" rel="prev" title="Overview of DexVLA Content">
+      <i class="fa fa-chevron-left"></i> Overview of DexVLA Content
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2025/07/01/20250621-OpenVAL%E8%AE%BA%E6%96%87/" rel="next" title="Overview of OpenVLA Content">
+      Overview of OpenVLA Content <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#What-are-Diffusion-Models"><span class="nav-number">1.</span> <span class="nav-text">What are Diffusion Models?</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#What-are-Diffusion-Models-1"><span class="nav-number">2.</span> <span class="nav-text">What are Diffusion Models?</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Forward-diffusion-process"><span class="nav-number">2.1.</span> <span class="nav-text">Forward diffusion process</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Connection-with-stochastic-gradient-Langevin-dynamics"><span class="nav-number">2.1.1.</span> <span class="nav-text">Connection with stochastic gradient Langevin dynamics</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reverse-diffusion-process"><span class="nav-number">2.2.</span> <span class="nav-text">Reverse diffusion process</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Parameterization-of-L-t-for-Training-Loss"><span class="nav-number">2.3.</span> <span class="nav-text">Parameterization of $L_t$ for Training Loss</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Simplification"><span class="nav-number">2.3.1.</span> <span class="nav-text">Simplification</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Connection-with-noise-conditioned-score-networks-NCSN"><span class="nav-number">2.3.2.</span> <span class="nav-text">Connection with noise-conditioned score networks (NCSN)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Parameterization-of-beta-t"><span class="nav-number">2.4.</span> <span class="nav-text">Parameterization of $\beta_t$</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Parameterization-of-reverse-process-variance-boldsymbol-Sigma-theta"><span class="nav-number">2.5.</span> <span class="nav-text">Parameterization of reverse process variance $\boldsymbol{\Sigma}_\theta$</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Conditioned-Generation"><span class="nav-number">3.</span> <span class="nav-text">Conditioned Generation</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Classifier-Guided-Diffusion"><span class="nav-number">3.1.</span> <span class="nav-text">Classifier Guided Diffusion</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Classifier-Free-Guidance"><span class="nav-number">3.2.</span> <span class="nav-text">Classifier-Free Guidance</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Speed-up-Diffusion-Models%E5%8A%A0%E9%80%9F"><span class="nav-number">4.</span> <span class="nav-text">Speed up Diffusion Models加速</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Fewer-Sampling-Steps-amp-Distillation"><span class="nav-number">4.1.</span> <span class="nav-text">Fewer Sampling Steps &amp; Distillation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Latent-Variable-Space"><span class="nav-number">4.2.</span> <span class="nav-text">Latent Variable Space</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Scale-up-Generation-Resolution-and-Quality"><span class="nav-number">5.</span> <span class="nav-text">Scale up Generation Resolution and Quality</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Model-Architecture"><span class="nav-number">6.</span> <span class="nav-text">Model Architecture</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Quick-Summary"><span class="nav-number">7.</span> <span class="nav-text">Quick Summary</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Daniel Hu"
+      src="/images/headpotrait.jpg">
+  <p class="site-author-name" itemprop="name">Daniel Hu</p>
+  <div class="site-description" itemprop="description">Share Notes & Life</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">19</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/sep459" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;sep459" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Daniel Hu</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">141k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">2:09</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共85.2k字</span>
+  <span class="post-meta-divider">|</span>
+  本站总访问量<span id="busuanzi_value_site_pv"></span>次
+  <span class="post-meta-divider">|</span>
+  本站访客数<span id="busuanzi_value_site_uv"></span>人次
+  <span class="post-meta-divider">|</span>
+  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

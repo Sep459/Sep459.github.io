@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/s5.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/s5.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":{"enable":true,"caption":false},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="[TOC] 本周进度阅读文献DexVLA-Vision-Language Model with Plug-In Diffusion Expert for General Robot Control【arxiv 2502  Midea Group】以及代码，了解具身智能控制方法的发展进程以及其组件原理。 Overview of DexVLA ContentIntroductionOpenVLA训练需">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Overview of DexVLA Content">
+<meta property="og:url" content="http://example.com/2025/06/24/20250624-DexVLA%20%E8%AE%BA%E6%96%87/index.html">
+<meta property="og:site_name" content="Sep_459&#39;s Blog">
+<meta property="og:description" content="[TOC] 本周进度阅读文献DexVLA-Vision-Language Model with Plug-In Diffusion Expert for General Robot Control【arxiv 2502  Midea Group】以及代码，了解具身智能控制方法的发展进程以及其组件原理。 Overview of DexVLA ContentIntroductionOpenVLA训练需">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2025/06/24/images/16.png">
+<meta property="og:image" content="http://example.com/2025/06/24/images/17.png">
+<meta property="og:image" content="http://example.com/2025/06/24/images/18.png">
+<meta property="og:image" content="http://example.com/2025/06/24/images/19.png">
+<meta property="og:image" content="http://example.com/2025/06/24/images/20.png">
+<meta property="og:image" content="http://example.com/2025/06/24/images/21.png">
+<meta property="og:image" content="http://example.com/2025/06/24/images/RDT.png">
+<meta property="og:image" content="http://example.com/2025/06/24/20250624-DexVLA%20%E8%AE%BA%E6%96%87/.assets/Nvida.png">
+<meta property="og:image" content="http://example.com/2025/06/24/images/23.jpg">
+<meta property="og:image" content="http://example.com/2025/06/24/images/25.svg">
+<meta property="og:image" content="http://example.com/2025/06/24/images/24.jpg">
+<meta property="og:image" content="http://example.com/2025/06/24/images/22.png">
+<meta property="og:image" content="http://example.com/2025/06/24/images/25.jpg">
+<meta property="og:image" content="http://example.com/2025/06/24/images/26.jpg">
+<meta property="og:image" content="http://example.com/2025/06/24/images/23.png">
+<meta property="og:image" content="http://example.com/2025/06/24/images/24.png">
+<meta property="og:image" content="http://example.com/2025/06/24/images/27.jpg">
+<meta property="article:published_time" content="2025-06-24T00:23:42.000Z">
+<meta property="article:modified_time" content="2025-11-08T05:25:38.132Z">
+<meta property="article:author" content="Daniel Hu">
+<meta property="article:tag" content="VLA">
+<meta property="article:tag" content="Note">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2025/06/24/images/16.png">
+
+<link rel="canonical" href="http://example.com/2025/06/24/20250624-DexVLA%20%E8%AE%BA%E6%96%87/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Overview of DexVLA Content | Sep_459's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Sep_459's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Welcome to my website</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">16</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">2</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">19</span></a>
+
+  </li>
+        <li class="menu-item menu-item-相册">
+
+    <a href="/gallery/" rel="section"><i class="fa fa-camera fa-fw"></i>相册</a>
+
+  </li>
+        <li class="menu-item menu-item-美食">
+
+    <a href="/food/" rel="section"><i class="fa fa-utensils fa-fw"></i>美食</a>
+
+  </li>
+        <li class="menu-item menu-item-日常">
+
+    <a href="/daily/" rel="section"><i class="fa fa-book fa-fw"></i>日常</a>
+
+  </li>
+        <li class="menu-item menu-item-宠物日常">
+
+    <a href="/pet/" rel="section"><i class="fa fa-paw fa-fw"></i>宠物日常</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/sep459" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/06/24/20250624-DexVLA%20%E8%AE%BA%E6%96%87/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/headpotrait.jpg">
+      <meta itemprop="name" content="Daniel Hu">
+      <meta itemprop="description" content="Share Notes & Life">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sep_459's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Overview of DexVLA Content
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2025-06-24 08:23:42" itemprop="dateCreated datePublished" datetime="2025-06-24T08:23:42+08:00">2025-06-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-11-08 13:25:38" itemprop="dateModified" datetime="2025-11-08T13:25:38+08:00">2025-11-08</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>6.2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>6 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>[TOC]</p>
+<h2 id="本周进度"><a href="#本周进度" class="headerlink" title="本周进度"></a>本周进度</h2><p>阅读文献DexVLA-Vision-Language Model with Plug-In Diffusion Expert for General Robot Control【arxiv 2502  Midea Group】以及代码，了解具身智能控制方法的发展进程以及其组件原理。</p>
+<h2 id="Overview-of-DexVLA-Content"><a href="#Overview-of-DexVLA-Content" class="headerlink" title="Overview of DexVLA Content"></a>Overview of DexVLA Content</h2><h3 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h3><p>OpenVLA训练需要大规模的机器人数据（这一缺点实际上对使用而言，并不是缺点，因为作者提供了训练好的参数），该方法存在如下问题：</p>
+<ul>
+<li>理解能力差，大预言模型存在<strong>虚假遗忘</strong>问题，这一点可以通过简单的训练重新进行激活；</li>
+<li>数据稀缺（这一点对于提供预训练好的模型而言，其实没有影响）</li>
+<li>架构不平衡。VLAs中的组件例如image encoder或者语言大模型，都经过大量数据学习优化，但相比而言，控制相关的数据数量少了非常多。这导致这些组件模块之间，缺少和控制的紧密联系。</li>
+<li>没有针对一些更复杂的任务做调整，比如折衣服，打包盒子。以往通常以来SayCan模型，将prompt拆分为更简单的子任务，针对这一点，本文希望实现更为端到端的设计，让VLM自动学会拆分任务；尤其是时间跨度比较长的任务，或者精细操控任务，简单的prompt经常会让机器人遗忘重要步骤。</li>
+</ul>
+<h3 id="Contribution"><a href="#Contribution" class="headerlink" title="Contribution"></a>Contribution</h3><p>本文的贡献主要有以下几点：</p>
+<ul>
+<li>分离VLM（QWen2-VL 2B模型）与控制空间的设计，利用10亿参数的模仿学习（扩散策略），实现动作的预训练；</li>
+<li>将扩散模型参数量增加到10亿（这一点实际上贡献并不大）</li>
+<li>设计<strong>三步骤</strong>训练方法，逐步增加训练难度，模仿人的学习过程；</li>
+<li>采用扩散策略，输出是一段轨迹，控制起来会更为连续，而不是像OpenVLA这样输出单次的控制量，缺少连续性；</li>
+</ul>
+<h3 id="Model-structure"><a href="#Model-structure" class="headerlink" title="Model structure"></a>Model structure</h3><p align="center">
+  <img src="../images/16.png" alt="" width="100%">
+</p>
+
+
+
+<p>模型主要由<strong>两部分</strong>组成</p>
+<ul>
+<li><strong>VLMs</strong>：本文采用<strong>QWen2-VL 2B</strong>模型，参数量上比OpenVLA更小一些，参数采用原始发布的Qwen2-VL参数；允许多视角图像输入，image encoder映射到向量空间之后，通过concatenated直接连接；输出两个Token: reasoning tokens 以及action tokens。<ul>
+<li><strong>动作token</strong>通过一个三层的MLP以及层归一化，输出给扩散策略网络</li>
+<li><strong>推理 token</strong> 通过一个FiLM模块，输出scale以及shift参数，去调整动作token的三层MLP网络（也可能修改了扩散策略内部，文中表述比较含糊）；这一步类似通过对于图像以及语言的理解，去调整动作；</li>
+</ul>
+</li>
+<li><strong>ScaleDP</strong>：第二部分是一个模型学习训练的扩散策略Scale Diffusion Policy (<strong>ScaleDP</strong> )，本文较其他论文，大幅度提升了扩散模型参数，希望更好的学到动作表示；参考Octo的方法，对于多个形态的机器人设置多个输出头。</li>
+</ul>
+<p>三步骤训练方法如下：</p>
+<ul>
+<li><p>首先，在<strong>跨体态数据</strong>上对扩散专家进行预训练。该步骤希望学会一些与机器人具体型号无关的动作。这一步骤仅仅训练一个扩散模型ScaleDP，训练的过程<strong>不修改VLM任何参数</strong>，利用一个预训练好的ResNet-50作为image encoder，以及DistilBERT，DP去训练本文的<strong>ScaleDP</strong>。此处的损失函数没有单独说明，但应该只包含扩散损失。本文做法不是很理解，为什么要额外加一些网络作为image encoder以及语言大模型，直接冻结QWen2-VL 模型，利用其输出，一样可以得到比较好的文本以及图像特征向量。</p>
+</li>
+<li><p>其次，将 VLA 模型对齐到特定的机器人形态（embodiments），文中说的比较含糊，我理解的是对于多个输出头，有多组训练数据，每个头在自己的训练数据上进行任务的训练以及参数梯度下降（这一过程中视觉编码器是冻结的）。考虑到prompt理解问题，文中对于训练数据单独处理。损失分为两部分<br>$$<br>L = L_{diff}+\alpha L_{ntp}<br>$$<br><strong>第一部分</strong>就是扩散损失，对应的就是输出的动作是否符合预期；<strong>第二部分</strong>是next token prediction 损失，文中对于prompt，例如“Folding all shirts in the basket.”， 利用其他模型，例如gemin2得到拆分后的子步骤如下图黄色框图所示，对应的就希望模型去预测下一个token，也就是将拆分后的子步骤描述作为目标语句进行预测，希望VLM自动的学到拆解复杂指令的能力（实现SayCan的效果）。这一步是对于训练数据的调整，对于训练优化目标也做了相应的调整，在训练过程中不仅仅只关注控制拟合情况，也关注其语言，图像理解的能力。（这一部分gemini2分解任务是手动实现的，劳动密集）</p>
+<p align="center">
+  <img src="../images/17.png" alt="" width="100%">
+</p></li>
+<li><p>最好，针对长时间跨度，精细任务，进一步训练。训练方法以及数据格式，与第二步实际上完全相同，只是任务更为复杂，例如叠衣服，打包快递；第二步训练后实际上已经可以在很多任务上得到比较好的表现，第三步的训练更像是为了特定的复杂任务进一步的微调，目标任务主要是长时间跨度的复杂任务，一些简单的任务的演示，在第三步中就不再继续训练了，因为已经取得了很好的训练效果。</p>
+</li>
+</ul>
+<h3 id="Experiment"><a href="#Experiment" class="headerlink" title="Experiment"></a>Experiment</h3><p>其他的一些实验文本数据，分解prompt</p>
+<p align="center">
+  <img src="../images/18.png" alt="" width="100%">
+</p>
+
+
+
+<p><strong>第一个实验</strong>：DexVLA只经过两阶段训练，同样的其他对比模型也用数据进行了微调，保证公平。实验对比有些夸张，叠衣服这样的复杂任务完成率低是可以理解的，但其他模型的成功率即使是在简单的pick任务上，得分也就只有0.2不到，感觉和作者的微调设置有关系。</p>
+<p align="center">
+  <img src="../images/19.png" alt="" width="100%">
+</p>
+
+
+<p><strong>第二个实验</strong>：两个非常复杂的任务，在两个全新的双臂机器人平台进行训练，比较迁移能力，只使用了100 demonstrations，本文的模型也取得了很高的成绩</p>
+<p align="center">
+  <img src="../images/20.png" alt="" width="100%">
+</p>
+
+
+
+<p>后续<strong>消融实验</strong>，也验证了第三阶段的训练的有效性以及更大的扩散策略（1B）的必要性。</p>
+<h3 id="Github-code"><a href="#Github-code" class="headerlink" title="Github code"></a>Github code</h3><p>由两部分组成，QWen2-VL以及一个扩散模型指导动作。训练分为三阶段，作者只提供了<strong>一阶段</strong>得到的扩散模型参数以及QWen-VL参数（一阶段Qwen就是原始参数），后续的二阶段，三阶段需要自己微调才可以实现使用。只提供了训练脚本sh文件。</p>
+<p>作为在双臂机器人的实验而言，二阶段已经可以做实验验证，简单的抓取动作都可以完成。</p>
+<p>第三阶段主要是作为更精细任务的进一步训练，本质上和第二阶段训练没有差别。区别主要在于训练的数据集任务更为复杂。</p>
+<h3 id="Question"><a href="#Question" class="headerlink" title="Question"></a>Question</h3><ul>
+<li>多输出头的代价函数如何设置，不同阶段的代价函数。对于新增的机器人需要新增一个head吗？对于新的双臂机器人，是否可以直接在已有的双头机器人输出头进行微调。</li>
+<li>第1阶段的训练过程，额外添加的ResNet50以及Distilbert是否也要参与训练，文中说道ResNet50是随机初始化的，作为image encoder而言，参数这样设置很不合理。</li>
+<li>我们的模型训练的时候，是否需要实现SayCan这样的功能呢？这个性质是好的，但是对训练数据提出了很高的要求。文中是通过将视频输入给Google Gemini2.0利用其视频理解功能，5s间隔自动生成每段视频的内容动作概述，作为训练label，时间成本会比较高。</li>
+<li>是否有足够的实验数据使我们可以在简单的任务上进行微调，推动后续任务。</li>
+</ul>
+<h3 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h3><p>本文的方法而言，虽然不是很端到端，因为需要加一个扩散策略，然后扩散策略还需要单独的训练，用了很多其他的网络，但确实可以提升数据的利用度，提高训练效率。这也是模仿学习相比于大数据训练的高效性体现，作者实际上在对比的每个任务上，都单独进行了微调，所以才能实现一个比较好的效果。</p>
+<p>本文在模型上没有特别的创新，但是在代价函数上给了一些启发，如何在训练动作的时候，额外的考虑语言以及图像理解能力不被弱化。这一点实际上很重要，有些模型例如Dino，宣称不需要微调，但实际上会发现简单的微调会使得性能下降的很严重。将这些VLM模型利用到控制相关任务中，训练过程引起的特征提取能力下降是</p>
+<h2 id="后续安排"><a href="#后续安排" class="headerlink" title="后续安排"></a>后续安排</h2><p>之前提到除了控制以外，还希望提供对于任务的分析，例如该任务可不可行这样的判断。但这一步前提实际上还是需要在双臂机器人上先实现基础的控制。这一步的实现，在我看来实际上可以直接提取reasoning token 去进行考虑，例如后续加MLP层进行判断，因为这个token本身就包含了对于任务以及场景的理解。</p>
+<p>针对我们的机器人微调，数据量照作者所说，需要至少100 demonstrations。用这个模型去做实验，包括在自己的机器人上部署，或者后续添加新的功能，相对来说调整会比较多。</p>
+<p align="center">
+  <img src="../images/21.png" alt="" width="100%">
+</p>
+
+
+
+<p>另一个模型，chatVLA似乎是提供了完整的训练好的开箱即用模型参数，但是模型是针对单臂训练的，将其应用到双臂机器人。</p>
+<p>此外还有清华大学开源的双臂机器人项目：<strong>RDT-1B</strong>: a Diffusion Foundation Model for Bimanual Manipulation，提供了初始训练的结果，可以进一步微调（作者也提供了他们的微调数据），但在一些简单任务上可以实现开箱即用。但只有Diffusion Transformer结构，没有VLA。</p>
+<p align="center">
+  <img src="../images/RDT.png" alt="" width="100%">
+</p>
+
+
+
+<p>此外还有英伟达GR00T N1.5，采用了与本文相同的模型结构，但控制是针对整个机器人而不是针对机械臂：</p>
+<p align="center">
+  <img src=".assets/Nvida.png" alt="" width="100%">
+</p>
+
+
+<h2 id="Appendix"><a href="#Appendix" class="headerlink" title="Appendix"></a>Appendix</h2><h3 id="M-RoPE：QWen2-VL多模态旋转编码"><a href="#M-RoPE：QWen2-VL多模态旋转编码" class="headerlink" title="M-RoPE：QWen2-VL多模态旋转编码"></a>M-RoPE：QWen2-VL多模态旋转编码</h3><blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/tardis/bd/art/647109286">十分钟读懂旋转编码（RoPE）</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/719388479">Qwen2-VL技术解析（二）- M-ROPE - 知乎</a></p>
+</blockquote>
+<p>旋转编码本质上，是将每个token，例如第$m$个token嵌入到512维度后，$x\in R^{512}$​，然后两两一组，例如x[0]与x[1]一组，进行一个旋转操作，操作的旋转矩阵<br>$$<br>\mathbf{R}(\theta) =<br>\begin{bmatrix}<br>\cos m\theta &amp; -\sin m\theta \<br>\sin m\theta &amp; \cos m\theta<br>\end{bmatrix}\quad<br>\theta = 10000^{-2(i-1)/d},i\in[1,2,…,d/2]<br>$$</p>
+<p>$$<br>\begin{bmatrix}<br>x_1’ \<br>x_2’<br>\end{bmatrix}<br>=<br>\begin{bmatrix}<br>\cos m\theta &amp; -\sin m \theta \<br>\sin m \theta &amp; \cos m \theta<br>\end{bmatrix}<br>\begin{bmatrix}<br>x_1 \<br>x_2<br>\end{bmatrix}<br>=<br>\begin{bmatrix}<br>x_1 \cos m\theta - x_2 \sin m\theta \<br>x_1 \sin m\theta + x_2 \cos m\theta<br>\end{bmatrix}<br>$$</p>
+<p>具体的示意图如下所示：，每个token两两分组，由于不同的token的m不一样，同一个token的不同位置i不一样，所以实现了不同位置的不同程度旋转。虽然这个是类似正弦形式的绝对位置编码，但由于其用在attention相乘中，自动的在m，n两个位置的token相乘过程中，构造了m-n的旋转角度，达到相对位置编码的目的。</p>
+<p align="center">
+  <img src="../images/23.jpg" alt="" width="80%">
+</p>
+
+<p align="center">
+  <img src="../images/25.svg" alt="" width="80%">
+</p>
+
+
+<p>对于2d旋转位置编码，与1d旋转位置编码，其实就是对角从2<em>2的旋转矩阵，变成了4</em>4的旋转矩阵：</p>
+<p align="center">
+  <img src="../images/24.jpg" alt="" width="80%">
+</p>
+
+
+<p>同理，QWen2.5中将时间，宽，高三个维度分离，实际上就是构造了6*6的旋转子空间。</p>
+<p align="center">
+  <img src="../images/22.png" alt="" width="80%">
+</p>
+
+
+<h3 id="Scable-Difussion-Policy（ScableDP）"><a href="#Scable-Difussion-Policy（ScableDP）" class="headerlink" title="Scable Difussion Policy（ScableDP）"></a>Scable Difussion Policy（ScableDP）</h3><blockquote>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/670555655">(8 条消息) Diffusion Policy—基于扩散模型的机器人动作生成策略 - 知乎</a></p>
+</blockquote>
+<p>扩散模型输出实际上是一系列的动作序列，这也是为什么扩散模型控制更为稳定的原因。对比BET与DP可以发现，输出多步动作。</p>
+<p align="center">
+  <img src="../images/25.jpg" alt="" width="80%">
+</p>
+
+
+<p>关于Action Space Scalabiltiy或者sequential correlation问题，就是机器人对未来动作的预测不应该只局限于眼前的一步两步动作，而应该更有前瞻性，可以往前预测数十步动作。针对这个问题，<strong>迟宬</strong>给了非常清晰的解释：数据预测有两种方法：</p>
+<ul>
+<li><strong>一</strong>是直接输出一个数值；</li>
+<li><strong>二</strong>是将可能的数值分成几个区间，进行离散预测。</li>
+</ul>
+<p>在预测Multi-Modal Action的时候，人们倾向于采用离散预测，将连续值问题转化为分类问题（OpenVLA） ，但这样做涉及的算力成本很高，尤其在处理高维空间时。此外，针对机器人控制问题，如果采用分类方法，每一步都需要预测下一步要执行的动作，而实际需求是希望一次性预测多步动作，这就涉及到了连续控制中的动作一致性问题。解决这个问题的挑战在于平衡成本和对高维连续控制的需求。假如一个动作化为7个自由度，一个自由度100个区间，就对应着100^7。如果采用这种方法，成本将会非常非常高。随着维度的增加，成本会呈指数级增长</p>
+<p>由于只能预测一步，所以OpenVLA的方法会出现不确定性，导致抖动（Action Inconsistent）。例如方向一下子左边，一下子右边。</p>
+<p>在Robot Learning领域，机器人动作执行主要有三种方法：</p>
+<ul>
+<li>直接回归：就是RL的方法，给图片输出动作</li>
+<li>分类预测：就是OpenVLA的方法</li>
+<li>生成式模型：扩散策略属于其中一种非常稳定的方法，也是扩散模型的一个非常重要的优势。远远强于gan这样的网络，不需要非常精细的调参。同时，这也解释了为什么像Stable Diffusion这样的方法，以及现在各种图像生成模型能够在如此庞大的数据集上进行训练，这是因为它们的训练非常稳定。</li>
+</ul>
+<p>首先回到最基础的扩散模型，Diffusion Models：</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/563661713">扩散模型之DDPM - 知乎</a>：该文章重点看</p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/624221952">超详细的扩散模型（Diffusion Models）原理+代码 - 知乎</a></p>
+<p><a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#forward-diffusion-process">What are Diffusion Models? | Lil’Log</a></p>
+</blockquote>
+<p>2020年，<strong>DDPM</strong>（Denoising Diffusion Probabilistic Model）被提出，被称为<a target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=226847260&content_type=Article&match_order=1&q=%E6%89%A9%E6%95%A3%E6%A8%A1%E5%9E%8B&zhida_source=entity">扩散模型</a>（Diffusion Model）。扩散模型分为两部分，前向过程与反向过程。前向过程又称为扩散，反向过程就是去噪。无论是前向过程还是反向过程都是一个参数化的<a target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=226847260&content_type=Article&match_order=1&q=%E9%A9%AC%E5%B0%94%E5%8F%AF%E5%A4%AB%E9%93%BE&zhida_source=entity">马尔可夫链</a>（Markov chain），其中反向过程可用于生成数据样本（它的作用类似GAN中的生成器）。实际上扩散模型的概念更广义的，DDPM是其提出的最原始标准形式。</p>
+<p align="center">
+  <img src="../images/26.jpg" alt="" width="80%">
+</p>
+
+
+<p>正向过程通过人为的β参数对图像添加噪声。</p>
+<p>逆向过程，希望通过网络进行拟合。q表示的实际的逆向过程，已知道xt和x0,倒推$x_{t-1}$。但实际拟合一个网络，网络输出是$x_t$以及时间步$t$，去拟合均值和方差然后得到$x_{t-1}$。假设$x_{t-1}$符合均值方差为$\mu_\theta,\Sigma_\theta$ 的分布。而$\mu_\theta,\Sigma_\theta$是用网络拟合得到的数值，网络的输入是$t$以及$x_t$</p>
+<p align="center">
+  <img src="../images/23.png" alt="" width="80%">
+</p>
+
+
+<p>实际网络只拟合均值，方差固定。反向过程中，方差通常是固定的（应该是简化）。论文通常不拟合均值，而是拟合噪声，然后用下面的公式，就得到了均值的值：</p>
+<p align="center">
+  <img src="../images/24.png" alt="" width="40%">
+</p>
+
+
+<p>因为 $t $和$ x_t$ 已知(实际上$\alpha$应该也是认为已知的，$\alpha$与前向过程的$\beta$有关系，$\beta$也认为已知)，只需使用神经网络拟合$ ϵ_θ(x_t,t)$ 。整个框图如下所示，Gaussian Diffusian 模块主要是生成随机噪声然后加到图片上。Unet就是预测反向的噪声，传给Gaussian Diffusion让他从图片中减去预测的噪声。</p>
+<p align="center">
+  <img src="../images/27.jpg" alt="" width="100%">
+</p>
+
+
+<p>Unet输入是时间t以及加噪声后的数据x_t，预测x_T回到x_0的噪声值。损失就是真实噪声与预测噪声之间的二范数差值。时间t使用正线位置编码，统一量化尺度。</p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Daniel Hu
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://example.com/2025/06/24/20250624-DexVLA%20%E8%AE%BA%E6%96%87/" title="Overview of DexVLA Content">http://example.com/2025/06/24/20250624-DexVLA 论文/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/VLA/" rel="tag"><i class="fa fa-tag"></i> VLA</a>
+              <a href="/tags/Note/" rel="tag"><i class="fa fa-tag"></i> Note</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/12/15/Attack%20On%20Titan/" rel="prev" title="Attack On Titan">
+      <i class="fa fa-chevron-left"></i> Attack On Titan
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2025/07/01/Difussion%20Model%20-Lil's%20blog/" rel="next" title="Overview of Diffusion Models">
+      Overview of Diffusion Models <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%AC%E5%91%A8%E8%BF%9B%E5%BA%A6"><span class="nav-number">1.</span> <span class="nav-text">本周进度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Overview-of-DexVLA-Content"><span class="nav-number">2.</span> <span class="nav-text">Overview of DexVLA Content</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Introduction"><span class="nav-number">2.1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Contribution"><span class="nav-number">2.2.</span> <span class="nav-text">Contribution</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Model-structure"><span class="nav-number">2.3.</span> <span class="nav-text">Model structure</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Experiment"><span class="nav-number">2.4.</span> <span class="nav-text">Experiment</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Github-code"><span class="nav-number">2.5.</span> <span class="nav-text">Github code</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Question"><span class="nav-number">2.6.</span> <span class="nav-text">Question</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Conclusion"><span class="nav-number">2.7.</span> <span class="nav-text">Conclusion</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%8E%E7%BB%AD%E5%AE%89%E6%8E%92"><span class="nav-number">3.</span> <span class="nav-text">后续安排</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Appendix"><span class="nav-number">4.</span> <span class="nav-text">Appendix</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#M-RoPE%EF%BC%9AQWen2-VL%E5%A4%9A%E6%A8%A1%E6%80%81%E6%97%8B%E8%BD%AC%E7%BC%96%E7%A0%81"><span class="nav-number">4.1.</span> <span class="nav-text">M-RoPE：QWen2-VL多模态旋转编码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Scable-Difussion-Policy%EF%BC%88ScableDP%EF%BC%89"><span class="nav-number">4.2.</span> <span class="nav-text">Scable Difussion Policy（ScableDP）</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Daniel Hu"
+      src="/images/headpotrait.jpg">
+  <p class="site-author-name" itemprop="name">Daniel Hu</p>
+  <div class="site-description" itemprop="description">Share Notes & Life</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">19</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/sep459" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;sep459" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Daniel Hu</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">141k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">2:09</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共85.2k字</span>
+  <span class="post-meta-divider">|</span>
+  本站总访问量<span id="busuanzi_value_site_pv"></span>次
+  <span class="post-meta-divider">|</span>
+  本站访客数<span id="busuanzi_value_site_uv"></span>人次
+  <span class="post-meta-divider">|</span>
+  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

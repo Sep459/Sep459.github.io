@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/s5.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/s5.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":{"enable":true,"caption":false},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="[TOC] 调研内容论文调研，关注手-头协同。  如何收集协同数据 如何使用协同数据  参考论文 ViA  open-television:Teleoperation with immersive active visual feedback  human2huanoid：ICRA 2024  “Learning Human‑to‑Humanoid Real‑Time Whole‑Body Tel">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Overview of 手-头协同">
+<meta property="og:url" content="http://example.com/2025/07/27/20250727-%E6%89%8B%E5%A4%B4%E5%8D%8F%E5%90%8C%E8%AE%BA%E6%96%87%E8%B0%83%E7%A0%94/index.html">
+<meta property="og:site_name" content="Sep_459&#39;s Blog">
+<meta property="og:description" content="[TOC] 调研内容论文调研，关注手-头协同。  如何收集协同数据 如何使用协同数据  参考论文 ViA  open-television:Teleoperation with immersive active visual feedback  human2huanoid：ICRA 2024  “Learning Human‑to‑Humanoid Real‑Time Whole‑Body Tel">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2025/07/27/images/31.png">
+<meta property="og:image" content="http://example.com/2025/07/27/images/40.png">
+<meta property="og:image" content="http://example.com/2025/07/27/images/48.png">
+<meta property="og:image" content="http://example.com/2025/07/27/images/32.png">
+<meta property="og:image" content="http://example.com/2025/07/27/images/33.png">
+<meta property="og:image" content="http://example.com/2025/07/27/images/34.png">
+<meta property="og:image" content="http://example.com/2025/07/27/images/35.png">
+<meta property="og:image" content="http://example.com/2025/07/27/images/36.png">
+<meta property="og:image" content="http://example.com/2025/07/27/images/37.png">
+<meta property="og:image" content="http://example.com/2025/07/27/images/38.png">
+<meta property="og:image" content="http://example.com/2025/07/27/images/39.png">
+<meta property="og:image" content="http://example.com/2025/07/27/images/41.png">
+<meta property="og:image" content="http://example.com/2025/07/27/images/42.png">
+<meta property="og:image" content="http://example.com/2025/07/27/images/43.png">
+<meta property="og:image" content="http://example.com/2025/07/27/images/44.png">
+<meta property="og:image" content="http://example.com/2025/07/27/images/45.png">
+<meta property="og:image" content="http://example.com/2025/07/27/images/46.png">
+<meta property="og:image" content="http://example.com/2025/07/27/images/47.png">
+<meta property="og:image" content="http://example.com/2025/07/27/images/49.png">
+<meta property="og:image" content="http://example.com/2025/07/27/images/50.png">
+<meta property="og:image" content="http://example.com/2025/07/27/images/51.png">
+<meta property="og:image" content="http://example.com/2025/07/27/images/52.png">
+<meta property="og:image" content="http://example.com/2025/07/27/images/53.png">
+<meta property="og:image" content="http://example.com/2025/07/27/20250727-%E6%89%8B%E5%A4%B4%E5%8D%8F%E5%90%8C%E8%AE%BA%E6%96%87%E8%B0%83%E7%A0%94/.assets/54.png">
+<meta property="article:published_time" content="2025-07-27T11:23:42.000Z">
+<meta property="article:modified_time" content="2025-11-08T05:28:16.325Z">
+<meta property="article:author" content="Daniel Hu">
+<meta property="article:tag" content="Note">
+<meta property="article:tag" content="Reinforcement Learning">
+<meta property="article:tag" content="teleoperation">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2025/07/27/images/31.png">
+
+<link rel="canonical" href="http://example.com/2025/07/27/20250727-%E6%89%8B%E5%A4%B4%E5%8D%8F%E5%90%8C%E8%AE%BA%E6%96%87%E8%B0%83%E7%A0%94/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Overview of 手-头协同 | Sep_459's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Sep_459's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Welcome to my website</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">16</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">2</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">19</span></a>
+
+  </li>
+        <li class="menu-item menu-item-相册">
+
+    <a href="/gallery/" rel="section"><i class="fa fa-camera fa-fw"></i>相册</a>
+
+  </li>
+        <li class="menu-item menu-item-美食">
+
+    <a href="/food/" rel="section"><i class="fa fa-utensils fa-fw"></i>美食</a>
+
+  </li>
+        <li class="menu-item menu-item-日常">
+
+    <a href="/daily/" rel="section"><i class="fa fa-book fa-fw"></i>日常</a>
+
+  </li>
+        <li class="menu-item menu-item-宠物日常">
+
+    <a href="/pet/" rel="section"><i class="fa fa-paw fa-fw"></i>宠物日常</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/sep459" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/07/27/20250727-%E6%89%8B%E5%A4%B4%E5%8D%8F%E5%90%8C%E8%AE%BA%E6%96%87%E8%B0%83%E7%A0%94/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/headpotrait.jpg">
+      <meta itemprop="name" content="Daniel Hu">
+      <meta itemprop="description" content="Share Notes & Life">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sep_459's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Overview of 手-头协同
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2025-07-27 19:23:42" itemprop="dateCreated datePublished" datetime="2025-07-27T19:23:42+08:00">2025-07-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-11-08 13:28:16" itemprop="dateModified" datetime="2025-11-08T13:28:16+08:00">2025-11-08</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>7.5k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>7 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>[TOC]</p>
+<h2 id="调研内容"><a href="#调研内容" class="headerlink" title="调研内容"></a>调研内容</h2><p>论文调研，关注手-头协同。</p>
+<ul>
+<li>如何收集协同数据</li>
+<li>如何使用协同数据</li>
+</ul>
+<h2 id="参考论文"><a href="#参考论文" class="headerlink" title="参考论文"></a>参考论文</h2><ul>
+<li><p>ViA</p>
+</li>
+<li><p>open-television:Teleoperation with immersive active visual feedback</p>
+</li>
+<li><p>human2huanoid：ICRA 2024  <strong>“Learning Human‑to‑Humanoid Real‑Time Whole‑Body Teleoperation</strong></p>
+<blockquote>
+<p>项目地址：<a target="_blank" rel="noopener" href="https://human2humanoid.com/?utm_source=chatgpt.com">Learning Human-to-Humanoid Real-Time Whole-Body Teleoperation</a></p>
+</blockquote>
+</li>
+<li><p>HOME</p>
+</li>
+<li><p>CLONE: Closed‑Loop Whole‑Body Humanoid Teleoperation for Long‑Horizon Tasks </p>
+</li>
+<li><p>Moma-teleop: Whole-Body Teleoperation for Mobile Manipulation at Zero Added Cost</p>
+</li>
+<li><p>ViTaceFormer: Learning Cross-Modal Representation for Visuo-Tactile Dexterous Manipulation</p>
+</li>
+<li><p>Mobile-television: Predictive motion priors for humanoid whole-body control。是open-televison的二代论文</p>
+</li>
+</ul>
+<h2 id="Learning-Human‑to‑Humanoid-Real‑Time-Whole‑Body-Teleoperation"><a href="#Learning-Human‑to‑Humanoid-Real‑Time-Whole‑Body-Teleoperation" class="headerlink" title="Learning Human‑to‑Humanoid Real‑Time Whole‑Body Teleoperation"></a>Learning Human‑to‑Humanoid Real‑Time Whole‑Body Teleoperation</h2><p>这篇论文主要是讲高效数据采集的，不是聚焦手眼协同控制。</p>
+<h2 id="Mobile-TeleVision-Predictive-Motion-Priors-for-Humanoid-Whole-Body-Control"><a href="#Mobile-TeleVision-Predictive-Motion-Priors-for-Humanoid-Whole-Body-Control" class="headerlink" title="Mobile-TeleVision: Predictive Motion Priors for Humanoid Whole-Body Control"></a><strong>Mobile-TeleVision: Predictive Motion Priors for</strong> <strong>Humanoid Whole-Body Control</strong></h2><p><strong>出发点：</strong>强化学习直接控制，精度略显不足。本文将人形机器人的上下部分控制解耦，上半身用逆运动学+运动重定向，下半身用RL学习。引入PMP（预测运动先验），使用条件变分自动编码器（CVAE）进行训练，以有效地表示上半身运动。然后在上半身训练的基础上，学习下半身的运动策略，确保运动时候的鲁棒性。</p>
+<p>训练的目的，是为了后续遥控机器人，探索环境执行任务，同时也是收集数据。</p>
+<h3 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h3><p>作者认为，上半身主要负责精细操控，例如arm。下半身主要复杂捕获常见的运动范围，维持平衡。</p>
+<p>RL方式的缺点：RL policy is also not well-suited for high DoF positional and orientation control，并且具有随机性。因此，作者引出，控制手臂也腿需要不同的机制。</p>
+<p>上半身无需考虑平衡问题，因此可以直接逆运动学计算控制信号。下半身的RL训练，就不考虑上半身控制维度，降低了训练代价。前文也有讨论，完全解耦会导致运动不稳定，因为失去了交互能力。</p>
+<p>本文在此基础上，虽然解耦上下部分，但想办法将两部分结合起来。简单来说，上半身简单的用逆运动学控制，然后训练一个条件变分自编码器，输入是上半身的过去几个时间点的动作轨迹，输出是上半身之后的运动轨迹预测，将其编码输入给下半身的RL，也就是变相的将上半身的运动轨迹作为条件，输入给下半身，下半身通过RL实现平衡。最主要的就是中间的<strong>CVAE</strong>部分，其作用就是<strong>表示学习</strong>，预测未来的上半身运动轨迹</p>
+<p align="center">
+  <img src="../images/31.png" alt="" width="100%">
+</p>
+
+<h3 id="三阶段训练："><a href="#三阶段训练：" class="headerlink" title="三阶段训练："></a><strong>三阶段训练：</strong></h3><ul>
+<li>第一阶段：数据转化，得到每个执行器的joint angle数据，数据过滤。</li>
+<li>第二阶段训练上半身的模型，自回归预测未来的上半身action，运动重定向。这部分用逆运动学或者其他模仿学习都可以实现。</li>
+<li>训练下半身的控制策略，RL训练。输入是控制指令，自回归预测的上半身模型运动序列，以及其他的感知信号（例如上一时刻的下半身action，时间步长等）。此时会使用课程学习，上半身有一个参数$\alpha \in [0,1]$，让参数有小到大，这样子上半身运动幅度由小到大，训练难度逐渐增加。等于0的时候，上半身手臂相当于维持在初始点。</li>
+</ul>
+<h3 id="实验设置"><a href="#实验设置" class="headerlink" title="实验设置"></a>实验设置</h3><p>使用宇树机器人与Fourier GR-1 robot。</p>
+<p>讨论内容：</p>
+<ul>
+<li>与其他方法比，本文的解耦方法上半身表现（用的是仿真）</li>
+<li>disturbance下的稳定性</li>
+<li>实际环境下，上下身结合的性能。</li>
+</ul>
+<p>摇杆方法：</p>
+<ul>
+<li><p>颈部与手部的运动，是用Apple Vision Pro 追踪得到的。然后数据经过逆向运动学以及动作重定向，转化为机器人关节角度。vr显示的就是机器人实时拍摄的画面。这里比较重要的是，Apple Vision Pro 得到的到底有哪些数据。头部的位置以及四元数，还计算了手部（等效终端执行器）的位置，所以本文这里就没有采用额外的辅助机械臂（不同于ViA的方法），去收集手臂数据。</p>
+</li>
+<li><p>下半身用两种方式：</p>
+<ul>
+<li><p><strong>分离控制</strong>：一名操作员使用 VR 头显控制上半身，另一名操作员使用带摇杆的遥控器控制下半身。</p>
+</li>
+<li><p><strong>统一控制</strong>：由单个用户同时控制上半身和下半身，其中上半身通过 VR 头显控制，下半身通过踏板控制。全部操作单人完成。效果如下所示：</p>
+<p align="center">
+  <img src="../images/40.png" alt="" width="90%">
+</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>为什么用苹果的VR设备：</strong></p>
+<p align="center">
+  <img src="../images/48.png" alt="" width="90%">
+</p>
+
+
+<p>苹果的ARKit提供了很多sdk，vr设备可以直接输出头部以及手部的位置以及手部的姿态。有些基于rgb深度的三维场景重构，应该也是利用了官方提供的接口进行渲染。</p>
+<h2 id="Vision-in-Action-Learning-Active-Perception-from-Human-Demonstrations"><a href="#Vision-in-Action-Learning-Active-Perception-from-Human-Demonstrations" class="headerlink" title="Vision in Action: Learning Active Perception from Human Demonstrations"></a>Vision in Action: Learning Active Perception from Human Demonstrations</h2><p>机械结构：双臂+6DOF neck模拟头部运动</p>
+<p align="center">
+  <img src="../images/32.png" alt="" width="50%">
+</p>
+
+
+<p>希望通过neck的移动，实现视角的移动，在搜索过程中增加视觉覆盖范围，减少障碍物造成的遮挡影响。</p>
+<p>通常多视角，例如waist可以一定程度处理上述的背包遮挡问题，但其本质上是任务导向的（手伸进背包），而不是主动的去感知。此外，对于一些数据，采集人员通常会移动自身视线取采集数据，但是机器采集的数据却不会对应的调整，<strong>采集人员所看到的与实际采集的数据，是存在偏差的</strong>。</p>
+<p><strong>observation mismatch</strong>：what the human sees and what the robot learns from。不匹配影响了学习效率。实际上关注的有两个方面，如何实现active 视角变化，如何消除robot与采集人员观测的mismatch。</p>
+<p>面临的困难：</p>
+<ul>
+<li>大部分机器人视角相关的自由度低，例如只有2dof的head，导致很难调整视角。</li>
+<li>相机同步，也就是采集人员用vr设备观测，在硬件上实现低延迟是较为困难的。此外电机反馈需要很快，动态的调整head视角。</li>
+<li>过去机器人视角变化，可能是在特定任务下，用特定策略指定的，缺少可扩展性。</li>
+</ul>
+<p>本文提出的<strong>ViA</strong>，对上述问题，提出如下解决方案：</p>
+<ul>
+<li>使用6dof arm作为neck，没有专门设计复杂的结构去模拟人类头部眼部的运动。</li>
+<li>以往的数据采集，顺序是，采集人员移动头部-&gt;发送指令-&gt;机器人运动-&gt;回传实时数据。本文设计一个方法，根据当前的采集人员头部姿态，去渲染实时画面，就不需要每次都依靠机器人采集新图像。</li>
+<li>在第二点贡献的基础上，实现了<strong>共享视角</strong>，这对于后续的模仿学习是有利的，即使采用最基础的行为克隆，也能够学会active的注视策略。</li>
+</ul>
+<p>实验设计了三个任务，都包含视觉遮挡。</p>
+<h3 id="数据采集"><a href="#数据采集" class="headerlink" title="数据采集"></a>数据采集</h3><p>两个问题：</p>
+<ul>
+<li>视觉延迟：头部运动与vr设备的延迟</li>
+<li>机器人控制延迟，包括程序执行，电机延迟等</li>
+</ul>
+<p align="center">
+  <img src="../images/33.png" alt="" width="30%">
+</p>
+
+
+<p>本文的方法：Async Teleop：<strong>Decoupled view rendering and asynchronous updating</strong></p>
+<p align="center">
+  <img src="../images/34.png" alt="" width="100%">
+</p>
+
+
+<p>上图的<strong>绿色轨迹</strong>，指的是依据用户头部姿态，在点云上实时渲染双目rgb图像。实现实时反馈无需等待机器人视角切换。</p>
+<p><strong>红色部分</strong>，依靠用户的头部姿态，以及手臂关节，更新机器人姿态。并且依据机器人的观测，对点云数据进行补全。</p>
+<p>将本身要传输的rgb数据换成点云数据，可能传输的数据会更少？</p>
+<p>具体的数据收集过程视觉效果：右侧点云渲染图就是vr设备真实看到的。所以本文最主要的共享主要还是在摇杆渲染这一块。</p>
+<p align="center">
+  <img src="../images/35.png" alt="" width="100%">
+</p>
+
+<p align="center">
+  <img src="../images/36.png" alt="" width="100%">
+</p>
+
+
+<h3 id="硬件设计"><a href="#硬件设计" class="headerlink" title="硬件设计"></a>硬件设计</h3><p>头部camera可以提供rgb，depth图像以及camera pose 数据。实际上是用iphone 15 pro，连接在一个ARX5机器人手臂上实现的。</p>
+<h3 id="摇杆接口"><a href="#摇杆接口" class="headerlink" title="摇杆接口"></a>摇杆接口</h3><p>手臂的数据很好收集，两个外骨骼形状的操控杆，手机双臂数据。</p>
+<p>vr设备的延时是比较低的，一般可以达到10ms，但是对于机器人控制，更多的是control latency，头部运动与实际的机器人运动之间会存在较大的延时。为此设计了之前的VR渲染模块，主要有以下三个内容：</p>
+<ul>
+<li>点云构造：需要两个变换，一个是6dof neck的坐标系变换，还有一个是头部相机的坐标变换。</li>
+<li>低延迟视角渲染：点云数据是t时刻的，渲染是t+k时刻的，在t+k时刻，利用t+k时刻的头部姿态以及t时刻的点云数据，渲染3d环境（150Hz）。因为是渲染的，所以有些地方会有缺失。</li>
+<li>结合头部运动更新点云：在时间t+K，注意此处的K远大于k，具体的K取值，与机器人控制系统的延迟决定。同时，系统会用10Hz的频率更新RGB以及深度图像的值，用于更新点云渲染数据。</li>
+</ul>
+<h3 id="How-to-learn"><a href="#How-to-learn" class="headerlink" title="How to learn?"></a>How to learn?</h3><p>设计网络比较简单，用的就是模仿学习，模型采用扩散策略Difussion Policy。<strong>单步预测未来的手臂以及neck动作序列。</strong>所以本文的头-手交互，难点在于数据的采集以及摇杆设备的处理。实际的数据使用是较为简单的。输出动作维度是23</p>
+<ul>
+<li>左臂，7dof</li>
+<li>右臂，7dof</li>
+<li>两个夹爪，2dof</li>
+<li>剩下的七个维度是neck的，位置3加上四元数4，一共得到七个自由度。</li>
+</ul>
+<p>图像经过DINOv2，得到一个384维度的token，将其作为观测的语义特征。预测窗口16，执行前8个预测的控制量。控制频率设定为10Hz。</p>
+<h3 id="评估"><a href="#评估" class="headerlink" title="评估"></a>评估</h3><p>实验对比一下内容：</p>
+<ul>
+<li>不同相机设置</li>
+<li>视觉表示能力</li>
+<li>摇杆界面</li>
+</ul>
+<p>三个实验：</p>
+<ul>
+<li>Bag Task：打开背包拿出物体，这个时候<strong>手臂的摄像头存在遮挡</strong>。训练阶段使用5个对象：香蕉、胡萝卜、小狗、鞋子、草莓；共收集150条示范；测试阶段使用2个未见过的对象：蓝色大象、绿色鳄梨；每个测试对象进行5次实验，共10次测试尝试；每次实验中，背包内仅放置一个目标物体。</li>
+<li>Cup Task：通过主动视角切换完成杯子摆放</li>
+<li>Pot Task：找到一个青柠并将其放入锅中；使用双臂共同抬起锅；将锅精确对准托盘放置。</li>
+</ul>
+<h4 id="实验1："><a href="#实验1：" class="headerlink" title="实验1："></a>实验1：</h4><p>第一个实验对比不同相机设置</p>
+<ul>
+<li>ViA:只使用head摄像头</li>
+<li>Active head摄像头以及两个wrist摄像头：head摄像头与ViA完全一致，相当于多提供了两个视角信息。</li>
+<li>固定在胸部的相机与两个wrist相机</li>
+</ul>
+<p>实验结果表明额外加了wrist相机反而降低了18%的性能，猜测是由于数据量不够，并且腕部相机提供的有效信息实际上很小，反而由于遮挡引入了更多的干扰噪声。下图是分阶段的成功率。</p>
+<p align="center">
+  <img src="../images/37.png" alt="" width="100%">
+</p>
+
+
+<h4 id="试验2：对比不同视觉表征方法"><a href="#试验2：对比不同视觉表征方法" class="headerlink" title="试验2：对比不同视觉表征方法"></a>试验2：对比不同视觉表征方法</h4><ul>
+<li>本文的DINOv2</li>
+<li>ResNet-18 用ImageNet训练</li>
+<li>DP3，用采集的点云数据</li>
+</ul>
+<p align="center">
+  <img src="../images/38.png" alt="" width="100%">
+</p>
+
+
+<h4 id="实验3：对比不同摇杆方式"><a href="#实验3：对比不同摇杆方式" class="headerlink" title="实验3：对比不同摇杆方式"></a>实验3：对比不同摇杆方式</h4><p>实际上对比的是传输rgb数据与点云数据。找了一些人员体验他们设计的vr渲染系统，说明他们的系统收集数据会慢一些，因为没有rgb图像直观，不过对于防眩晕会更友好。</p>
+<p align="center">
+  <img src="../images/39.png" alt="" width="70%">
+</p>
+
+
+<h3 id="Questions"><a href="#Questions" class="headerlink" title="Questions"></a>Questions</h3><ul>
+<li><p>头部可以控制角度，但采集人员如何控制6dof的neck呢？看了一下数据采集演示视频，也是依靠人的运动去直接控制的，相对来说比采集手臂难操作一点。</p>
+</li>
+<li><p>如何区分，到底是简单的模仿学习跟踪头部动作，还是说真的学会并且理解了关注region of interest。实际上在实验的时候应该设置一些随机性。</p>
+</li>
+</ul>
+<h2 id="Open-TeleVision-Teleoperation-with-Immersive-Active-Visual-Feedback"><a href="#Open-TeleVision-Teleoperation-with-Immersive-Active-Visual-Feedback" class="headerlink" title="Open-TeleVision: Teleoperation with Immersive Active Visual Feedback"></a>Open-TeleVision: Teleoperation with Immersive Active Visual Feedback</h2><p>主要是提出了一种沉浸式的摇操系统，OpenTeleVision。用于高效的收集数据，然后在四个复杂任务上说明了数据采集的有效性。利用头戴式设备，采集rgb图像，然后分析手臂位置以及手部关节，得到双臂数据。头部数据直接根据头戴vr设备可以得到。</p>
+<p>本文只考虑头部以及双臂和手的控制。</p>
+<p align="center">
+  <img src="../images/41.png" alt="" width="90%">
+</p>
+
+
+<p>数据采集流程如下：本文开发了一个基于Vuer的Web服务器[。VR设备将操作员的手，头和手腕姿势传输到服务器，服务器处理人到机器人的运动重定向。机器人双目立体视频分辨率为480x640，频率60 Hz。Vr设备用的Apple Vision Pro。</p>
+<p align="center">
+  <img src="../images/42.png" alt="" width="90%">
+</p>
+
+
+<p>机器人设备如下：</p>
+<p>头部VR设备移动，直接控制机器人头部设备的移动（2-3个自由度）。该过程人可以主动的看向感兴趣的部分，实现了active的视觉感知功能。而且这样子处理，可以<strong>用更小的图像</strong>，因为视角可以移动。这里作者还提了一下，用的是双目摄像头。方便采集人员获得图像空间信息，可能是为了提高采集的准确性等，后续训练实际上也是提供了一些深度的信息。</p>
+<p>​    手臂的移动是跳过vr设备的rgb图像流处理的，两个部分，一部分是手臂的位置，另一部分是手的姿态。</p>
+<ul>
+<li>手臂位置：通过图像识别人手臂根部，通过逆运动学计算机器人的关节角度。</li>
+<li>手的姿态：</li>
+</ul>
+<p align="center">
+  <img src="../images/43.png" alt="" width="90%">
+</p>
+
+<p align="center">
+  <img src="../images/44.png" alt="" width="90%">
+</p>
+
+
+<h3 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h3><p>四个实验的数据采集</p>
+<p align="center">
+  <img src="../images/45.png" alt="" width="90%">
+</p>
+
+
+<p>讨论的问题</p>
+<ul>
+<li>实验中的一些设置对于模仿学习的影响。例如resnet对比Dinov，单目与双目</li>
+<li>本文设计的方案数据收集方面的有效性</li>
+</ul>
+<p>选用两个双目图像作为视觉输入，而不是腕部之类的摄像头。将其输入DiNOv2得到视觉特征。每个图形生成16*22个tokens。ACT网络实现chunk动作输出。本文的active head相对来说简单一点，因为主要涉及到2dof的旋转，而不是ViA中的位置变化。</p>
+<p>一些比较重要的结论：</p>
+<ul>
+<li>原始的ACT用了四个角度输入，而本文使用了双目图像，所以对于图像特征提取能力要求更高，导致ResNet效果不够好。</li>
+<li>单目实验效果不如双目实验，可能是因为缺少深度信息。对于距离的判断不足。</li>
+</ul>
+<h3 id="泛化性能"><a href="#泛化性能" class="headerlink" title="泛化性能"></a>泛化性能</h3><p>泛化性能实际上比较一般，只是位置稍微改一下，失败率就非常高（每个位置实验5次）</p>
+<p align="center">
+  <img src="../images/46.png" alt="" width="60%">
+</p>
+
+
+<p>一些常见的数据收集方案：</p>
+<p align="center">
+  <img src="../images/47.png" alt="" width="90%">
+</p>
+
+
+
+
+<h2 id="Learning-to-Look-Around-Enhancing-Teleoperation-and-Learning-with-a-Human-like-Actuated-Neck"><a href="#Learning-to-Look-Around-Enhancing-Teleoperation-and-Learning-with-a-Human-like-Actuated-Neck" class="headerlink" title="Learning to Look Around: Enhancing Teleoperation and Learning with a Human-like Actuated Neck"></a>Learning to Look Around: Enhancing Teleoperation and Learning with a Human-like Actuated Neck</h2><p align="center">
+  <img src="../images/49.png" alt="" width="90%">
+</p>
+
+
+<p>该文章是MIT2024年论文，同样是设计了一个摇操系统，控制双臂的同时，控制5dof的head，实现例如“偷看”或者“倾斜”之类的功能。一方面，对操作人员会比较友好，更直观而且更好操控。对于训练而言，这种方式，可以提供更好的<strong>空间理解能力</strong>，相比于静态的camera，可以实现<strong>任务自适应</strong>。</p>
+<h3 id="硬件："><a href="#硬件：" class="headerlink" title="硬件："></a>硬件：</h3><p>Apple visionPro 提供了头部跟踪以及手部跟踪，以此收集演示过程的数据。<strong>四个摄像头</strong>，分别安装在头部，躯干以及两个手腕。</p>
+<p align="center">
+  <img src="../images/50.png" alt="" width="90%">
+</p>
+
+
+<p>几种演示操作：</p>
+<p align="center">
+  <img src="../images/51.png" alt="" width="90%">
+</p>
+
+
+<h4 id="手部跟踪"><a href="#手部跟踪" class="headerlink" title="手部跟踪"></a>手部跟踪</h4><ul>
+<li><strong>Ascension trakSTAR</strong>：6自由度跟踪节点，使用一个<strong>手套</strong>进行捕捉。</li>
+<li><strong>Manus VR 手套</strong>：对于更复杂的任务用了这个手套，可以有25个关键节点跟踪</li>
+<li><strong>Apple Vision Pro</strong>：数据比较准，但是有时候手会移出视野，数据收集可能会有问题。</li>
+</ul>
+<h4 id="头部跟踪"><a href="#头部跟踪" class="headerlink" title="头部跟踪"></a>头部跟踪</h4><p><strong>头部跟踪</strong> 是使用 <strong>Apple Vision Pro</strong>，提供6dof头部跟踪。</p>
+<h3 id="实验-1"><a href="#实验-1" class="headerlink" title="实验"></a>实验</h3><p>用ACT训练，训练头部+右臂，训练三个任务的数据：</p>
+<ul>
+<li>Left-to-right Pick and Place (L2R): </li>
+<li>Close-range Object Manipulation (CRange):</li>
+<li>Cup Transfer From Bottom Shelf (CfB)</li>
+</ul>
+<p>这三个任务都需要控制过程移动neck，例如调整视角观察物体，移动视角保持物体的实时可见性。每个任务有120条演示数据。为了证明是学会了how to look而不是简单的模仿，作者将三个数据融合（但实际上这种做法任然不能很明显的说明学会了如何找到region of interest，应该移动物体或者改变位置，角度。不过这一点在后续的测试里也是有的）。</p>
+<p>实验结果如下：成功率有很大程度提高</p>
+<p align="center">
+  <img src="../images/52.png" alt="" width="60%">
+</p>
+
+
+<h2 id="Using-Apple-Vision-Pro-to-Train-and-Control-Robots"><a href="#Using-Apple-Vision-Pro-to-Train-and-Control-Robots" class="headerlink" title="Using Apple Vision Pro to Train and Control Robots"></a>Using Apple Vision Pro to Train and Control Robots</h2><p>改论文讲述了如何利用Apple vr设备，实现头部以及手部的姿态数据获取，24年论文，很多相关论文应该是用了其中的方法。</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://github.com/Improbable-AI/VisionProTeleop">Improbable-AI/VisionProTeleop: VisionOS App + Python Library to stream head / wrist / finger tracking data from Vision Pro to any robots.</a></p>
+</blockquote>
+<p>apple本身提供了ARKit库，主要提供了三类数据：</p>
+<ul>
+<li>头</li>
+<li>腕</li>
+<li>手指关节</li>
+</ul>
+<h3 id="使用步骤"><a href="#使用步骤" class="headerlink" title="使用步骤"></a>使用步骤</h3><ul>
+<li><p>下载app</p>
+<p align="center">
+  <img src="../images/53.png" alt="" width="60%">
+</p></li>
+<li><p>下载python库：pip install avp_stream</p>
+</li>
+<li><p>mac中函数调用获取数据</p>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> avp_stream <span class="keyword">import</span> VisionProStreamer</span><br><span class="line"><span class="number">2</span> avp_ip = <span class="string">&quot; 10.31.181.201 &quot;</span> <span class="comment"># example IP</span></span><br><span class="line"><span class="number">3</span> s = VisionProStreamer ( ip = avp_ip , record = <span class="literal">True</span> )</span><br><span class="line"><span class="number">4</span></span><br><span class="line"><span class="number">5</span> <span class="keyword">while</span> <span class="literal">True</span> :</span><br><span class="line"><span class="number">6</span> r = s . latest <span class="comment"># gets the latest tracking data</span></span><br><span class="line"><span class="number">7</span> <span class="built_in">print</span> ( r )</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>这里的r就是字典，可以获取例如r[‘head’]这样的数据</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">r</span>[<span class="string">&#x27;head&#x27;</span>]: np.ndarray  </span><br><span class="line">  <span class="comment"># shape (1,4,4) / measured from ground frame</span></span><br><span class="line"><span class="built_in">r</span>[<span class="string">&#x27;right_wrist&#x27;</span>]: np.ndarray </span><br><span class="line">  <span class="comment"># shape (1,4,4) / measured from ground frame</span></span><br><span class="line"><span class="built_in">r</span>[<span class="string">&#x27;left_wrist&#x27;</span>]: np.ndarray </span><br><span class="line">  <span class="comment"># shape (1,4,4) / measured from ground frame</span></span><br><span class="line"><span class="built_in">r</span>[<span class="string">&#x27;right_fingers&#x27;</span>]: np.ndarray </span><br><span class="line">  <span class="comment"># shape (25,4,4) / measured from right wrist frame </span></span><br><span class="line"><span class="built_in">r</span>[<span class="string">&#x27;left_fingers&#x27;</span>]: np.ndarray </span><br><span class="line">  <span class="comment"># shape (25,4,4) / measured from left wrist frame </span></span><br><span class="line"><span class="built_in">r</span>[<span class="string">&#x27;right_pinch_distance&#x27;</span>]: float  </span><br><span class="line">  <span class="comment"># distance between right index tip and thumb tip </span></span><br><span class="line"><span class="built_in">r</span>[<span class="string">&#x27;left_pinch_distance&#x27;</span>]: float  </span><br><span class="line">  <span class="comment"># distance between left index tip and thumb tip </span></span><br><span class="line"><span class="built_in">r</span>[<span class="string">&#x27;right_wrist_roll&#x27;</span>]: float </span><br><span class="line">  <span class="comment"># rotation angle of your right wrist around your arm axis</span></span><br><span class="line"><span class="built_in">r</span>[<span class="string">&#x27;left_wrist_roll&#x27;</span>]: float </span><br><span class="line"> <span class="comment"># rotation angle of your left wrist around your arm axis</span></span><br></pre></td></tr></table></figure>
+
+<p align="center">
+  <img src=".assets/54.png" alt="" width="90%">
+</p>
+  
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Daniel Hu
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://example.com/2025/07/27/20250727-%E6%89%8B%E5%A4%B4%E5%8D%8F%E5%90%8C%E8%AE%BA%E6%96%87%E8%B0%83%E7%A0%94/" title="Overview of 手-头协同">http://example.com/2025/07/27/20250727-手头协同论文调研/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/Note/" rel="tag"><i class="fa fa-tag"></i> Note</a>
+              <a href="/tags/Reinforcement-Learning/" rel="tag"><i class="fa fa-tag"></i> Reinforcement Learning</a>
+              <a href="/tags/teleoperation/" rel="tag"><i class="fa fa-tag"></i> teleoperation</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/07/27/DinoV2/" rel="prev" title="Overview of DinoV2">
+      <i class="fa fa-chevron-left"></i> Overview of DinoV2
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2025/11/01/AuDeRe%20Automated%20Strategy%20Decision%20and%20Realization%20in%20Robot%20Planning%20and%20Control%20via%20LLMs%5BMIT%20202511%5D/" rel="next" title="AuDeRe-Automated Strategy Decision and Realization in Robot Planning and Control via LLMs[MIT 202511]">
+      AuDeRe-Automated Strategy Decision and Realization in Robot Planning and Control via LLMs[MIT 202511] <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B0%83%E7%A0%94%E5%86%85%E5%AE%B9"><span class="nav-number">1.</span> <span class="nav-text">调研内容</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%AE%BA%E6%96%87"><span class="nav-number">2.</span> <span class="nav-text">参考论文</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Learning-Human%E2%80%91to%E2%80%91Humanoid-Real%E2%80%91Time-Whole%E2%80%91Body-Teleoperation"><span class="nav-number">3.</span> <span class="nav-text">Learning Human‑to‑Humanoid Real‑Time Whole‑Body Teleoperation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Mobile-TeleVision-Predictive-Motion-Priors-for-Humanoid-Whole-Body-Control"><span class="nav-number">4.</span> <span class="nav-text">Mobile-TeleVision: Predictive Motion Priors for Humanoid Whole-Body Control</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Introduction"><span class="nav-number">4.1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E9%98%B6%E6%AE%B5%E8%AE%AD%E7%BB%83%EF%BC%9A"><span class="nav-number">4.2.</span> <span class="nav-text">三阶段训练：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E8%AE%BE%E7%BD%AE"><span class="nav-number">4.3.</span> <span class="nav-text">实验设置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Vision-in-Action-Learning-Active-Perception-from-Human-Demonstrations"><span class="nav-number">5.</span> <span class="nav-text">Vision in Action: Learning Active Perception from Human Demonstrations</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E9%87%87%E9%9B%86"><span class="nav-number">5.1.</span> <span class="nav-text">数据采集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A1%AC%E4%BB%B6%E8%AE%BE%E8%AE%A1"><span class="nav-number">5.2.</span> <span class="nav-text">硬件设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%91%87%E6%9D%86%E6%8E%A5%E5%8F%A3"><span class="nav-number">5.3.</span> <span class="nav-text">摇杆接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#How-to-learn"><span class="nav-number">5.4.</span> <span class="nav-text">How to learn?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%84%E4%BC%B0"><span class="nav-number">5.5.</span> <span class="nav-text">评估</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C1%EF%BC%9A"><span class="nav-number">5.5.1.</span> <span class="nav-text">实验1：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AF%95%E9%AA%8C2%EF%BC%9A%E5%AF%B9%E6%AF%94%E4%B8%8D%E5%90%8C%E8%A7%86%E8%A7%89%E8%A1%A8%E5%BE%81%E6%96%B9%E6%B3%95"><span class="nav-number">5.5.2.</span> <span class="nav-text">试验2：对比不同视觉表征方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C3%EF%BC%9A%E5%AF%B9%E6%AF%94%E4%B8%8D%E5%90%8C%E6%91%87%E6%9D%86%E6%96%B9%E5%BC%8F"><span class="nav-number">5.5.3.</span> <span class="nav-text">实验3：对比不同摇杆方式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Questions"><span class="nav-number">5.6.</span> <span class="nav-text">Questions</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Open-TeleVision-Teleoperation-with-Immersive-Active-Visual-Feedback"><span class="nav-number">6.</span> <span class="nav-text">Open-TeleVision: Teleoperation with Immersive Active Visual Feedback</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C"><span class="nav-number">6.1.</span> <span class="nav-text">实验</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%9B%E5%8C%96%E6%80%A7%E8%83%BD"><span class="nav-number">6.2.</span> <span class="nav-text">泛化性能</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Learning-to-Look-Around-Enhancing-Teleoperation-and-Learning-with-a-Human-like-Actuated-Neck"><span class="nav-number">7.</span> <span class="nav-text">Learning to Look Around: Enhancing Teleoperation and Learning with a Human-like Actuated Neck</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A1%AC%E4%BB%B6%EF%BC%9A"><span class="nav-number">7.1.</span> <span class="nav-text">硬件：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%89%8B%E9%83%A8%E8%B7%9F%E8%B8%AA"><span class="nav-number">7.1.1.</span> <span class="nav-text">手部跟踪</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%B4%E9%83%A8%E8%B7%9F%E8%B8%AA"><span class="nav-number">7.1.2.</span> <span class="nav-text">头部跟踪</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C-1"><span class="nav-number">7.2.</span> <span class="nav-text">实验</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Using-Apple-Vision-Pro-to-Train-and-Control-Robots"><span class="nav-number">8.</span> <span class="nav-text">Using Apple Vision Pro to Train and Control Robots</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E6%AD%A5%E9%AA%A4"><span class="nav-number">8.1.</span> <span class="nav-text">使用步骤</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Daniel Hu"
+      src="/images/headpotrait.jpg">
+  <p class="site-author-name" itemprop="name">Daniel Hu</p>
+  <div class="site-description" itemprop="description">Share Notes & Life</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">19</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/sep459" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;sep459" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Daniel Hu</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">141k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">2:09</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共85.2k字</span>
+  <span class="post-meta-divider">|</span>
+  本站总访问量<span id="busuanzi_value_site_pv"></span>次
+  <span class="post-meta-divider">|</span>
+  本站访客数<span id="busuanzi_value_site_uv"></span>人次
+  <span class="post-meta-divider">|</span>
+  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

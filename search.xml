@@ -1,6 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>π0 ：A Vision-Language-Action Flow Model for General Robot Control[2024,physical intelligence]</title>
+    <url>/2025/11/04/%CF%800%20%EF%BC%9AA%20Vision-Language-Action%20Flow%20Model%20for%20General%20Robot%20Control%5B2024,physical%20intelligence%5D/</url>
+    <content><![CDATA[<p><code>非常出名的一个初创公司physical intelligence闭源产品，页面https://physicalintelligence.company/blog/pi0</code></p>
+<p>模型结构，使用预训练的VLM作为backbone，以及一系列的cross-embodiment 灵巧手操控数据集。在VLM后独立添加了一个action expert，通过flow matching生成连续动作。主要考虑数据，通用性以及鲁棒性。实现complex and dexterous tasks。</p>
+<img src="/images/a6.jpg" alt="" style="zoom:100%;" />
+
+<p>解决的三个bottlenecks：数据量的问题，大数据的预训练优势，在小数据时通常不会显示。模型结构以及数据利用率。最后就是训练的recipe，也就是数据配方，强调的是<strong>数据策划（data curation）</strong>的“精细性”和“策略性”。</p>
+<p>动作模型用的流匹配，是diffusion的一种变体。训练流程和文本/图像训练是一样的，预训练然后微调。作者提到，由于数据集里没有错误恢复的数据，因此很难学到这种能力。有两种数据，高质量和低质量的，结合这两种数据可以得到理想的能力（repertoire of recoveries and corrections）。<span id="more"></span> </p>
+<img src="/images/a7.jpg" alt="" style="zoom:100%;" />
+
+<p><code>Intuitively, the diverse (but lower quality) pre-training data allows the model to recover from mistakes and handle highly varied situations</code></p>
+<p>多视角图像如何处理？一般可能多个特征通过cross 注意力变为一个，或者直接多个token输入给vlm直接处理变长度输入。本文是直接For robots with fewer than three images, we also mask out the missing image slots.用mask处理缺失的视角图像。</p>
+<p>文中虽然说只有68个任务，但不同于将“捡起盘子”，“捡起杯子”视为不同的任务，本文实际的任务场景是很多的。</p>
+<p>输出的动作维度不一样，例如单臂双臂，或者6dof与7dof，做法是取最大的dof，用0补齐动作数据。</p>
+<p>可以利用saycan这样的策略，将粗略的任务指令，分解为更细致的命令。</p>
+<h4 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h4><p>实验有开箱即用的实验结果（只用了粗数据进行预训练，没有后续高质量数据的后训练），以及后训练后在复杂任务上的效果。</p>
+]]></content>
+      <categories>
+        <category>笔记</category>
+      </categories>
+      <tags>
+        <tag>Note</tag>
+        <tag>thesis</tag>
+        <tag>VLM</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Navigation World Models  [Meta 2025]</title>
+    <url>/2025/11/02/Navigation%20World%20Models%20%20%5BMeta%202025%5D/</url>
+    <content><![CDATA[<h2 id="Navigation-World-Models-Meta-2025"><a href="#Navigation-World-Models-Meta-2025" class="headerlink" title="Navigation World Models  [Meta 2025]"></a>Navigation World Models  [Meta 2025]</h2><p><code>Bar A, Zhou G, Tran D, et al. Navigation world models[C]//Proceedings of the Computer Vision and Pattern Recognition Conference. 2025: 15791-15801. </code></p>
+<img src="/images/a1.png" alt="" style="zoom:70%;" />
+
+<p>文章使用1B的条件扩散Transformer（CDiT），实现的功能为给定图片以及动作序列，预测未来的图像序列。另外可以给定起始点，规划运动轨迹，对最后的结果打分（与goal的差距）。</p>
+<p>CDiT方法计算复杂度与图像数量线性增加。1B情况下也可以稳定训练相比于传统的DiT减小了4X的FLOPs计算。</p>
+<p>本文辅助使用了NoMaD进行导航，该模型是行为克隆训练的扩散模型，另外可以使用temporal distance 目标对目标进行跟踪。也可以在新环境下进行探索。相应的也有其他导航方法例如RL，或者neural slam结合A*/迪杰斯特拉等plannner的方案。</p>
+<p>不同于直接学习策略，NWM的目标是simulate 环境。给定当前状态，预测未来的状态以及对应的reward。<strong>联合学习world model以及policy可以提升数据效率。</strong><span id="more"></span> </p>
+<h4 id="Formulation"><a href="#Formulation" class="headerlink" title="Formulation"></a>Formulation</h4><p>给定图像动作序列D=[x0,a0,x1,a1,…,xT,aT],其中a由两部分组成，a=[u,phi],u是二维向量，前后与左右运动，phi是标量，控制旋转角度。实际上这个状态可以很容易拓展到三维情况。外部的实际输入xt，通过预训练的VAE进行编码得到st，然后结合at去预测下一个s_{t+1}.</p>
+<p>进一步修改方程，引入时间下标k到动作at中a = (u, phi, k),表示预测未来或者过去的第k个状态，而不仅仅是单步。使得模型不仅能学习“动作导致的状态变化”，还能<strong>显式地控制时间跨度和时间方向（向前或向后）</strong>。</p>
+<p>为了防止直接根据时间去预测结果（entanglement of actions and time.），实际采集数据的时候，同一个起点会设置多个目标，收集数据。</p>
+<p>Conditional Diffusion Transformer (CDiT) Block结构如下：复杂度与frame number成线性关系。</p>
+<img src="/images/a2.jpg" alt="" style="zoom:70%;" />
+
+
+
+<p>at先通过正弦编码嵌入到d/3维度，然后拼接，通过mlp之后，k也同样处理到d维度，然后和at部分相加，t也变为d维度。三个d维度向量相加得到condition条件的嵌入向量</p>
+<img src="/images/a3.jpg" alt="" style="zoom:100%;" />
+
+<p>该部分之后通过AdaLN生成scale以及shift向量。用于调节layer norm以及attn模块的输出。</p>
+<p>使用CDiT而不是DiT，是因为如果将at部分的信息也一同作为输入给attn，会导致computationally expensive。主要是对于过去帧的处理，如果将过去帧一起放入atten计算，会导致计算量非常大。例如llm里，如果将过去的language token一起放进来，会导致计算增长很快。所以这里即使是</p>
+<p>这里的t随机采样，使得模型可以对不同的加噪声进行denoising。也对扩撒模型进行了改进，预测协方差，用变分下界辅助训练，提高稳定性。</p>
+<p>模型的目标函数是最小化MSE，希望学到去噪过程</p>
+<img src="/images/a4.jpg" alt="" style="zoom:100%;" />
+
+<h4 id="Navigation-Planning-with-World-Models"><a href="#Navigation-Planning-with-World-Models" class="headerlink" title="Navigation Planning with World Models"></a>Navigation Planning with World Models</h4><p>如果模型对于环境很熟悉，那么可以simulate导航轨迹并且选择达到目标的那条轨迹。如果说不熟悉环境，长期的planning就需要想象。</p>
+<p>给初始的隐藏状态s0,目标s*，希望找到动作序列（a0,a1,…,aT）。S(sT,s*)表示对于自回归结果的评分（未进行归一化）。另外还有能量函数，最小化能量函数对应最大化感知相似度，并且保证动作和状态的有效性（一些安全约束等）：</p>
+<img src="/images/a5.jpg" alt="" style="zoom:100%;" />
+
+<p>第一部分相似度通过预训练的VAE编码进行计算。Avalid可以是“never go left then right”，Ssafe可以是“never explore the edge of the cliff”。优化问题得到的就是动作序列（a0,…,aT）。</p>
+<p>有了目标函数，就可以用CEM方法，去随机采样k条轨迹然后加权得到预测的控制量，然后用Moving horizon方法执行动作。</p>
+<h4 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h4><p>数据集使用：SCAND [30], Tartan-Drive [60], RECON [52], and HuRoN [27]</p>
+<p>对不同的机器人step distance进行归一化处理，除以各自的平均distance。过滤了backward 运动。有些数据集例如Ego4D以及GO Stanford没有label，就是没有前后左右以及转向标签，只有帧数的标签，当作unknown evaluation environment.</p>
+<p>测试标准：一个是轨迹的位置以及角度误差。对于图像的相似度，用LPIPS [76] and DreamSim提取的deep features进行对比。PSNR测量像素级别的相似度。对于image以及视频合成，使用FID [23] and FVD [64]进行衡量数据分布，因为这个时候，我们是完全外推的，不知道真实的对比图像或者视频。</p>
+]]></content>
+      <categories>
+        <category>笔记</category>
+      </categories>
+      <tags>
+        <tag>Note</tag>
+        <tag>thesis</tag>
+        <tag>VLM</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Attack On Titan</title>
     <url>/2023/12/15/Attack%20On%20Titan/</url>
     <content><![CDATA[<h2 id="致两千年前的你"><a href="#致两千年前的你" class="headerlink" title="致两千年前的你"></a>致两千年前的你</h2><p>2000年前，一个名为艾尔迪亚的部落存在于这个世界的某个大陆上，和许多其他的部落一样，该部落实行奴隶制，将俘获的其他部落的战俘割掉舌头，当作自己部落的奴隶，这个部落的首领，叫初代弗里茨王，1900多年后他的后代是帕拉迪岛的实际控制者——雷斯家族。<span id="more"></span><br>弗里茨王的奴隶中，有一个小女孩，叫做尤弥尔，这个尤弥尔也是个被割了舌头的奴隶，某天，在尤弥尔正围观一对男女，心脏扑通直跳，就和其他奴隶一起被抓了起来，原来，围栏里有一头特立独行的猪向往自由，顺着开着的门跑了，弗里茨王很生气，要求奴隶供出到底谁把猪栏的门打开，把猪给放跑了，如果没人承认，那么所有的奴隶都要被挖掉一只眼睛，然后，十三个奴隶把手齐齐的指向了尤弥尔（13是作者的幸运数字，以后会多次出现，比如，埃尔文·史密斯团长就是调查兵团第十三任团长，包括每任巨人能力持有者的寿命也是13年），于是，可怜的尤弥尔不得不承认她放走了猪，她被放逐了，弗里茨王嘲讽的说，“你，自由了。”<br>随后部落开始了人猎，尤弥尔在前面逃跑，后面的人骑着马，带着猎狗，朝她射箭，尤弥尔流出了血泪，生死之际，尤弥尔发现了一个树洞，她跳了进去，却不曾想里面竟然是冰冷的地下水，刺骨的冷水刺激着尤弥尔的皮肤，就在此刻，一种神秘的史前生物靠近了她，这边是巨人力量的来源——怪诞虫。<br>尤弥尔因此获得了巨人之力，后来的传说是，尤弥尔与大地恶魔做了交易，自此，尤弥尔被称作始祖尤弥尔。<br>尤弥尔获得了巨人之力后，并没有选择复仇，或者说，她从小就被灌输了奴隶的思想，她甚至不知道复仇是一个什么概念，于是她又回到了艾尔迪亚部落，再次成为了一个奴隶，因为尤弥尔拥有了巨人之力，弗里茨凭此带领部落迅速的开疆扩土，铺路建桥，征服了很多敌对部落，期间，弗里茨王破格赐给了尤弥尔姓氏，并和她生下了三个女儿， 玛丽亚，罗塞，希纳，也就是后来帕拉迪岛上的三道巨人之墙的名字。<br>在尤弥尔的帮助下，艾尔迪亚无人能敌，其中臣服于它的武力下的部落里，就有马莱，某天，马莱人假装来和弗里茨王谈判，实际却是刺杀，在马莱人掷出了飞茅后，尤弥尔挺身而出，替弗里茨王挡下了这致命一击，弗里茨却王丝毫不为所动，还冷冷的说，“站起来干活啊，尤弥尔，我知道这是杀不了你的。”然而尤弥尔却没有响应弗里茨王的话，她真的死了。</p>
@@ -77,6 +150,218 @@
       </categories>
       <tags>
         <tag>-Anime -Attack On Titan</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title></title>
+    <url>/2025/11/08/Training%20data-efficient%20image%20transformers&amp;%20distillation%20through%20attention/</url>
+    <content><![CDATA[<h2 id="Training-data-efficient-image-transformers-amp-distillation-through-attention，2021年Facebook"><a href="#Training-data-efficient-image-transformers-amp-distillation-through-attention，2021年Facebook" class="headerlink" title="Training data-efficient image transformers&amp; distillation through attention，2021年Facebook"></a>Training data-efficient image transformers&amp; distillation through attention，2021年Facebook</h2><p>本文提出Deit，实现蒸馏。另一篇开山之作Distilling the Knowledge in a Neural Network也可以看一下。</p>
+<p>高性能视觉transformer太大了，难以被使用，因为没有这个条件。本文只用ImageNet数据集训练，得到了83%的top1效果</p>
+]]></content>
+  </entry>
+  <entry>
+    <title></title>
+    <url>/2025/11/08/RT-1/</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
+    <title></title>
+    <url>/2025/11/08/Distilling%20the%20Knowledge%20in%20a%20Neural%20Network/</url>
+    <content><![CDATA[<h2 id="Distilling-the-Knowledge-in-a-Neural-Network"><a href="#Distilling-the-Knowledge-in-a-Neural-Network" class="headerlink" title="Distilling the Knowledge in a Neural Network"></a>Distilling the Knowledge in a Neural Network</h2><p>一个几乎通用的方法，一个数据集训练多个模型，然后输出求平均。但是这种方法代价太大。蒸馏将多个模型或者一个大模型，提取到一个可以部署的小模型上。</p>
+<p>解释了soft label与hard label，对应不同的蒸馏方法。实验部分比较多，说明了蒸馏相比于从头训练的优势。可以作为一种过拟合技术。</p>
+]]></content>
+  </entry>
+  <entry>
+    <title></title>
+    <url>/2025/11/08/Diffusion-VLA/</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
+    <title></title>
+    <url>/2025/11/08/20250804%E5%85%A8%E8%BA%AB%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%8D%8F%E5%90%8C%E8%B0%83%E7%A0%94/</url>
+    <content><![CDATA[<p>[TOC]</p>
+<h2 id="调研内容"><a href="#调研内容" class="headerlink" title="调研内容"></a>调研内容</h2><p>论文调研，关注全身协同。</p>
+<ul>
+<li>如何收集协同数据，例如腰部数据</li>
+<li>如何使用协同数据</li>
+</ul>
+<h2 id="参考论文"><a href="#参考论文" class="headerlink" title="参考论文"></a>参考论文</h2><ul>
+<li>human2huanoid：ICRA 2024  <strong>“Learning Human‑to‑Humanoid Real‑Time Whole‑Body Teleoperation</strong></li>
+<li>Mobile-television: Predictive motion priors for humanoid whole-body control。是open-televison的二代论文</li>
+</ul>
+<h2 id="Learning-Human‑to‑Humanoid-Real‑Time-Whole‑Body-Teleoperation"><a href="#Learning-Human‑to‑Humanoid-Real‑Time-Whole‑Body-Teleoperation" class="headerlink" title="Learning Human‑to‑Humanoid Real‑Time Whole‑Body Teleoperation"></a>Learning Human‑to‑Humanoid Real‑Time Whole‑Body Teleoperation</h2><p>这篇论文主要是讲高效数据采集的，不是聚焦手眼协同控制。全身控制，使用RGB实时采集全身数据，照片得到关键点位置，骨骼绑定反向得到机器人具体结构，得到数据。</p>
+<ul>
+<li><p>本文考虑了数据采集，一些人类的动作对于机器人是不可行的，例如步幅大于机器人关节，关节导致的或者比例不一致。提出了一个重定向流程，sim to data 使得数据对于机器人是可用的。</p>
+</li>
+<li><p>sim to real 的基于RL的全身控制器，可以执行很多action</p>
+</li>
+<li><p>实时的teleoperation，使用rgb相机以及3d人体姿态估计。展示了多种全身运动</p>
+</li>
+</ul>
+<h2 id="Mobile-TeleVision-Predictive-Motion-Priors-for-Humanoid-Whole-Body-Control"><a href="#Mobile-TeleVision-Predictive-Motion-Priors-for-Humanoid-Whole-Body-Control" class="headerlink" title="Mobile-TeleVision: Predictive Motion Priors for Humanoid Whole-Body Control"></a><strong>Mobile-TeleVision: Predictive Motion Priors for</strong> <strong>Humanoid Whole-Body Control</strong></h2><p><strong>出发点：</strong>强化学习直接控制，精度略显不足。本文将人形机器人的上下部分控制解耦，上半身用逆运动学+运动重定向，下半身用RL学习。引入PMP（预测运动先验），使用条件变分自动编码器（CVAE）进行训练，以有效地表示上半身运动。然后在上半身训练的基础上，学习下半身的运动策略，确保运动时候的鲁棒性。</p>
+<p>训练的目的，是为了后续遥控机器人，探索环境执行任务，同时也是收集数据。</p>
+<p>本文只有手部，手臂以及下半身六自由度控制量，没有头部腰部等信息。</p>
+<h3 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h3><p>作者认为，上半身主要负责精细操控，例如arm。下半身主要复杂捕获常见的运动范围，维持平衡。</p>
+<p>RL方式的缺点：RL policy is also not well-suited for high DoF positional and orientation control，并且具有随机性。因此，作者引出，控制手臂也腿需要不同的机制。</p>
+<p>上半身无需考虑平衡问题，因此可以直接逆运动学计算控制信号。下半身的RL训练，就不考虑上半身控制维度，降低了训练代价。前文也有讨论，完全解耦会导致运动不稳定，因为失去了交互能力。</p>
+<p>本文在此基础上，虽然解耦上下部分，但想办法将两部分结合起来。简单来说，上半身简单的用逆运动学控制，然后训练一个条件变分自编码器，输入是上半身的过去几个时间点的动作轨迹，输出是上半身之后的运动轨迹预测，将其编码输入给下半身的RL，也就是变相的将上半身的运动轨迹作为条件，输入给下半身，下半身通过RL实现平衡。最主要的就是中间的<strong>CVAE</strong>部分，其作用就是<strong>表示学习</strong>，预测未来的上半身运动轨迹</p>
+<p align="center">
+  <img src="../images/31.png" alt="" width="100%">
+</p>
+
+<h3 id="三阶段训练："><a href="#三阶段训练：" class="headerlink" title="三阶段训练："></a><strong>三阶段训练：</strong></h3><ul>
+<li>第一阶段：数据转化，得到每个执行器的joint angle数据，数据过滤。</li>
+<li>第二阶段训练上半身的模型，自回归预测未来的上半身action，运动重定向。这部分用逆运动学或者其他模仿学习都可以实现。</li>
+<li>训练下半身的控制策略，RL训练。输入是控制指令，自回归预测的上半身模型运动序列，以及其他的感知信号（例如上一时刻的下半身action，时间步长等）。此时会使用课程学习，上半身有一个参数$\alpha \in [0,1]$，让参数有小到大，这样子上半身运动幅度由小到大，训练难度逐渐增加。等于0的时候，上半身手臂相当于维持在初始点。</li>
+</ul>
+<h3 id="实验设置"><a href="#实验设置" class="headerlink" title="实验设置"></a>实验设置</h3><p>使用宇树机器人与Fourier GR-1 robot。</p>
+<p>讨论内容：</p>
+<ul>
+<li>与其他方法比，本文的解耦方法上半身表现（用的是仿真）</li>
+<li>disturbance下的稳定性</li>
+<li>实际环境下，上下身结合的性能。</li>
+</ul>
+<p>摇杆方法：</p>
+<ul>
+<li><p>颈部与手部的运动，是用Apple Vision Pro 追踪得到的。然后数据经过逆向运动学以及动作重定向，转化为机器人关节角度。vr显示的就是机器人实时拍摄的画面。这里比较重要的是，Apple Vision Pro 得到的到底有哪些数据。头部的位置以及四元数，还计算了手部（等效终端执行器）的位置，所以本文这里就没有采用额外的辅助机械臂（不同于ViA的方法），去收集手臂数据。</p>
+</li>
+<li><p>下半身用两种方式：</p>
+<ul>
+<li><p><strong>分离控制</strong>：一名操作员使用 VR 头显控制上半身，另一名操作员使用带摇杆的遥控器控制下半身。</p>
+</li>
+<li><p><strong>统一控制</strong>：由单个用户同时控制上半身和下半身，其中上半身通过 VR 头显控制，下半身通过踏板控制。全部操作单人完成。效果如下所示</p>
+</li>
+</ul>
+</li>
+</ul>
+]]></content>
+  </entry>
+  <entry>
+    <title>CoAtNet：Marrying Convolution and Attention for All Data Sizes[Google 202109]</title>
+    <url>/2025/11/06/20251107CoAtNet%EF%BC%9AMarrying%20Convolution%20and%20Attention%20for%20All%20Data%20Sizes/</url>
+    <content><![CDATA[<h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>当时的Transformer在计算机视觉领域仍然达不到卷积的state-of-the-art效果。Transformer有更大的model capacity，但由于没有inductive bias缺少泛化。CoAtNets是一种混合模型。1.由深度可分离卷积以及自注意力，通过相对注意力结合。2.垂直结构堆叠卷积以及注意力，在提升模型的<strong>泛化能力（generalization）</strong>、<strong>表达能力（capacity）</strong>以及<strong>计算效率（efficiency）</strong>方面表现出惊人的效果。使用了ImageNet-21K以及JFT-300M数据集。</p>
+<p>该方法通过混合，达到了ViT-huge的水平，且数据少了23倍。</p>
+<h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>Vit模型在大数据集的训练效果很好，但是在low data regime的效果不如卷积网络。本文主要考虑两个关键部分，generalization以及model capacity。本文系统地讨论了混合问题。一般来说卷积泛化能力更好，收敛更快，transformer有更好的模型能力。主要的问题是如何结合，追求trade-offs between accuracy and efficiency。文中发现了两个关键点：1.深度可分离卷积可以有效的融入attn，通过相对注意力。2.堆叠可以很有效的提高泛化以及模型能力。</p>
+<h2 id="Model"><a href="#Model" class="headerlink" title="Model"></a>Model</h2><img src="F:/papers/images/a24.jpg" alt="" style="zoom:100%;" />
+
+<h3 id="融合卷积与自注意力"><a href="#融合卷积与自注意力" class="headerlink" title="融合卷积与自注意力"></a>融合卷积与自注意力</h3><p>有两个关键的相似点：</p>
+<ul>
+<li>卷积和Transformer里的FFN都用了‘反瓶颈’模块，通道变成4倍之后还原。</li>
+<li>都用了pre-defined感受野下的加权求和（卷积以及attn）</li>
+</ul>
+<p>一些希望得到的好的特性：</p>
+<ul>
+<li>深度可分离卷积的权重与输入无关，而注意力的权重是全局相关的，可以得到不同位置的空间关系，这是我们处理的时候希望得到的high-level concepts。不过这一点在数据量小的时候，也容易引入过拟合。</li>
+<li>卷积的权重$w_{i-j}$只依赖于$i-j$而与实际的位置无关，也是由此得到了平移不变性。由于使用了绝对位置编码，标准的ViT缺少这种性质，这也解释了为什么本文的方法在数据量不够大的时候，比ViT效果更好。</li>
+<li><strong>感受野的大小</strong>是很重要的一个因素，更大的感受野提供了更多的contextual information，提高model capacity。这也是为什么希望将注意力用于视觉领域。这一点也带来了更多的计算量，是空间大小的二次方关系。</li>
+</ul>
+<img src="F:/papers/images/a25.jpg" alt="" style="zoom:100%;" />
+
+<p>一种直接的结合方法就是，在softmax之前或者之后，直接加上卷积核的权重$w_{i-j}$.</p>
+<img src="F:/papers/images/a26.jpg" alt="" style="zoom:100%;" />
+
+<p>文中还提到，在新的公式里，$w_{i-j}$被简化为一个scalar而不是一个向量，应该是说，不同的channel用的一样的$w_{i-j}$所以使得参数量不会爆炸（Scalar formulation）。文中后续的方法是用的（3）中的$y^{pre}$进行计算，pre-normalization。</p>
+<h3 id="垂直堆叠设计"><a href="#垂直堆叠设计" class="headerlink" title="垂直堆叠设计"></a>垂直堆叠设计</h3><p>考虑到图像通常比较大，实际上（3）的计算会比较复杂，有以下3个方案：</p>
+<p><strong>(A)</strong> 进行<strong>下采样（down-sampling）</strong>，再施加<strong>全局相对注意力</strong>；</p>
+<p><strong>(B)</strong> 采用<strong>局部注意力（local attention）</strong>，即将注意力的全局感受野 G 限制为一个<strong>局部区域 L</strong>，类似于卷积操作；</p>
+<p><strong>(C)</strong> 将具有二次复杂度的 Softmax 注意力替换为某种线性注意力（linear attention）变体，使其计算复杂度仅与空间尺寸线性相关。</p>
+<p>文中试了一下，bc方案都不太好，后续都用A方案进行处理。下采样可以两个方案，一个是直接Vit一样，分块比较激进的方法进行卷积，另外一个就是多阶段的池化例如ConvNet的方法。为此本文提出了五种用于对比的模型结构，有四种结构都是conv逐渐降低维度的，因为采用不同的卷积以及自注意力顺序所以一共有四种不同的对比结构，不过卷积都在transformer之前出现。</p>
+<ul>
+<li>全transformer</li>
+<li> C-C-C-C</li>
+<li> C-C-C-T</li>
+<li> C-C-T-T</li>
+<li> C-T-T-T</li>
+</ul>
+<p>五个模型都用了近似的参数量，没有用数据增广以及正则化。ImageNet-1K (1.3M) and JFT (&gt;300M) dataset for 300 and 3 epochs。验证泛化能力（验证集准确率）以及model capacity。</p>
+<ul>
+<li>以ImageNet结果为例，首先是泛化能力，可以看到卷积越多，泛化能力越好，也就是在验证集上的准确率越高。</li>
+</ul>
+<img src="F:/papers/images/a27.jpg" alt="" style="zoom:100%;" />
+
+<ul>
+<li>至于模型能力，结果如下：</li>
+</ul>
+<img src="F:/papers/images/a27.jpg" alt="" style="zoom:100%;" />
+
+<p>后续实验为了选出最好的模型，比较C-C-T-T and C-T-T-T，额外加了一个transferability实验，先在JFT数据集预训练，然后再ImageNet-1K上微调30epochs。发现C-C-T-T效果更好一点。也将这个结构作为CoAtNet的结构。</p>
+<p>注意文中的相对注意力不是交叉注意力，相对注意力依然是自注意力的一种，只是在计算注意力得分的时候，会用到一些相对位置的信息（不同的位置编码形式）。</p>
+<h3 id="数据增广以及正则化"><a href="#数据增广以及正则化" class="headerlink" title="数据增广以及正则化"></a>数据增广以及正则化</h3><p>使用了RandAugment [45] and MixUp [46], 此外用了三个技巧, including stochastic depth [47], label smoothing [48] and weight decay</p>
+]]></content>
+      <categories>
+        <category>笔记</category>
+      </categories>
+      <tags>
+        <tag>key</tag>
+        <tag>key2</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ALOHA:Learning Fine-Grained Bimanual Manipulation with Low-Cost Hardware</title>
+    <url>/2025/11/06/ALOHALearning%20Fine-Grained%20Bimanual%20Manipulation%20with%20Low-Cost%20Hardware/</url>
+    <content><![CDATA[<h2 id="ALOHA-Learning-Fine-Grained-Bimanual-Manipulation-with-Low-Cost-Hardware"><a href="#ALOHA-Learning-Fine-Grained-Bimanual-Manipulation-with-Low-Cost-Hardware" class="headerlink" title="ALOHA:Learning Fine-Grained Bimanual Manipulation with Low-Cost Hardware"></a>ALOHA:Learning Fine-Grained Bimanual Manipulation with Low-Cost Hardware</h2><p>本文提出了外骨骼收集数据的<strong>ALOHA框架</strong>，以及<strong>ACT</strong>方法，输出chunk动作序列的transformer模型。</p>
+<p align="center">
+  <img src="../images/55.png" alt="" width="100%">
+</p>
+
+
+<p>模仿学习，输出chunk actions，演示只用了十分钟的数据。主要是为了实现精细操作，例如线穿孔，组装电池等，希望降低价格。</p>
+<p>主要工作有两部分</p>
+<ul>
+<li>摇操系统</li>
+<li>模仿学习算法</li>
+</ul>
+<p>单纯的模仿学习存在问题，会造成累积误差，为题本文提出chunk的方法，预测的不只是一个动作，而是一段动作序列。利用<strong>时间集成</strong>提高<strong>平滑性</strong>。</p>
+<p>模仿学习用transformer框架，利用CVAE进行训练。只需要10分钟或者50条左右的演示数据就可以得到很好的控制效果。</p>
+<p>因为文中聚焦精细动作，所以对误差很敏感。作者的方法是时间集成，就是重叠动作之间集成，例如求平均以提高准确性以及获得平滑的轨迹。</p>
+<p align="center">
+  <img src="../images/56.png" alt="" width="100%">
+</p>
+
+
+
+
+<h3 id="硬件方面"><a href="#硬件方面" class="headerlink" title="硬件方面"></a>硬件方面</h3><p>1)低成本：整个系统应在大多数机器人实验室的预算之内，相当于一个工业机械臂。</p>
+<p>2)多功能性：它可应用于对真实对象的各种精细操纵任务。</p>
+<p>3)用户友好：系统应直观、可靠、易于使用。</p>
+<p>4)可修复性：当装置不可避免地损坏时，研究人员可以很容易地修复它。</p>
+<p>5)易于构建：研究人员可以使用易于获取的材料快速组装</p>
+<p>配备了同一家公司的WindowX(3300美元)去操控ViperX机器人（5600美元）。控制频率50Hz。</p>
+<p>相比于vr设备，这种操控方式带来的一些好处：</p>
+<ul>
+<li>机械臂有六个自由度，对于精细任务来说，没有多余的冗余，这就使得vr直接将关节映射到动作空间的形式，反向运动学IK会失败，因为机器人经常会工作在奇点附近。</li>
+<li>关节直接映射不许需要额外的计算，延迟低。</li>
+<li>防止用户移动太快，而且抑制了一些抖动。</li>
+</ul>
+<p><strong>测试</strong>的时候挑选验证集合最低的策略，然后发现主要的错误就是复合错误，误差累积导致状态超出训练分布</p>
+<p>chunk可以对非马尔科夫行为进行建模，例如两难情况，用这个就可以很好的决策，而不会由于。</p>
+<p>chunk的方法，每次控制k次然后重新获取观测，这会导致观测信息的突变，对应的机器人会有抖动。为此，作者是实时计算的，并且用了指数平滑。</p>
+]]></content>
+      <categories>
+        <category>笔记</category>
+      </categories>
+      <tags>
+        <tag>Imitation Learning</tag>
+        <tag>ACT</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Reasoning with Language Model is Planning withWorld Model[UC San Diego,University of Florida,202310]</title>
+    <url>/2025/11/06/Reasoning%20with%20Language%20Model%20is%20Planning%20withWorld%20Model/</url>
+    <content><![CDATA[<h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>LLM结合CoT方法，可以实现很强的推理能力。但是对于复杂环境下的动作预测以及复杂的数学推理，依然存在不足。根本原因是缺少<strong>internal world model</strong>用于预测world state。为了解决这个问题，提出了新的LLM推理框架，称为<strong>RAP：Reasoning via Planning</strong>。RAP 将大语言模型（LLM）重新用于<strong>世界模型</strong>和<strong>推理代理（reasoning agent）两种角色，并引入一种基于蒙特卡洛树搜索（Monte Carlo Tree Search, MCTS）的系统化规划算法，用于在庞大的推理空间中进行策略性探索</strong>。</p>
+<p>在推理过程中，LLM（作为代理）在LLM（作为世界模型）和奖励信号的指导下，<strong>逐步构建推理树</strong>，并通过在探索与利用（exploration vs. exploitation）之间取得平衡，<strong>高效地找到高奖励的推理路径</strong>。</p>
+<img src="../images/a.jpg" alt="" style="zoom:100%;" />
+
+<span id="more"></span> 
+]]></content>
+      <categories>
+        <category>笔记</category>
+      </categories>
+      <tags>
+        <tag>Note</tag>
+        <tag>COT</tag>
+        <tag>World Model</tag>
+        <tag>LLM</tag>
       </tags>
   </entry>
   <entry>
@@ -171,98 +456,1169 @@
         <category>笔记</category>
       </categories>
       <tags>
+        <tag>Note</tag>
         <tag>thesis</tag>
         <tag>VLM</tag>
-        <tag>Note</tag>
       </tags>
   </entry>
   <entry>
-    <title>Mobile ALOHA:Learning Bimanual Mobile Manipulation with Low-Cost Whole-Body Teleoperation[Stanford 2024]</title>
-    <url>/2025/11/10/Mobile%20ALOHALearning%20Bimanual%20Mobile%20Manipulation%20with%20Low-Cost%20Whole-Body%20Teleoperation%5BStanford%202024%5D/</url>
-    <content><![CDATA[<h2 id="Mobile-ALOHA-Learning-Bimanual-Mobile-Manipulation-with-Low-Cost-Whole-Body-Teleoperation-Stanford-2024"><a href="#Mobile-ALOHA-Learning-Bimanual-Mobile-Manipulation-with-Low-Cost-Whole-Body-Teleoperation-Stanford-2024" class="headerlink" title="Mobile ALOHA:Learning Bimanual Mobile Manipulation with Low-Cost Whole-Body Teleoperation[Stanford 2024]"></a>Mobile ALOHA:Learning Bimanual Mobile Manipulation with Low-Cost Whole-Body Teleoperation[Stanford 2024]</h2><img src="/images/a8.jpg" alt="" style="zoom:100%;" />
+    <title>Overview of 手-头协同</title>
+    <url>/2025/07/27/20250727-%E6%89%8B%E5%A4%B4%E5%8D%8F%E5%90%8C%E8%AE%BA%E6%96%87%E8%B0%83%E7%A0%94/</url>
+    <content><![CDATA[<p>[TOC]</p>
+<h2 id="调研内容"><a href="#调研内容" class="headerlink" title="调研内容"></a>调研内容</h2><p>论文调研，关注手-头协同。</p>
+<ul>
+<li>如何收集协同数据</li>
+<li>如何使用协同数据</li>
+</ul>
+<h2 id="参考论文"><a href="#参考论文" class="headerlink" title="参考论文"></a>参考论文</h2><ul>
+<li><p>ViA</p>
+</li>
+<li><p>open-television:Teleoperation with immersive active visual feedback</p>
+</li>
+<li><p>human2huanoid：ICRA 2024  <strong>“Learning Human‑to‑Humanoid Real‑Time Whole‑Body Teleoperation</strong></p>
+<blockquote>
+<p>项目地址：<a href="https://human2humanoid.com/?utm_source=chatgpt.com">Learning Human-to-Humanoid Real-Time Whole-Body Teleoperation</a></p>
+</blockquote>
+</li>
+<li><p>HOME</p>
+</li>
+<li><p>CLONE: Closed‑Loop Whole‑Body Humanoid Teleoperation for Long‑Horizon Tasks </p>
+</li>
+<li><p>Moma-teleop: Whole-Body Teleoperation for Mobile Manipulation at Zero Added Cost</p>
+</li>
+<li><p>ViTaceFormer: Learning Cross-Modal Representation for Visuo-Tactile Dexterous Manipulation</p>
+</li>
+<li><p>Mobile-television: Predictive motion priors for humanoid whole-body control。是open-televison的二代论文</p>
+</li>
+</ul>
+<h2 id="Learning-Human‑to‑Humanoid-Real‑Time-Whole‑Body-Teleoperation"><a href="#Learning-Human‑to‑Humanoid-Real‑Time-Whole‑Body-Teleoperation" class="headerlink" title="Learning Human‑to‑Humanoid Real‑Time Whole‑Body Teleoperation"></a>Learning Human‑to‑Humanoid Real‑Time Whole‑Body Teleoperation</h2><p>这篇论文主要是讲高效数据采集的，不是聚焦手眼协同控制。</p>
+<h2 id="Mobile-TeleVision-Predictive-Motion-Priors-for-Humanoid-Whole-Body-Control"><a href="#Mobile-TeleVision-Predictive-Motion-Priors-for-Humanoid-Whole-Body-Control" class="headerlink" title="Mobile-TeleVision: Predictive Motion Priors for Humanoid Whole-Body Control"></a><strong>Mobile-TeleVision: Predictive Motion Priors for</strong> <strong>Humanoid Whole-Body Control</strong></h2><p><strong>出发点：</strong>强化学习直接控制，精度略显不足。本文将人形机器人的上下部分控制解耦，上半身用逆运动学+运动重定向，下半身用RL学习。引入PMP（预测运动先验），使用条件变分自动编码器（CVAE）进行训练，以有效地表示上半身运动。然后在上半身训练的基础上，学习下半身的运动策略，确保运动时候的鲁棒性。</p>
+<p>训练的目的，是为了后续遥控机器人，探索环境执行任务，同时也是收集数据。</p>
+<h3 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h3><p>作者认为，上半身主要负责精细操控，例如arm。下半身主要复杂捕获常见的运动范围，维持平衡。</p>
+<p>RL方式的缺点：RL policy is also not well-suited for high DoF positional and orientation control，并且具有随机性。因此，作者引出，控制手臂也腿需要不同的机制。</p>
+<p>上半身无需考虑平衡问题，因此可以直接逆运动学计算控制信号。下半身的RL训练，就不考虑上半身控制维度，降低了训练代价。前文也有讨论，完全解耦会导致运动不稳定，因为失去了交互能力。</p>
+<p>本文在此基础上，虽然解耦上下部分，但想办法将两部分结合起来。简单来说，上半身简单的用逆运动学控制，然后训练一个条件变分自编码器，输入是上半身的过去几个时间点的动作轨迹，输出是上半身之后的运动轨迹预测，将其编码输入给下半身的RL，也就是变相的将上半身的运动轨迹作为条件，输入给下半身，下半身通过RL实现平衡。最主要的就是中间的<strong>CVAE</strong>部分，其作用就是<strong>表示学习</strong>，预测未来的上半身运动轨迹</p>
+<p align="center">
+  <img src="../images/31.png" alt="" width="100%">
+</p>
 
-<p>模仿学习，和之前的ALOHA一样，主要是提出了cheap的结构设计，模仿学习收集数据。这里只是加了mobile底座。</p>
-<span id="more"></span> 
+<h3 id="三阶段训练："><a href="#三阶段训练：" class="headerlink" title="三阶段训练："></a><strong>三阶段训练：</strong></h3><ul>
+<li>第一阶段：数据转化，得到每个执行器的joint angle数据，数据过滤。</li>
+<li>第二阶段训练上半身的模型，自回归预测未来的上半身action，运动重定向。这部分用逆运动学或者其他模仿学习都可以实现。</li>
+<li>训练下半身的控制策略，RL训练。输入是控制指令，自回归预测的上半身模型运动序列，以及其他的感知信号（例如上一时刻的下半身action，时间步长等）。此时会使用课程学习，上半身有一个参数$\alpha \in [0,1]$，让参数有小到大，这样子上半身运动幅度由小到大，训练难度逐渐增加。等于0的时候，上半身手臂相当于维持在初始点。</li>
+</ul>
+<h3 id="实验设置"><a href="#实验设置" class="headerlink" title="实验设置"></a>实验设置</h3><p>使用宇树机器人与Fourier GR-1 robot。</p>
+<p>讨论内容：</p>
+<ul>
+<li>与其他方法比，本文的解耦方法上半身表现（用的是仿真）</li>
+<li>disturbance下的稳定性</li>
+<li>实际环境下，上下身结合的性能。</li>
+</ul>
+<p>摇杆方法：</p>
+<ul>
+<li><p>颈部与手部的运动，是用Apple Vision Pro 追踪得到的。然后数据经过逆向运动学以及动作重定向，转化为机器人关节角度。vr显示的就是机器人实时拍摄的画面。这里比较重要的是，Apple Vision Pro 得到的到底有哪些数据。头部的位置以及四元数，还计算了手部（等效终端执行器）的位置，所以本文这里就没有采用额外的辅助机械臂（不同于ViA的方法），去收集手臂数据。</p>
+</li>
+<li><p>下半身用两种方式：</p>
+<ul>
+<li><p><strong>分离控制</strong>：一名操作员使用 VR 头显控制上半身，另一名操作员使用带摇杆的遥控器控制下半身。</p>
+</li>
+<li><p><strong>统一控制</strong>：由单个用户同时控制上半身和下半身，其中上半身通过 VR 头显控制，下半身通过踏板控制。全部操作单人完成。效果如下所示：</p>
+<p align="center">
+  <img src="../images/40.png" alt="" width="90%">
+</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>为什么用苹果的VR设备：</strong></p>
+<p align="center">
+  <img src="../images/48.png" alt="" width="90%">
+</p>
+
+
+<p>苹果的ARKit提供了很多sdk，vr设备可以直接输出头部以及手部的位置以及手部的姿态。有些基于rgb深度的三维场景重构，应该也是利用了官方提供的接口进行渲染。</p>
+<h2 id="Vision-in-Action-Learning-Active-Perception-from-Human-Demonstrations"><a href="#Vision-in-Action-Learning-Active-Perception-from-Human-Demonstrations" class="headerlink" title="Vision in Action: Learning Active Perception from Human Demonstrations"></a>Vision in Action: Learning Active Perception from Human Demonstrations</h2><p>机械结构：双臂+6DOF neck模拟头部运动</p>
+<p align="center">
+  <img src="../images/32.png" alt="" width="50%">
+</p>
+
+
+<p>希望通过neck的移动，实现视角的移动，在搜索过程中增加视觉覆盖范围，减少障碍物造成的遮挡影响。</p>
+<p>通常多视角，例如waist可以一定程度处理上述的背包遮挡问题，但其本质上是任务导向的（手伸进背包），而不是主动的去感知。此外，对于一些数据，采集人员通常会移动自身视线取采集数据，但是机器采集的数据却不会对应的调整，<strong>采集人员所看到的与实际采集的数据，是存在偏差的</strong>。</p>
+<p><strong>observation mismatch</strong>：what the human sees and what the robot learns from。不匹配影响了学习效率。实际上关注的有两个方面，如何实现active 视角变化，如何消除robot与采集人员观测的mismatch。</p>
+<p>面临的困难：</p>
+<ul>
+<li>大部分机器人视角相关的自由度低，例如只有2dof的head，导致很难调整视角。</li>
+<li>相机同步，也就是采集人员用vr设备观测，在硬件上实现低延迟是较为困难的。此外电机反馈需要很快，动态的调整head视角。</li>
+<li>过去机器人视角变化，可能是在特定任务下，用特定策略指定的，缺少可扩展性。</li>
+</ul>
+<p>本文提出的<strong>ViA</strong>，对上述问题，提出如下解决方案：</p>
+<ul>
+<li>使用6dof arm作为neck，没有专门设计复杂的结构去模拟人类头部眼部的运动。</li>
+<li>以往的数据采集，顺序是，采集人员移动头部-&gt;发送指令-&gt;机器人运动-&gt;回传实时数据。本文设计一个方法，根据当前的采集人员头部姿态，去渲染实时画面，就不需要每次都依靠机器人采集新图像。</li>
+<li>在第二点贡献的基础上，实现了<strong>共享视角</strong>，这对于后续的模仿学习是有利的，即使采用最基础的行为克隆，也能够学会active的注视策略。</li>
+</ul>
+<p>实验设计了三个任务，都包含视觉遮挡。</p>
+<h3 id="数据采集"><a href="#数据采集" class="headerlink" title="数据采集"></a>数据采集</h3><p>两个问题：</p>
+<ul>
+<li>视觉延迟：头部运动与vr设备的延迟</li>
+<li>机器人控制延迟，包括程序执行，电机延迟等</li>
+</ul>
+<p align="center">
+  <img src="../images/33.png" alt="" width="30%">
+</p>
+
+
+<p>本文的方法：Async Teleop：<strong>Decoupled view rendering and asynchronous updating</strong></p>
+<p align="center">
+  <img src="../images/34.png" alt="" width="100%">
+</p>
+
+
+<p>上图的<strong>绿色轨迹</strong>，指的是依据用户头部姿态，在点云上实时渲染双目rgb图像。实现实时反馈无需等待机器人视角切换。</p>
+<p><strong>红色部分</strong>，依靠用户的头部姿态，以及手臂关节，更新机器人姿态。并且依据机器人的观测，对点云数据进行补全。</p>
+<p>将本身要传输的rgb数据换成点云数据，可能传输的数据会更少？</p>
+<p>具体的数据收集过程视觉效果：右侧点云渲染图就是vr设备真实看到的。所以本文最主要的共享主要还是在摇杆渲染这一块。</p>
+<p align="center">
+  <img src="../images/35.png" alt="" width="100%">
+</p>
+
+<p align="center">
+  <img src="../images/36.png" alt="" width="100%">
+</p>
+
+
+<h3 id="硬件设计"><a href="#硬件设计" class="headerlink" title="硬件设计"></a>硬件设计</h3><p>头部camera可以提供rgb，depth图像以及camera pose 数据。实际上是用iphone 15 pro，连接在一个ARX5机器人手臂上实现的。</p>
+<h3 id="摇杆接口"><a href="#摇杆接口" class="headerlink" title="摇杆接口"></a>摇杆接口</h3><p>手臂的数据很好收集，两个外骨骼形状的操控杆，手机双臂数据。</p>
+<p>vr设备的延时是比较低的，一般可以达到10ms，但是对于机器人控制，更多的是control latency，头部运动与实际的机器人运动之间会存在较大的延时。为此设计了之前的VR渲染模块，主要有以下三个内容：</p>
+<ul>
+<li>点云构造：需要两个变换，一个是6dof neck的坐标系变换，还有一个是头部相机的坐标变换。</li>
+<li>低延迟视角渲染：点云数据是t时刻的，渲染是t+k时刻的，在t+k时刻，利用t+k时刻的头部姿态以及t时刻的点云数据，渲染3d环境（150Hz）。因为是渲染的，所以有些地方会有缺失。</li>
+<li>结合头部运动更新点云：在时间t+K，注意此处的K远大于k，具体的K取值，与机器人控制系统的延迟决定。同时，系统会用10Hz的频率更新RGB以及深度图像的值，用于更新点云渲染数据。</li>
+</ul>
+<h3 id="How-to-learn"><a href="#How-to-learn" class="headerlink" title="How to learn?"></a>How to learn?</h3><p>设计网络比较简单，用的就是模仿学习，模型采用扩散策略Difussion Policy。<strong>单步预测未来的手臂以及neck动作序列。</strong>所以本文的头-手交互，难点在于数据的采集以及摇杆设备的处理。实际的数据使用是较为简单的。输出动作维度是23</p>
+<ul>
+<li>左臂，7dof</li>
+<li>右臂，7dof</li>
+<li>两个夹爪，2dof</li>
+<li>剩下的七个维度是neck的，位置3加上四元数4，一共得到七个自由度。</li>
+</ul>
+<p>图像经过DINOv2，得到一个384维度的token，将其作为观测的语义特征。预测窗口16，执行前8个预测的控制量。控制频率设定为10Hz。</p>
+<h3 id="评估"><a href="#评估" class="headerlink" title="评估"></a>评估</h3><p>实验对比一下内容：</p>
+<ul>
+<li>不同相机设置</li>
+<li>视觉表示能力</li>
+<li>摇杆界面</li>
+</ul>
+<p>三个实验：</p>
+<ul>
+<li>Bag Task：打开背包拿出物体，这个时候<strong>手臂的摄像头存在遮挡</strong>。训练阶段使用5个对象：香蕉、胡萝卜、小狗、鞋子、草莓；共收集150条示范；测试阶段使用2个未见过的对象：蓝色大象、绿色鳄梨；每个测试对象进行5次实验，共10次测试尝试；每次实验中，背包内仅放置一个目标物体。</li>
+<li>Cup Task：通过主动视角切换完成杯子摆放</li>
+<li>Pot Task：找到一个青柠并将其放入锅中；使用双臂共同抬起锅；将锅精确对准托盘放置。</li>
+</ul>
+<h4 id="实验1："><a href="#实验1：" class="headerlink" title="实验1："></a>实验1：</h4><p>第一个实验对比不同相机设置</p>
+<ul>
+<li>ViA:只使用head摄像头</li>
+<li>Active head摄像头以及两个wrist摄像头：head摄像头与ViA完全一致，相当于多提供了两个视角信息。</li>
+<li>固定在胸部的相机与两个wrist相机</li>
+</ul>
+<p>实验结果表明额外加了wrist相机反而降低了18%的性能，猜测是由于数据量不够，并且腕部相机提供的有效信息实际上很小，反而由于遮挡引入了更多的干扰噪声。下图是分阶段的成功率。</p>
+<p align="center">
+  <img src="../images/37.png" alt="" width="100%">
+</p>
+
+
+<h4 id="试验2：对比不同视觉表征方法"><a href="#试验2：对比不同视觉表征方法" class="headerlink" title="试验2：对比不同视觉表征方法"></a>试验2：对比不同视觉表征方法</h4><ul>
+<li>本文的DINOv2</li>
+<li>ResNet-18 用ImageNet训练</li>
+<li>DP3，用采集的点云数据</li>
+</ul>
+<p align="center">
+  <img src="../images/38.png" alt="" width="100%">
+</p>
+
+
+<h4 id="实验3：对比不同摇杆方式"><a href="#实验3：对比不同摇杆方式" class="headerlink" title="实验3：对比不同摇杆方式"></a>实验3：对比不同摇杆方式</h4><p>实际上对比的是传输rgb数据与点云数据。找了一些人员体验他们设计的vr渲染系统，说明他们的系统收集数据会慢一些，因为没有rgb图像直观，不过对于防眩晕会更友好。</p>
+<p align="center">
+  <img src="../images/39.png" alt="" width="70%">
+</p>
+
+
+<h3 id="Questions"><a href="#Questions" class="headerlink" title="Questions"></a>Questions</h3><ul>
+<li><p>头部可以控制角度，但采集人员如何控制6dof的neck呢？看了一下数据采集演示视频，也是依靠人的运动去直接控制的，相对来说比采集手臂难操作一点。</p>
+</li>
+<li><p>如何区分，到底是简单的模仿学习跟踪头部动作，还是说真的学会并且理解了关注region of interest。实际上在实验的时候应该设置一些随机性。</p>
+</li>
+</ul>
+<h2 id="Open-TeleVision-Teleoperation-with-Immersive-Active-Visual-Feedback"><a href="#Open-TeleVision-Teleoperation-with-Immersive-Active-Visual-Feedback" class="headerlink" title="Open-TeleVision: Teleoperation with Immersive Active Visual Feedback"></a>Open-TeleVision: Teleoperation with Immersive Active Visual Feedback</h2><p>主要是提出了一种沉浸式的摇操系统，OpenTeleVision。用于高效的收集数据，然后在四个复杂任务上说明了数据采集的有效性。利用头戴式设备，采集rgb图像，然后分析手臂位置以及手部关节，得到双臂数据。头部数据直接根据头戴vr设备可以得到。</p>
+<p>本文只考虑头部以及双臂和手的控制。</p>
+<p align="center">
+  <img src="../images/41.png" alt="" width="90%">
+</p>
+
+
+<p>数据采集流程如下：本文开发了一个基于Vuer的Web服务器[。VR设备将操作员的手，头和手腕姿势传输到服务器，服务器处理人到机器人的运动重定向。机器人双目立体视频分辨率为480x640，频率60 Hz。Vr设备用的Apple Vision Pro。</p>
+<p align="center">
+  <img src="../images/42.png" alt="" width="90%">
+</p>
+
+
+<p>机器人设备如下：</p>
+<p>头部VR设备移动，直接控制机器人头部设备的移动（2-3个自由度）。该过程人可以主动的看向感兴趣的部分，实现了active的视觉感知功能。而且这样子处理，可以<strong>用更小的图像</strong>，因为视角可以移动。这里作者还提了一下，用的是双目摄像头。方便采集人员获得图像空间信息，可能是为了提高采集的准确性等，后续训练实际上也是提供了一些深度的信息。</p>
+<p>​    手臂的移动是跳过vr设备的rgb图像流处理的，两个部分，一部分是手臂的位置，另一部分是手的姿态。</p>
+<ul>
+<li>手臂位置：通过图像识别人手臂根部，通过逆运动学计算机器人的关节角度。</li>
+<li>手的姿态：</li>
+</ul>
+<p align="center">
+  <img src="../images/43.png" alt="" width="90%">
+</p>
+
+<p align="center">
+  <img src="../images/44.png" alt="" width="90%">
+</p>
+
+
+<h3 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h3><p>四个实验的数据采集</p>
+<p align="center">
+  <img src="../images/45.png" alt="" width="90%">
+</p>
+
+
+<p>讨论的问题</p>
+<ul>
+<li>实验中的一些设置对于模仿学习的影响。例如resnet对比Dinov，单目与双目</li>
+<li>本文设计的方案数据收集方面的有效性</li>
+</ul>
+<p>选用两个双目图像作为视觉输入，而不是腕部之类的摄像头。将其输入DiNOv2得到视觉特征。每个图形生成16*22个tokens。ACT网络实现chunk动作输出。本文的active head相对来说简单一点，因为主要涉及到2dof的旋转，而不是ViA中的位置变化。</p>
+<p>一些比较重要的结论：</p>
+<ul>
+<li>原始的ACT用了四个角度输入，而本文使用了双目图像，所以对于图像特征提取能力要求更高，导致ResNet效果不够好。</li>
+<li>单目实验效果不如双目实验，可能是因为缺少深度信息。对于距离的判断不足。</li>
+</ul>
+<h3 id="泛化性能"><a href="#泛化性能" class="headerlink" title="泛化性能"></a>泛化性能</h3><p>泛化性能实际上比较一般，只是位置稍微改一下，失败率就非常高（每个位置实验5次）</p>
+<p align="center">
+  <img src="../images/46.png" alt="" width="60%">
+</p>
+
+
+<p>一些常见的数据收集方案：</p>
+<p align="center">
+  <img src="../images/47.png" alt="" width="90%">
+</p>
+
+
+
+
+<h2 id="Learning-to-Look-Around-Enhancing-Teleoperation-and-Learning-with-a-Human-like-Actuated-Neck"><a href="#Learning-to-Look-Around-Enhancing-Teleoperation-and-Learning-with-a-Human-like-Actuated-Neck" class="headerlink" title="Learning to Look Around: Enhancing Teleoperation and Learning with a Human-like Actuated Neck"></a>Learning to Look Around: Enhancing Teleoperation and Learning with a Human-like Actuated Neck</h2><p align="center">
+  <img src="../images/49.png" alt="" width="90%">
+</p>
+
+
+<p>该文章是MIT2024年论文，同样是设计了一个摇操系统，控制双臂的同时，控制5dof的head，实现例如“偷看”或者“倾斜”之类的功能。一方面，对操作人员会比较友好，更直观而且更好操控。对于训练而言，这种方式，可以提供更好的<strong>空间理解能力</strong>，相比于静态的camera，可以实现<strong>任务自适应</strong>。</p>
+<h3 id="硬件："><a href="#硬件：" class="headerlink" title="硬件："></a>硬件：</h3><p>Apple visionPro 提供了头部跟踪以及手部跟踪，以此收集演示过程的数据。<strong>四个摄像头</strong>，分别安装在头部，躯干以及两个手腕。</p>
+<p align="center">
+  <img src="../images/50.png" alt="" width="90%">
+</p>
+
+
+<p>几种演示操作：</p>
+<p align="center">
+  <img src="../images/51.png" alt="" width="90%">
+</p>
+
+
+<h4 id="手部跟踪"><a href="#手部跟踪" class="headerlink" title="手部跟踪"></a>手部跟踪</h4><ul>
+<li><strong>Ascension trakSTAR</strong>：6自由度跟踪节点，使用一个<strong>手套</strong>进行捕捉。</li>
+<li><strong>Manus VR 手套</strong>：对于更复杂的任务用了这个手套，可以有25个关键节点跟踪</li>
+<li><strong>Apple Vision Pro</strong>：数据比较准，但是有时候手会移出视野，数据收集可能会有问题。</li>
+</ul>
+<h4 id="头部跟踪"><a href="#头部跟踪" class="headerlink" title="头部跟踪"></a>头部跟踪</h4><p><strong>头部跟踪</strong> 是使用 <strong>Apple Vision Pro</strong>，提供6dof头部跟踪。</p>
+<h3 id="实验-1"><a href="#实验-1" class="headerlink" title="实验"></a>实验</h3><p>用ACT训练，训练头部+右臂，训练三个任务的数据：</p>
+<ul>
+<li>Left-to-right Pick and Place (L2R): </li>
+<li>Close-range Object Manipulation (CRange):</li>
+<li>Cup Transfer From Bottom Shelf (CfB)</li>
+</ul>
+<p>这三个任务都需要控制过程移动neck，例如调整视角观察物体，移动视角保持物体的实时可见性。每个任务有120条演示数据。为了证明是学会了how to look而不是简单的模仿，作者将三个数据融合（但实际上这种做法任然不能很明显的说明学会了如何找到region of interest，应该移动物体或者改变位置，角度。不过这一点在后续的测试里也是有的）。</p>
+<p>实验结果如下：成功率有很大程度提高</p>
+<p align="center">
+  <img src="../images/52.png" alt="" width="60%">
+</p>
+
+
+<h2 id="Using-Apple-Vision-Pro-to-Train-and-Control-Robots"><a href="#Using-Apple-Vision-Pro-to-Train-and-Control-Robots" class="headerlink" title="Using Apple Vision Pro to Train and Control Robots"></a>Using Apple Vision Pro to Train and Control Robots</h2><p>改论文讲述了如何利用Apple vr设备，实现头部以及手部的姿态数据获取，24年论文，很多相关论文应该是用了其中的方法。</p>
+<blockquote>
+<p><a href="https://github.com/Improbable-AI/VisionProTeleop">Improbable-AI/VisionProTeleop: VisionOS App + Python Library to stream head / wrist / finger tracking data from Vision Pro to any robots.</a></p>
+</blockquote>
+<p>apple本身提供了ARKit库，主要提供了三类数据：</p>
+<ul>
+<li>头</li>
+<li>腕</li>
+<li>手指关节</li>
+</ul>
+<h3 id="使用步骤"><a href="#使用步骤" class="headerlink" title="使用步骤"></a>使用步骤</h3><ul>
+<li><p>下载app</p>
+<p align="center">
+  <img src="../images/53.png" alt="" width="60%">
+</p></li>
+<li><p>下载python库：pip install avp_stream</p>
+</li>
+<li><p>mac中函数调用获取数据</p>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> avp_stream <span class="keyword">import</span> VisionProStreamer</span><br><span class="line"><span class="number">2</span> avp_ip = <span class="string">&quot; 10.31.181.201 &quot;</span> <span class="comment"># example IP</span></span><br><span class="line"><span class="number">3</span> s = VisionProStreamer ( ip = avp_ip , record = <span class="literal">True</span> )</span><br><span class="line"><span class="number">4</span></span><br><span class="line"><span class="number">5</span> <span class="keyword">while</span> <span class="literal">True</span> :</span><br><span class="line"><span class="number">6</span> r = s . latest <span class="comment"># gets the latest tracking data</span></span><br><span class="line"><span class="number">7</span> <span class="built_in">print</span> ( r )</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>这里的r就是字典，可以获取例如r[‘head’]这样的数据</p>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line"><span class="built_in">r</span>[<span class="string">&#x27;head&#x27;</span>]: np.ndarray  </span><br><span class="line">  <span class="comment"># shape (1,4,4) / measured from ground frame</span></span><br><span class="line"><span class="built_in">r</span>[<span class="string">&#x27;right_wrist&#x27;</span>]: np.ndarray </span><br><span class="line">  <span class="comment"># shape (1,4,4) / measured from ground frame</span></span><br><span class="line"><span class="built_in">r</span>[<span class="string">&#x27;left_wrist&#x27;</span>]: np.ndarray </span><br><span class="line">  <span class="comment"># shape (1,4,4) / measured from ground frame</span></span><br><span class="line"><span class="built_in">r</span>[<span class="string">&#x27;right_fingers&#x27;</span>]: np.ndarray </span><br><span class="line">  <span class="comment"># shape (25,4,4) / measured from right wrist frame </span></span><br><span class="line"><span class="built_in">r</span>[<span class="string">&#x27;left_fingers&#x27;</span>]: np.ndarray </span><br><span class="line">  <span class="comment"># shape (25,4,4) / measured from left wrist frame </span></span><br><span class="line"><span class="built_in">r</span>[<span class="string">&#x27;right_pinch_distance&#x27;</span>]: float  </span><br><span class="line">  <span class="comment"># distance between right index tip and thumb tip </span></span><br><span class="line"><span class="built_in">r</span>[<span class="string">&#x27;left_pinch_distance&#x27;</span>]: float  </span><br><span class="line">  <span class="comment"># distance between left index tip and thumb tip </span></span><br><span class="line"><span class="built_in">r</span>[<span class="string">&#x27;right_wrist_roll&#x27;</span>]: float </span><br><span class="line">  <span class="comment"># rotation angle of your right wrist around your arm axis</span></span><br><span class="line"><span class="built_in">r</span>[<span class="string">&#x27;left_wrist_roll&#x27;</span>]: float </span><br><span class="line"> <span class="comment"># rotation angle of your left wrist around your arm axis</span></span><br></pre></td></tr></table></figure>
+
+<p align="center">
+  <img src=".assets/54.png" alt="" width="90%">
+</p>
+  
 ]]></content>
       <categories>
         <category>笔记</category>
       </categories>
       <tags>
-        <tag>thesis</tag>
-        <tag>VLM</tag>
         <tag>Note</tag>
+        <tag>Reinforcement Learning</tag>
+        <tag>teleoperation</tag>
       </tags>
   </entry>
   <entry>
-    <title>Navigation World Models  [Meta 2025]</title>
-    <url>/2025/11/02/Navigation%20World%20Models%20%20%5BMeta%202025%5D/</url>
-    <content><![CDATA[<h2 id="Navigation-World-Models-Meta-2025"><a href="#Navigation-World-Models-Meta-2025" class="headerlink" title="Navigation World Models  [Meta 2025]"></a>Navigation World Models  [Meta 2025]</h2><p><code>Bar A, Zhou G, Tran D, et al. Navigation world models[C]//Proceedings of the Computer Vision and Pattern Recognition Conference. 2025: 15791-15801. </code></p>
-<img src="/images/a1.png" alt="" style="zoom:70%;" />
-
-<p>文章使用1B的条件扩散Transformer（CDiT），实现的功能为给定图片以及动作序列，预测未来的图像序列。另外可以给定起始点，规划运动轨迹，对最后的结果打分（与goal的差距）。</p>
-<p>CDiT方法计算复杂度与图像数量线性增加。1B情况下也可以稳定训练相比于传统的DiT减小了4X的FLOPs计算。</p>
-<p>本文辅助使用了NoMaD进行导航，该模型是行为克隆训练的扩散模型，另外可以使用temporal distance 目标对目标进行跟踪。也可以在新环境下进行探索。相应的也有其他导航方法例如RL，或者neural slam结合A*/迪杰斯特拉等plannner的方案。</p>
-<p>不同于直接学习策略，NWM的目标是simulate 环境。给定当前状态，预测未来的状态以及对应的reward。<strong>联合学习world model以及policy可以提升数据效率。</strong><span id="more"></span> </p>
-<h4 id="Formulation"><a href="#Formulation" class="headerlink" title="Formulation"></a>Formulation</h4><p>给定图像动作序列D=[x0,a0,x1,a1,…,xT,aT],其中a由两部分组成，a=[u,phi],u是二维向量，前后与左右运动，phi是标量，控制旋转角度。实际上这个状态可以很容易拓展到三维情况。外部的实际输入xt，通过预训练的VAE进行编码得到st，然后结合at去预测下一个s_{t+1}.</p>
-<p>进一步修改方程，引入时间下标k到动作at中a = (u, phi, k),表示预测未来或者过去的第k个状态，而不仅仅是单步。使得模型不仅能学习“动作导致的状态变化”，还能<strong>显式地控制时间跨度和时间方向（向前或向后）</strong>。</p>
-<p>为了防止直接根据时间去预测结果（entanglement of actions and time.），实际采集数据的时候，同一个起点会设置多个目标，收集数据。</p>
-<p>Conditional Diffusion Transformer (CDiT) Block结构如下：复杂度与frame number成线性关系。</p>
-<img src="/images/a2.jpg" alt="" style="zoom:70%;" />
-
-
-
-<p>at先通过正弦编码嵌入到d/3维度，然后拼接，通过mlp之后，k也同样处理到d维度，然后和at部分相加，t也变为d维度。三个d维度向量相加得到condition条件的嵌入向量</p>
-<img src="/images/a3.jpg" alt="" style="zoom:100%;" />
-
-<p>该部分之后通过AdaLN生成scale以及shift向量。用于调节layer norm以及attn模块的输出。</p>
-<p>使用CDiT而不是DiT，是因为如果将at部分的信息也一同作为输入给attn，会导致computationally expensive。主要是对于过去帧的处理，如果将过去帧一起放入atten计算，会导致计算量非常大。例如llm里，如果将过去的language token一起放进来，会导致计算增长很快。所以这里即使是</p>
-<p>这里的t随机采样，使得模型可以对不同的加噪声进行denoising。也对扩撒模型进行了改进，预测协方差，用变分下界辅助训练，提高稳定性。</p>
-<p>模型的目标函数是最小化MSE，希望学到去噪过程</p>
-<img src="/images/a4.jpg" alt="" style="zoom:100%;" />
-
-<h4 id="Navigation-Planning-with-World-Models"><a href="#Navigation-Planning-with-World-Models" class="headerlink" title="Navigation Planning with World Models"></a>Navigation Planning with World Models</h4><p>如果模型对于环境很熟悉，那么可以simulate导航轨迹并且选择达到目标的那条轨迹。如果说不熟悉环境，长期的planning就需要想象。</p>
-<p>给初始的隐藏状态s0,目标s*，希望找到动作序列（a0,a1,…,aT）。S(sT,s*)表示对于自回归结果的评分（未进行归一化）。另外还有能量函数，最小化能量函数对应最大化感知相似度，并且保证动作和状态的有效性（一些安全约束等）：</p>
-<img src="/images/a5.jpg" alt="" style="zoom:100%;" />
-
-<p>第一部分相似度通过预训练的VAE编码进行计算。Avalid可以是“never go left then right”，Ssafe可以是“never explore the edge of the cliff”。优化问题得到的就是动作序列（a0,…,aT）。</p>
-<p>有了目标函数，就可以用CEM方法，去随机采样k条轨迹然后加权得到预测的控制量，然后用Moving horizon方法执行动作。</p>
-<h4 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h4><p>数据集使用：SCAND [30], Tartan-Drive [60], RECON [52], and HuRoN [27]</p>
-<p>对不同的机器人step distance进行归一化处理，除以各自的平均distance。过滤了backward 运动。有些数据集例如Ego4D以及GO Stanford没有label，就是没有前后左右以及转向标签，只有帧数的标签，当作unknown evaluation environment.</p>
-<p>测试标准：一个是轨迹的位置以及角度误差。对于图像的相似度，用LPIPS [76] and DreamSim提取的deep features进行对比。PSNR测量像素级别的相似度。对于image以及视频合成，使用FID [23] and FVD [64]进行衡量数据分布，因为这个时候，我们是完全外推的，不知道真实的对比图像或者视频。</p>
+    <title>Overview of DinoV2</title>
+    <url>/2025/07/27/DinoV2/</url>
+    <content><![CDATA[]]></content>
+      <categories>
+        <category>笔记</category>
+      </categories>
+      <tags>
+        <tag>Note</tag>
+        <tag>Reinforcement Learning</tag>
+        <tag>teleoperation</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Overview of GELLO</title>
+    <url>/2025/07/27/20250727-GELLO%20%E8%AE%BA%E6%96%87/</url>
+    <content><![CDATA[<h2 id="GELLO-A-General-Low-Cost-and-Intuitive-Teleoperation-Framework-for-Robot-Manipulators"><a href="#GELLO-A-General-Low-Cost-and-Intuitive-Teleoperation-Framework-for-Robot-Manipulators" class="headerlink" title="GELLO: A General, Low-Cost, and Intuitive Teleoperation Framework for Robot Manipulators"></a>GELLO: A General, Low-Cost, and Intuitive Teleoperation Framework for Robot Manipulators</h2><p>设计一种外骨骼的数据采集方式，成本小于300＄。<strong>ALOHA</strong>也是外骨骼，但是要求1:1，成本会更高。一些研究关注双向反馈，被控的机械臂传递力反馈或者触觉反馈，是目前的一些研究方向。</p>
+<ul>
+<li>低价</li>
+<li>操控方便</li>
+<li>便携</li>
+<li>易复制</li>
+</ul>
 ]]></content>
       <categories>
         <category>笔记</category>
       </categories>
       <tags>
-        <tag>thesis</tag>
-        <tag>VLM</tag>
         <tag>Note</tag>
+        <tag>Imitation Learning</tag>
+        <tag>Mechanism</tag>
       </tags>
   </entry>
   <entry>
-    <title>π0 ：A Vision-Language-Action Flow Model for General Robot Control[2024,physical intelligence]</title>
-    <url>/2025/11/04/%CF%800%20%EF%BC%9AA%20Vision-Language-Action%20Flow%20Model%20for%20General%20Robot%20Control%5B2024,physical%20intelligence%5D/</url>
-    <content><![CDATA[<p><code>非常出名的一个初创公司physical intelligence闭源产品，页面https://physicalintelligence.company/blog/pi0</code></p>
-<p>模型结构，使用预训练的VLM作为backbone，以及一系列的cross-embodiment 灵巧手操控数据集。在VLM后独立添加了一个action expert，通过flow matching生成连续动作。主要考虑数据，通用性以及鲁棒性。实现complex and dexterous tasks。</p>
-<img src="/images/a6.jpg" alt="" style="zoom:100%;" />
+    <title>Overview of ChatVLA Content</title>
+    <url>/2025/07/06/20250624-ChatVLA%20%E8%AE%BA%E6%96%87/</url>
+    <content><![CDATA[<p>[TOC]</p>
+<h2 id="本周进度"><a href="#本周进度" class="headerlink" title="本周进度"></a>本周进度</h2><p>调研VLM结构的控制类模型，熟悉DDMP原理，阅读difussion policy以及ScaleDP两篇论文。</p>
+<p>阅读文献ChatVLA: Unified Multimodal Understanding and Robot Control with Vision-Language-Action Model【arxiv 2502  Midea Group】以及代码，进一步看一下基于VLA的模型如何拓展至rejection操作。</p>
+<p>调研reject方法设计方法；</p>
+<p>了解DexVLA开源代码结构以及配置代码环境；</p>
+<h2 id="Overview-of-ChatVLAContent"><a href="#Overview-of-ChatVLAContent" class="headerlink" title="Overview of ChatVLAContent"></a>Overview of ChatVLAContent</h2><h3 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h3><p>我们希望实现的主要还是对于上层任务的一个判别，做出不同选择，关注的实际上不是控制精度方面，所以单臂，双臂实际上差别不大。双臂感觉模型会更大一些，控制的时候如果模型比较大，导致频率很低，有可能影响最后的效果。</p>
+<p align="center">
+  <img src="../images/25.png" alt="" width="50%">
+</p>
 
-<p>解决的三个bottlenecks：数据量的问题，大数据的预训练优势，在小数据时通常不会显示。模型结构以及数据利用率。最后就是训练的recipe，也就是数据配方，强调的是<strong>数据策划（data curation）</strong>的“精细性”和“策略性”。</p>
-<p>动作模型用的流匹配，是diffusion的一种变体。训练流程和文本/图像训练是一样的，预训练然后微调。作者提到，由于数据集里没有错误恢复的数据，因此很难学到这种能力。有两种数据，高质量和低质量的，结合这两种数据可以得到理想的能力（repertoire of recoveries and corrections）。<span id="more"></span> </p>
-<img src="/images/a7.jpg" alt="" style="zoom:100%;" />
 
-<p><code>Intuitively, the diverse (but lower quality) pre-training data allows the model to recover from mistakes and handle highly varied situations</code></p>
-<p>多视角图像如何处理？一般可能多个特征通过cross 注意力变为一个，或者直接多个token输入给vlm直接处理变长度输入。本文是直接For robots with fewer than three images, we also mask out the missing image slots.用mask处理缺失的视角图像。</p>
-<p>文中虽然说只有68个任务，但不同于将“捡起盘子”，“捡起杯子”视为不同的任务，本文实际的任务场景是很多的。</p>
-<p>输出的动作维度不一样，例如单臂双臂，或者6dof与7dof，做法是取最大的dof，用0补齐动作数据。</p>
-<p>可以利用saycan这样的策略，将粗略的任务指令，分解为更细致的命令。</p>
-<h4 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h4><p>实验有开箱即用的实验结果（只用了粗数据进行预训练，没有后续高质量数据的后训练），以及后训练后在复杂任务上的效果。</p>
+<p>实际上只要该模型有类似action token 以及reasoning token 这样分离的设计，就可以实现类似的reject功能，可以进行对应的持续微调。主体还是VLM+控制模块。</p>
+<p>本文解决的两个问题：</p>
+<ul>
+<li>训练过程会导致虚假遗忘，破坏了visual-text alignment</li>
+<li>task interference，联合训练使得控制与语言图像理解冲突，性能无法同时保持提升</li>
+</ul>
+<p>对比了三种VLA训练方法</p>
+<ul>
+<li>只用控制演示数据训练，类似OpenVLA</li>
+<li>augmenting robot data with reasoning phrases to guide action<strong>（叠加机器人数据与动作）</strong></li>
+<li>co-training with both visual-text pairs and robot data(as in RT-2 [8]).</li>
+</ul>
+<h3 id="Contribution"><a href="#Contribution" class="headerlink" title="Contribution"></a>Contribution</h3><ul>
+<li><p>本文实际上还是重点关注语言能力，而不是控制部分能力（包含基础的控制以及复杂任务的分解）</p>
+<p align="center">
+  <img src="../images/27.png" alt="" width="100%">
+</p>
+
+
+
+<p>可以看到本文有三种训练的设置，第二种是类似DexVLA的设置<strong>（Setting 2）</strong>，输入的是图像以及指令以及状态信号，输出的是reasoning token有一集action；</p>
+<p>作为对比的，第三种方法联合训练<strong>（Setting 3）</strong>，输入除了上述控制数据，还额外加了image-text数据对，由于是随机采样的，图文数据对与控制数据可能完全没有关联。</p>
+<p>我们比较最终的<strong>实验结果</strong>：</p>
+<p>首先是第一个图，是在五个真实控制任务里的控制结果。可以发现直接图文数据对训练会导致控制性能非常差（Setting 3）非常差，远不如本文的后续改进方法以及Setting 2 方法。其中本文的方法在控制方面甚至不如setting 2。说明联合数据训练更多的是增加语言推理以及图像理解能力。该能力与控制过程中的，拆解复杂任务指令是不完全一致的。Setting 2是将prompt内部VLM进行拆解，这一过程与控制效果是息息相关的。而Image-Text的数据对本身和控制完全无关，在这方面的理解能力提升，不一定就会提升控制性能。</p>
+<p align="center">
+  <img src="../images/28.png" alt="" width="50%">
+</p></li>
+</ul>
+<p>上图（c）实际上是一些语言benchmark上的推理结果，发现Setting2 确实在这方面稍微弱一些，毕竟训练过程只有一些关于指令的分解，这部分对于语言能力的训练还是比较有限的，但依然保留了一些能力，相比于只用控制数据训练（Setting 1）已经有了很大的改进。</p>
+<h3 id="Model-structure"><a href="#Model-structure" class="headerlink" title="Model structure"></a>Model structure</h3><p>模型结构参考了另一篇论文【57】中的DiffusionVLA的模型，也是这个组24年提出的。本文的模型没有完全分离动作和图文特征提取模块，而是用了类似分支选择的方式进行训练，这一点和DexVLA差别会比较大。</p>
+<p align="center">
+  <img src="../images/29.png" alt="" width="50%">
+</p>
+
+
+<h3 id="Github-code"><a href="#Github-code" class="headerlink" title="Github code"></a>Github code</h3><p>该模型提供了完整的训练代码以及最后训练好的单臂模型，不过个人感觉这个模型更适用于聊天情况。</p>
+<blockquote>
+<p>代码地址：<a href="https://github.com/tutujingyugang1/ChatVLA_public?tab=readme-ov-file">tutujingyugang1/ChatVLA_public</a></p>
+</blockquote>
+<p align="center">
+  <img src="../images/30.png" alt="" width="80%">
+</p>
+
+
+<p>但是之前提到了，本文更关注Multi-modal Understanding Tasks，但对我们的任务而言，实际上不需要那么强的语言能力。</p>
+<h3 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h3><p>本文与DexVLA相比，侧重的是两方面，本文更加注重机器人控制过程中的语言聊天或者图像理解能力，而不是希望更进一步提升控制性能。单纯的控制性能而言，例如处理复杂任务，本文的方法可能在实际中不如DexVLA的方法，但是对于语言方面的能力而言，通过第二阶段的两部分数据集联合训练，可以保留更好的图像理解以及文本理解能力。</p>
+<h2 id="DexVLA代码简述"><a href="#DexVLA代码简述" class="headerlink" title="DexVLA代码简述"></a>DexVLA代码简述</h2><h3 id="训练部分资源要求"><a href="#训练部分资源要求" class="headerlink" title="训练部分资源要求"></a>训练部分资源要求</h3><p>实际上没有给出训练部分的GPU显存要求，下面表格里的显存跑的是另一个脚本。但应该也是训练模型，虽然可能和stage2的一些设置不太一样。可以看到LoRA可以减少14GB显存，410M　ScaleDP可以节省大概5GB显存。作者是在 <strong>single</strong> A6000(46G) ，batch_size=2做的实验，如果训练stage2显存实在不满足要求，我们可以设置batch_size=1;  之前刘兴报错，可能是没修改参数，sh脚本里有个参数per_device_train_batch_size=2,如果不改这个，无论用了多少gpu，每个gpu都加载两组数据，会导致显存越界。另外的话，当时设置了LORA，还有一些参数需要冻结，</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">...</span><br><span class="line">--lora_enable True \</span><br><span class="line">...</span><br><span class="line">--freeze_vision_tower True \</span><br><span class="line">--freeze_backbone True \</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>Notably, deepspeed may takes more GPU memory on single gpu with zero2 optimization.作者这里是对比deepspeed的影响，发现如果用的是一个GPU，使用DeepSpeed会导致内存占用变多</p>
+<table>
+<thead>
+<tr>
+<th>Script</th>
+<th>DeepSpeed offload</th>
+<th>LoRA VLM</th>
+<th>Smaller ScaleDP</th>
+<th>training speed</th>
+<th>CUDA memory</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>local_debug_deepspeed.sh</td>
+<td>✔️</td>
+<td>-</td>
+<td>-</td>
+<td>6.56s/iter</td>
+<td>20-29G</td>
+</tr>
+<tr>
+<td>local_debug_python.sh</td>
+<td>-</td>
+<td>✔️</td>
+<td>-</td>
+<td>1.09s/iter</td>
+<td>24G</td>
+</tr>
+<tr>
+<td>local_debug_python.sh</td>
+<td>-</td>
+<td>-</td>
+<td>✔️</td>
+<td>1.01s/iter</td>
+<td>33G</td>
+</tr>
+<tr>
+<td>local_debug_python.sh</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>1.1s/iter</td>
+<td>38G</td>
+</tr>
+</tbody></table>
+<p>实际训练过程中，</p>
+<table>
+<thead>
+<tr>
+<th>可训练参数</th>
+<th>所有参数</th>
+<th>占比</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>115M lora + 其他参数=592M</td>
+<td>2901 M</td>
+<td>4.13%| 20.4 %</td>
+</tr>
+</tbody></table>
+<p>不使用lora，训练参数是<strong>476M</strong>，训练过程显存也是满足要求的。</p>
+<p>使用lora+ ScaleDP 410M：训练参数115M，显存占用16.4GB左右</p>
+<p>不使用lora+ ScaleDP 410M，vision_tower 和backbone都设置为freeze：训练参数476M，显存不够，之前可能是不小心错误设置了freeze所以能跑。vision_tower和backbone都调整的话，显存不够。</p>
+<h3 id="推理部分资源要求"><a href="#推理部分资源要求" class="headerlink" title="推理部分资源要求"></a>推理部分资源要求</h3><p>推理部分暂时没有介绍，之后初步训练之后，运行测试脚本再看一下性能。作者的测试部分，求解一次，控制量重复使用十六次，计算代价相对来说会比openvla这种低很多。</p>
+<blockquote>
+<p>evaluate/smart_eval_agilex.py</p>
+</blockquote>
+<p>只训练了100步，然后测试了一下；每10步保存一个ckpt（输出都是nan，可能是因为训练的问题，也有可能因为测试输入图像是随机噪声，应该不太影响时间）。</p>
+<p>单次模型预测时间平均是1300ms，文中复用16次，大概控制频率12Hz。测试环境也是单卡3090运行的。运行占用显存大概是10.3GB。 如果将输入image和training的时候一样设置为（32,240）,单次求解时间可以缩减为657ms，也就是大概25Hz的一个频率</p>
+<p>测试的时候用lora模型，程序出错还没解决好。（7,3已经调试好了，lora可以用）</p>
 ]]></content>
       <categories>
         <category>笔记</category>
       </categories>
       <tags>
-        <tag>thesis</tag>
-        <tag>VLM</tag>
+        <tag>VLA</tag>
+        <tag>Note</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Overview of OpenVLA Content</title>
+    <url>/2025/07/01/20250621-OpenVAL%E8%AE%BA%E6%96%87/</url>
+    <content><![CDATA[<p>[TOC]</p>
+<h3 id="Why-VLA"><a href="#Why-VLA" class="headerlink" title="Why VLA"></a>Why VLA</h3><p>具身智能控制，主要是模仿学习，强化学习，以及VLA。</p>
+<ul>
+<li><strong>模仿学习</strong>：通过采集的控制轨迹进行训练，学习输入输出映射关系。<ul>
+<li>需要大量的数据training from scratch，数据获取代价大，尤其是针对机器人方面，需要人为控制得到一轮数据（较NLP与图像标注，代价更高）；</li>
+<li>泛化能力不够，由于数据量的限制，模型大小也受限，对应的语义理解，图像理解能力都只在特定的数据集获得较高的成绩。导致迁移能力也较弱，对于新任务的学习，开销较大。</li>
+</ul>
+</li>
+<li><strong>强化学习</strong>：强化学习属于控制的另一条路线，主要难点还是在于仿真环境以及奖励的设置。</li>
+<li><strong>VLA(Vision Language Action model)</strong>:更为<strong>端到端</strong>的多模态深度学习模型，综合视觉，语言以及机器人控制信息。旨在利用<strong>外部感知输入</strong>以及控制指令，实现闭环控制。回答问什么是VLA<ul>
+<li><strong>端到端的设计</strong>，结构简单。目前主流的CV或者NLP，都尽量避免其他组件的干扰结构，例如Vit提出之时，即使CNN提取特征保留<strong>局部不变性</strong>，<strong>平移不变性</strong>等归纳偏置可以提升transformer效果，但为了保持结构的一致性，依然只采用纯transformer结构。</li>
+<li><strong>模块化设计</strong>，通过<strong>SigLIP</strong>提取高级的语义信息，<strong>DIno V2</strong> 提取底层的空间信息，LLama大预言模型进行信息的整合。三个组件都基于纯transformer架构，可以依靠CV以及NLP领域的发展，直接提升控制方向的性能。</li>
+<li><strong>自监督学习的趋势</strong>：目前主流的大模型发展下，数据的获取标注代价过大，提升模型的语言理解，图像理解能力依靠监督学习难以进一步提升。VLA中的<strong>DinoV2</strong>以及<strong>SigLIP</strong>都采用自监督的方式，进行文本以及图像的理解。</li>
+<li><strong>便于微调</strong>：采用Internet-scale 数据集预训练好的组件，可以极大地降低训练成本。</li>
+</ul>
+</li>
+</ul>
+<p align="center">
+  <img src="../images/2.png" alt="" width="80%">
+</p>
+
+<h3 id="Motivation-of-OpenVLA"><a href="#Motivation-of-OpenVLA" class="headerlink" title="Motivation of OpenVLA"></a>Motivation of OpenVLA</h3><p>考虑到从头训练困难，由此考虑fine-tune下的控制模型训练。目前VLA模型难点：</p>
+<ul>
+<li>不开源</li>
+<li>针对性比较强，没有考虑new task下的fine-tuning</li>
+</ul>
+<h3 id="Model-structure"><a href="#Model-structure" class="headerlink" title="Model structure"></a>Model structure</h3><p align="center">
+  <img src="../images/2.png" alt="" width="80%">
+</p>
+
+
+<p><strong>主体结构</strong>是<strong>Llama2 7b</strong>模型，然后fuse 从<strong>DinoV2</strong>以及<strong>SigLIP</strong>模型得到的预训练特征。<strong>visiual encoder</strong> = DINIv2+SigLIP;</p>
+<ul>
+<li><p>SigLIP 与CLIP类似，通过图文数据对学习，对齐语言与图像，提供了<strong>language grounding abilities</strong>。自监督学习框架使得transformer获取大数据，并进一步得到超越监督学习性能成为可能。所以SigLIP 提供给LLama2 的，可以理解为<strong>输入图像的语义特征（semantic features）</strong></p>
+<p align="center">
+  <img src=".assets/3.png" alt="" width="60%">
+</p></li>
+<li><p>DinoV2本质上与Vit类似，只是没有针对特定的分类或者检测框架，利用自监督学习图像的特征表示；通过自蒸馏以及图像裁剪的方法训练特征提取网络；DinoV2提供给LLama2 的，可以理解为<strong>图像的空间特征（spatial features）</strong></p>
+</li>
+</ul>
+<p align="center">
+  <img src="../images/2.gif" alt="" width="60%">
+</p>
+
+
+<ul>
+<li><p>输入给LLama2的除了上述两部分信息，还有prompt信息，例如“message=f”What action should the robot take to {instruction.lower()}?”。 通过上述分析，可以发现<strong>SigLIP以及DinoV2提供的图像特征是完全不同的</strong>，其网络的设计出发点也不同，这也解释了为何联合使用会得到更好的效果。二者的联合是有依据的，而不是单纯的堆叠。以往的CNN中特征融合通常是融合浅层纹理特征与深层语义信息，不过此处由于DinoV2的训练规模，已经单个模型便已经提供了足够丰富的空间特征信息。</p>
+</li>
+<li><p>机械臂输出七个维度控制量，虽然图中写作Δ形式，但是文中处理离散化动作得到256个离散动作，似乎输出的就是动作而不是动作的变化量：<br>$$<br>7 ~ \textrm{DoF} \rightarrow (\Delta \textrm{x},\Delta \textrm{y},\Delta \textrm{z}<del>|</del>\Delta  \theta_{x},\Delta  \theta_{y},\Delta  \theta_{z}<del>|</del>\Delta \textrm{Grip})<br>$$</p>
+</li>
+</ul>
+<h3 id="Contributions-of-OpenVLA"><a href="#Contributions-of-OpenVLA" class="headerlink" title="Contributions of OpenVLA"></a>Contributions of OpenVLA</h3><ul>
+<li>发布开源代码以及训练的checkpoint以及调试过程；</li>
+<li>OpenVLA在大数据集<strong>Open X-Embodiment dataset</strong>上预训练，得到了SOTA的控制效果，虽然在一些简单任务上并不是最好的，但是在复杂任务下的泛化能力更好。最后实验表明，相比于其他模型，在绝对任务成功率方面（29个task）。参数少了7倍。对比从零模仿学习的学习的模型，提升更明显。</li>
+<li>在计算效率方面，验证<strong>Lora</strong>方法以及<strong>模型量化（bfloat16&amp;int4）</strong> 方法的有效性，方法虽然不是本文提出的，但是也是第一次得到验证；实现了消费机gpu上的运行，且没有严重影响推理性能；</li>
+<li>消融实验得到的一些额外结论：例如：<ul>
+<li>训练阶段是否冻结visual encoder；    A: No</li>
+<li>是否需要多个epoch？                          A: Yes</li>
+<li>SigLIP融合DinoV2 是否有效？            A:Yes</li>
+<li>大规模机器人数据预训练是否有必要  A :Yes</li>
+<li>高分辨率是否有利于控制 ?                   A:No</li>
+</ul>
+</li>
+</ul>
+<h3 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h3><p>目前的针对视觉和文本的模型，都有很强的迁移能力（CLIP, SigLIP, and Llama 2 ）主要原因是互联网级别的数据量。对于机器人控制而言，这样的数据量太难了,一般是100k-1M级别。这种不均衡性引出了本文思路，用其他大模型作为核心building block去提升控制模型泛化能力。用视觉或者语言大模型辅助实现 robotic representation learning。</p>
+<ul>
+<li><p>OpenVLA 使用了多个<strong>预训练模型组件</strong>：SigLIP 和 DinoV2 视觉编码器，以及 Llama 2 语言模型作为主干。对于这三个模型，它们的权重是公开的，但它们的训练数据和代码并未公开。本文发布了 OpenVLA 的训练数据、代码以及在这些组件基础上的模型权重。组件的训练过程本文其实是不讨论的。</p>
+</li>
+<li><p>使用<strong>更大的Open-X Embodiment 数据集</strong>，并且进行全零数据的剔除清洗，提升数据集的质量；只考虑单臂机械臂，至少有一个第三人称视角的图像数据；并且不同的数据集设置 data misture weights ；</p>
+</li>
+</ul>
+<h4 id="泛化能力对比："><a href="#泛化能力对比：" class="headerlink" title="泛化能力对比："></a>泛化能力对比：</h4><p><strong>视觉泛化</strong>，<strong>运动泛化</strong>，<strong>物理泛化</strong>，<strong>语义泛化</strong>。希望实现开箱即用。</p>
+<p align="center">
+  <img src=".assets/5.png" alt="" width="75%">
+</p>
+正如之前所说，由于大量机器人数据的训练，OpenVLA在大多数任务里都取得了很好的成绩。唯一不占优势的就是Semantic Generallization。
+
+<p>仅仅利用机械臂数据进行<strong>Visually-Conditioned Language Models（VLMs）</strong> 到VLA的微调，而没有进行文本图像的联合调整，故而在一些对比中语义能力不如RT-2-X(55B), 本身本文的7B模型也不算特别大，在语义泛化方面会稍弱一些。在一些实验中，OpenVLA弱于其他模型，更像是LLama本身能力限制导致的。当然，训练过程中只考虑了机械臂数据，而不是Internet pretraining data和机械臂数据联调，也会对语义，图像理解能力有影响。但后者对于训练的难度更大，设置也更复杂。</p>
+<p align="center">
+  <img src=".assets/4.png" alt="" width="80%">
+</p>
+#### Fine-tune能力对比：
+
+<p>微调过程中，每个任务都只有10-150条演示数据。相比于Open X-Embodiment dataset的970K，非常少的数据量。</p>
+<p align="center">
+  <img src=".assets/6.png" alt="" width="80%">
+</p>
+模仿学习的方法（Diffusion Policy）在简单任务里确实取得了较好的效果，不过在复杂任务里效果欠佳，缺少泛化能力；而考虑微调的Octo和OpenVLA泛化能力上取得了不错的效果，虽然简单任务上效果甚至不如模仿学习。Diffusion policy由于用了滑动窗口机制，一次输出可以重复使用很多次，输出更为平滑而且对其求解频率要求也会更低。相比之下Diffusion policy matched由于只预测一次动作，连续性上降低，导致效果变差（作者没有提供相关的视频）。
+
+<p>相比于别的方法，OpenVLA实际上在微调方面优势没有很明显，虽然总体上比较高，但是其他模型也在一些方面有很高的水平。</p>
+<p align="center">
+  <img src=".assets/10.png" alt="" width="90%">
+</p>
+#### Lora模型以及模型量化:
+
+<p>Lora方法不同rank=32与64差别不大，说明权重微调所需的参数实际上并不多。且控制效果上仅降低了1.5%</p>
+<p align="center">
+  <img src="../images/7.png" alt="" width="70%">
+</p>
+
+<p>由于硬件上的优化，bit8效果不是很好，因为求解频率太低了导致控制性能很差。int4和bfloat16都取得了不错的控制效果</p>
+<p align="center">
+  <img src="../images/8.png" alt="" width="80%">
+</p>
+
+<h3 id="Questions"><a href="#Questions" class="headerlink" title="Questions"></a>Questions</h3><ul>
+<li><p>动作空间离散化，虽然文中对于0动作单独进行了处理，但是依然可以看到控制存在抖动，离散化的控制依然存在问题。角度方向对于不同的执行器范围是相同的，但是位置差距会很大，例如xyz方向划分为0-255然后归一化到0-1，但是如果机械臂的体型变化过大，是否会有问题？</p>
+</li>
+<li><p>预测动作采用自回归形式，给定prompt，例如“What should the robot do to {task}? A:”，之后添加BOS进行自回归，构建的数据集类似“What should the robot do to {task}? A:[BOS] 0.1 0.1 0.3 0.2 0.3 0.1 0.7 [EOS]”，但是七个维度的动作本质上不是关联的，用自回归的形式确实方便训练以及代码编写，但是对于推理而言，这种处理不太符合逻辑。</p>
+</li>
+<li><p>OpenVLA中，不像其他一些模型，输入是单张图像，这就导致前后时刻的预测独立，缺乏连续性。挑选了一些比较明显的带有抖动的视频：</p>
+<div style="display: flex; justify-content: center; gap: 5px;">
+  <video src="./../images/base_vlm--flip_pot_upright.mp4" width="75%" poster="" controls></video>
+  <video src="./../images/openvla--put_carrot.mp4" width="75%" poster="" controls></video>
+</div>
+
+<p>大多数时候，本身轨迹是连续的（归纳偏执），其他论文例如目标检测中。</p>
+<ul>
+<li>预处理：模型输入修改为<strong>连续图像序列</strong>，或者保留一段前面控制序列的特征向量信息；</li>
+<li>后处理：例如目标检测中<strong>EKF</strong>或者动量法，去处理视频中目标检测框图抖动问题；</li>
+</ul>
+</li>
+<li><p>实验表现的泛化能力较弱，例如下列两个任务：Bowl 和Plate都是训练集里见过的，Carrot没有见过，就导致最终实验失败。</p>
+<p align="center">
+  <img src=".assets/9.png" alt="" width="80%">
+</p></li>
+</ul>
+<p>  并且实物实验由于成本，时间限制，次数太少，计算的success rate 波动过大，参考价值较纯NLP或者视觉而言，一些指标参考价值较低。</p>
+<ul>
+<li><p>能否如CLIP中所示，简单的设计prompt即可获得较大的提升，“Put eggplant in bowl”，可以分解为，“Move to eggplant”, “lift eggplant”,  “Move to bowl”,  “put eggplant”；类似语言模型prompt处理数学推理时，think step by setp。相比于NLP领域的能力，VLAs有时候即使简单的修改物体的颜色或者抓取物体的种类，就导致完全不一样的结果，泛化能力方面仍然有很大的提升空间。</p>
+<p align="center">
+  <img src="../images/1.png" alt="prompt 工程和 Ensemble 对 Zero-Shot 性能的影响" width="60%">
+</p></li>
+<li><p>如何理解消融实验中的，图像大小的修改，对于控制性能的影响甚微。是因为控制任务相比于图像分割这种像素级别粒度的任务，对于图像的特征精细度要求更低吗？</p>
+</li>
+</ul>
+<h2 id="Appendix"><a href="#Appendix" class="headerlink" title="Appendix"></a>Appendix</h2><h3 id="CLIP与SigLIP"><a href="#CLIP与SigLIP" class="headerlink" title="CLIP与SigLIP"></a>CLIP与SigLIP</h3><p align="center">
+  <img src="../images/3.png" alt="" width="60%">
+</p>
+
+
+
+<p>二者实际上网络结构都一样，区别在于损失函数的设置；CLIP将损失函数视为N个类的多分类交叉熵；二SigMIP视为N个二分类问题。</p>
+<p>学习两个网络，Image encoder以及Text encoder，网络的输出是语言以及图像的特征向量表示，映射到语义空间。目的主要是两个：</p>
+<ul>
+<li>首先是将语言以及图像都进行投影，投影到语义空间中；</li>
+<li>其次，对齐语言与图像，在特征空间中对齐二者之间的投影距离。越接近说明图像和文本越相似；</li>
+</ul>
+<p>所以最终的两个网络的输出都是一个向量，图像encoder不一定要用transformer，也可以是resnet之类的cnn网络，作者都进行了对比，但主流的方向还是统一结构，用transformer进行所有任务特征提取以及表示。</p>
+<h3 id="DINO-ICCV-2021-FacebookAI-amp-DINOv2"><a href="#DINO-ICCV-2021-FacebookAI-amp-DINOv2" class="headerlink" title="DINO [ICCV 2021 FacebookAI] &amp; DINOv2"></a>DINO [ICCV 2021 FacebookAI] &amp; DINOv2</h3><blockquote>
+<p>paper: <a href="https://openaccess.thecvf.com/content/ICCV2021/papers/Caron_Emerging_Properties_in_Self-Supervised_Vision_Transformers_ICCV_2021_paper.pdf">Emerging Properties in Self-Supervised Vision Transformers</a></p>
+</blockquote>
+<p>从DINO的名字出发—— <strong>self-DIstillation with NO labels</strong>，我们可以得出 DINO是属于 <strong>无监督自蒸馏[^1]学习范式</strong> 的。Facebook 团队（现 meta AI)旨在探索<strong>基于transformer架构的视觉自监督模型来提取通用视觉特征</strong>。从最后实验结果上来说，<strong>DINO提取器确实优于 传统的CNN架构提取器，如 ResNet</strong>。</p>
+<hr>
+<p>DINO的模型架构如下图所示：</p>
+<p align="center">
+  <img src="../images/DINO.png" alt="" width="60%">
+</p>
+
+
+<ul>
+<li>输入同一张图片x，经过不同的数据增强手段（颜色扰动、高斯模糊、曝光、裁剪）等方式得到了 x1 , x2 。分别喂入到 学生模型和教师模型当中<ul>
+<li>裁剪有两种方式：局部裁剪，即裁剪的面积 小于 原始图像的 50% + 全局裁剪，即裁剪的面积大于原始图像50%</li>
+<li>学生模型接受 所有的增强。旨在鼓励 从 局部到全局的响应中，学生模型能从一个小的裁剪画面中推断出更广泛的上下文信息</li>
+<li>教师模型只接受 全局裁剪的信息</li>
+</ul>
+</li>
+<li>同时 为了避免模式崩溃问题，引入了 动量教师模型 以及 centering &amp; sharpening 这些trick<ul>
+<li>模式崩溃（mode collapse）问题：当教师模型和学生模型输出相同的 embedding // 分类信息时，此时 他们俩学习到的模型特征趋于一致，而此时在反向传播分类误差时，模型会偷懒只针对这几种数据特征进行学习，即 不关注了 数据分布的多样性，影响了模型的鲁棒性和泛化性。更学术的定义为 <strong>网络的学习过程中出现了多样性减少的现象。具体来说，当网络学习到一组特征表示时，往往会出现多个输入数据映射到相同的特征表示的情况，这就是所谓的模式崩塌。</strong></li>
+<li>所以 为了 防止 教师模型和学生模型沆瀣一气，引入了动量教师模型。具体来说就是，分类误差只在学生模型上反向传播，然后更新的权重 通过指数移动平均的方式 更新给 教师模型。这种方式的好处在于 教师模型能够 更好的关注 数据的整体分布（毕竟以往的学习到的数据分布还没有忘记）。</li>
+<li>其次 centering &amp; sharpening 的 trick，都是为了有效防止 模式崩溃<ul>
+<li>centering 类似 bn类似的归一化： 将教师模型的输出先经过EMA操作，然后减去 原始的输出 即 （ output -= EMA(output) ) , 数学意义上来说，将 输出的值 避免 陷入 softmax的饱和区，即 防止任何一种特征占据统治地位</li>
+<li>sharpening 其实 就是 在 softmax上引入了 temperature 系数，来强制模型将概率分布变得差异化。上一步的模型输出 经过 类似于 标准化的处理，那么本身数值将会缩小，那么 ，将会放大这些小差异，可以进一步引导学生模型了解哪些特征需要进一步强化。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>本身因为是 自蒸馏的范式，也就是其实 教师模型和学生模型是 同一个模型，论文也探究过 多种设置教师模型的方式：1。 直接copy学生模型当前的权重 ； 2. copy 上一个iteration的学生模型的权重；3. copy 上一个epoch的学生模型的权重；3. EMA方式动态更新教师模型的权重</li>
+</ul>
+<h3 id="Denoise-Diffusion-Probabilistic-Models-Berkeley-2020"><a href="#Denoise-Diffusion-Probabilistic-Models-Berkeley-2020" class="headerlink" title="Denoise Diffusion Probabilistic Models [Berkeley 2020]"></a>Denoise Diffusion Probabilistic Models [Berkeley 2020]</h3><blockquote>
+<p>Paper: <a href="https://arxiv.org/pdf/2006.11239">Denoising Diffusion Probabilistic Models</a></p>
+<p>Reference Blog: <a href="https://divertingpan.github.io/post/understanding_diffusion_models/">从统一的视角理解扩散模型 | 老潘家的潘老师</a></p>
+</blockquote>
+<p>我这里并不涉及具体的数学推导，旨在 以感性的角度深入理解DDPM，从而解密 DDPM是后续文生图类扩散模型框架的基石 的强大能力。</p>
+<p>那么，首先从生成模型开始聊聊。给定一个真实的数据分布$p(x)$，我们从中采样了很多样本$X={x_i}_{i=1}^{N}$，那么生成模型就是从这些样本$X$中，去拟合这个真实分布$p(x)$。那么，一旦学到了这个分布，我们就可以利用这个近似的模型来生成我们想要的新的样本。</p>
+<p>当我第一次看GAN时，接触到了 **latent space(隐空间) // latent variable $z$ (隐变量) // latent representation(隐表示) **等等概念，这些其实就是 生成模型如何去拟合真实分布$p(x)$的关键视角。一个直观的例子是 <strong>柏拉图的洞穴（Allegory of the cave)</strong></p>
+<h3 id="Deit"><a href="#Deit" class="headerlink" title="Deit"></a>Deit</h3><p>Deit本身也是一个VIT模型，但希望用更少的计算量实现类似的效果。VIT原始使用JFT300 （3亿张图片）,而Deit使用ImageNet进行监督学习。</p>
+<p align="center">
+  <img src="../images/11.png" alt="prompt 工程和 Ensemble 对 Zero-Shot 性能的影响" width="80%">
+</p>
+
+<p>首先训练一个teacher模型，比如cnn结构的。</p>
+<p align="center">
+  <img src="../images/12.png" alt="prompt 工程和 Ensemble 对 Zero-Shot 性能的影响" width="50%">
+</p>
+
+
+<p>进一步依靠自蒸馏的方法进行训练，本质上和提出自蒸馏的论文没有什么不一样。损失分为两部分，token预测损失以及与teacher输出label的交叉熵损失。由于教师模型输出不是one hot，实际上提供了更加丰富的信息，学习教师模型不容易过拟合。例如除了概率最高的那一维度输出，第二高的维度可能也有很高的概率，就说明这两个维度实际上有比较强的相关性。</p>
+<h3 id="Chain-of-thought"><a href="#Chain-of-thought" class="headerlink" title="Chain of thought"></a>Chain of thought</h3><p>思维链更多的是一种思想，例如用户在prompt中修改提示词即可获得更好的模型输出</p>
+<ul>
+<li>Q1:证明XXX;</li>
+<li>Q2: 先给一个类似的例子。证明XXX；</li>
+</ul>
+<p>相比于Q1，Q2通过更合适的prompt，可以使得模型输出更准确，其他的可以是prompt中添加“Think step by step”。这一点在训练的时候也可以提升效果，给出回答的模版，让模型依据模版进行回答。</p>
+<h3 id="GPT"><a href="#GPT" class="headerlink" title="GPT"></a>GPT</h3><blockquote>
+<p>参考链接：<a href="https://paddlepedia.readthedocs.io/en/latest/tutorials/pretrain_model/GPT.html">GPT — PaddleEdu documentation</a></p>
+</blockquote>
+<p align="center">
+  <img src=".assets/15.jpeg" alt="prompt 工程和 Ensemble 对 Zero-Shot 性能的影响" width="60%">
+</p>
+这里去掉了中间的交叉注意力机制，Decoder only与Encoder  only结构区别，在于多头注意力中，有没有用Masked，GPT的注意力实际上只关注之前的单词，对于后续的单词是没有办法注意到的，这种做法有好有坏。Bert这样的Encoder only结构，注意力中是具有全局注意力的。这也是最主要的差别。
+
+<h3 id="Bert"><a href="#Bert" class="headerlink" title="Bert"></a>Bert</h3><blockquote>
+<p>参考链接：<a href="https://paddlepedia.readthedocs.io/en/latest/tutorials/pretrain_model/bert.html">BERT — PaddleEdu documentation</a>，<a href="https://zhuanlan.zhihu.com/p/403495863">读懂BERT，看这一篇就够了 - 知乎</a></p>
+</blockquote>
+<p>Bert为Encoder only模型，输入结构没有任何变化，主要是输入输出以及代价函数的设置。</p>
+<p>输入为两个句子，中间用[SEP]分隔开，为了说明是两个句子，加入额外的embedding，也就是一个句子全1，一个句子全0，用于提供先验句子信息。添加MASK随机将单词替换为MASK，或者替换为别的任意单词，提高“完形填空”的能力。</p>
+<p align="center">
+  <img src="../images/13.png" alt="prompt 工程和 Ensemble 对 Zero-Shot 性能的影响" width="80%">
+</p>
+
+<p align="center">
+  <img src="../images/14.png" alt="prompt 工程和 Ensemble 对 Zero-Shot 性能的影响" width="80%">
+</p>
+
+
+
+<p>预训练过程如下，损失有两部分组成，一个是预测MASK掉的单词（MLM：Masked Language Model），依据概率分布，与GPT类似。另一个损失是完成NSP任务（NSP：Next setence prediction）</p>
+<p align="center">
+  <img src="../images/15.png" alt="prompt 工程和 Ensemble 对 Zero-Shot 性能的影响" width="80%">
+</p>
+
+
+
+<p>但实际上NSP损失影响不大，在后续的改进中去掉了这一部分，而且对于MASK的预测，如果两个句子无关，用一个句子去预测另一个句子的MASK实际上没有帮助，个人觉得这种结构理在直观理解上上会差一些。</p>
+<h3 id="OpenVLA与Coto，RT-X-2"><a href="#OpenVLA与Coto，RT-X-2" class="headerlink" title="OpenVLA与Coto，RT-X-2"></a>OpenVLA与Coto，RT-X-2</h3><p><strong>Visually-Conditioned Language Models</strong> （VLMs）：模型架构能够将预训练视觉编码器（如 SigLIP、DinoV2）与预训练语言模型（如 Llama、LLM 系列）的特征连接起来，直接借助计算机视觉和自然语言处理领域的进步，构建出强大的多模态模型。新的开源 VLMs 采用一种更简单的“<strong>patch-as-token</strong>”方法。将预训练视觉 Transformer 提取的图像块（patch）特征直接视为语言模型中的“token”，然后将其投影到语言模型的输入空间中，实现视觉与语言的融合处理。两步骤，而不是两个模型交叉注意力去融合信息。</p>
+<p>本文的VLMs参考Karamcheti，融合了来自 DINOv2 的低级空间信息和来自 SigLIP 的高级语义信息</p>
+<p><strong>Generalist Robot Policies</strong>:本文的方法架构和Notably, Octo等不一样，他们给定了训练好的视觉和语言模型，考虑从头训练网络学习如何“拼接”这两个模型。</p>
+<p>本文的方法相比之下更为端到端，<strong>将机器人动作视为语言模型词汇表中的 token</strong></p>
+<p>**Vision-Language-Action Models **：VLMs微调得到VLAs，一方面可以利用大量大模型信息。另一方面，无需特地为控制提出的架构。最后，可以在未来依靠VLMs的进步，提高控制性能。</p>
+<p>比RT-2-X 以及r state-of-the-art VLA,提升了16%。29个任务，机器人平台用的是 WidowX &amp; Google Robot embodiments。高效微调讨论了7种情况，比如擦桌子，抓放。和其他微调模型相比，比如Octo，本文的也更好。与从头训练的模型相比，</p>
+<h2 id="Annotation"><a href="#Annotation" class="headerlink" title="Annotation"></a>Annotation</h2><p>[^1]: 教师模型和学生模型都是同一个模型，自己教自己学习，故而称之为 自蒸馏</p>
+]]></content>
+      <categories>
+        <category>笔记</category>
+      </categories>
+      <tags>
+        <tag>VLA</tag>
+        <tag>Note</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Overview of Diffusion Models</title>
+    <url>/2025/07/01/Difussion%20Model%20-Lil&#39;s%20blog/</url>
+    <content><![CDATA[<h1 id="What-are-Diffusion-Models"><a href="#What-are-Diffusion-Models" class="headerlink" title="What are Diffusion Models?"></a>What are Diffusion Models?</h1><p>Date: July 11, 2021 | Estimated Reading Time: 31 min | Author: Lilian Weng</p>
+<details open="" style="box-sizing: border-box;"><summary accesskey="c" title="(Alt + C)" style="box-sizing: border-box; cursor: zoom-out; margin-inline-start: 20px;"><span class="details" style="box-sizing: border-box; display: inline; font-weight: 500;">Table of Contents</span></summary><div class="inner" style="box-sizing: border-box; margin: 0px 20px; padding: 10px 20px;"><ul style="box-sizing: border-box; padding: 0px; margin: 0px;"><li style="box-sizing: border-box;"><a href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#what-are-diffusion-models" aria-label="What are Diffusion Models?" style="box-sizing: border-box; color: rgb(30, 30, 30); text-decoration: none;">What are Diffusion Models?</a><ul style="box-sizing: border-box; padding: 0px; margin: 0px; margin-inline-start: 24px;"><li style="box-sizing: border-box;"><a href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#forward-diffusion-process" aria-label="Forward diffusion process" style="box-sizing: border-box; color: rgb(30, 30, 30); text-decoration: none;">Forward diffusion process</a><ul style="box-sizing: border-box; padding: 0px; margin: 0px; margin-inline-start: 24px;"><li style="box-sizing: border-box;"><a href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#connection-with-stochastic-gradient-langevin-dynamics" aria-label="Connection with stochastic gradient Langevin dynamics" style="box-sizing: border-box; color: rgb(30, 30, 30); text-decoration: none;">Connection with stochastic gradient Langevin dynamics</a></li></ul></li><li style="box-sizing: border-box;"><a href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#reverse-diffusion-process" aria-label="Reverse diffusion process" style="box-sizing: border-box; color: rgb(30, 30, 30); text-decoration: none;">Reverse diffusion process</a></li><li style="box-sizing: border-box;"><a href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#parameterization-of-l_t-for-training-loss" aria-label="Parameterization of $L_t$ for Training Loss" style="box-sizing: border-box; color: rgb(30, 30, 30); text-decoration: none;">Parameterization of $L_t$ for Training Loss</a><ul style="box-sizing: border-box; padding: 0px; margin: 0px; margin-inline-start: 24px;"><li style="box-sizing: border-box;"><a href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#simplification" aria-label="Simplification" style="box-sizing: border-box; color: rgb(30, 30, 30); text-decoration: none;">Simplification</a></li><li style="box-sizing: border-box;"><a href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#connection-with-noise-conditioned-score-networks-ncsn" aria-label="Connection with noise-conditioned score networks (NCSN)" style="box-sizing: border-box; color: rgb(30, 30, 30); text-decoration: none;">Connection with noise-conditioned score networks (NCSN)</a></li></ul></li><li style="box-sizing: border-box;"><a href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#parameterization-of-beta_t" aria-label="Parameterization of $\beta_t$" style="box-sizing: border-box; color: rgb(30, 30, 30); text-decoration: none;">Parameterization of $\beta_t$</a></li><li style="box-sizing: border-box;"><a href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#parameterization-of-reverse-process-variance-boldsymbolsigma_theta" aria-label="Parameterization of reverse process variance $\boldsymbol{\Sigma}_\theta$" style="box-sizing: border-box; color: rgb(30, 30, 30); text-decoration: none;">Parameterization of reverse process variance $\boldsymbol{\Sigma}_\theta$</a></li></ul></li><li style="box-sizing: border-box;"><a href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#conditioned-generation" aria-label="Conditioned Generation" style="box-sizing: border-box; color: rgb(30, 30, 30); text-decoration: none;">Conditioned Generation</a><ul style="box-sizing: border-box; padding: 0px; margin: 0px; margin-inline-start: 24px;"><li style="box-sizing: border-box;"><a href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#classifier-guided-diffusion" aria-label="Classifier Guided Diffusion" style="box-sizing: border-box; color: rgb(30, 30, 30); text-decoration: none;">Classifier Guided Diffusion</a></li><li style="box-sizing: border-box;"><a href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#classifier-free-guidance" aria-label="Classifier-Free Guidance" style="box-sizing: border-box; color: rgb(30, 30, 30); text-decoration: none;">Classifier-Free Guidance</a></li></ul></li><li style="box-sizing: border-box;"><a href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#speed-up-diffusion-models" aria-label="Speed up Diffusion Models" style="box-sizing: border-box; color: rgb(30, 30, 30); text-decoration: none;">Speed up Diffusion Models</a><ul style="box-sizing: border-box; padding: 0px; margin: 0px; margin-inline-start: 24px;"><li style="box-sizing: border-box;"><a href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#fewer-sampling-steps--distillation" aria-label="Fewer Sampling Steps &amp; Distillation" style="box-sizing: border-box; color: rgb(30, 30, 30); text-decoration: none;">Fewer Sampling Steps &amp; Distillation</a></li><li style="box-sizing: border-box;"><a href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#latent-variable-space" aria-label="Latent Variable Space" style="box-sizing: border-box; color: rgb(30, 30, 30); text-decoration: none;">Latent Variable Space</a></li></ul></li><li style="box-sizing: border-box;"><a href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#scale-up-generation-resolution-and-quality" aria-label="Scale up Generation Resolution and Quality" style="box-sizing: border-box; color: rgb(30, 30, 30); text-decoration: none;">Scale up Generation Resolution and Quality</a></li><li style="box-sizing: border-box;"><a href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#model-architecture" aria-label="Model Architecture" style="box-sizing: border-box; color: rgb(30, 30, 30); text-decoration: none;">Model Architecture</a></li><li style="box-sizing: border-box;"><a href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#quick-summary" aria-label="Quick Summary" style="box-sizing: border-box; color: rgb(30, 30, 30); text-decoration: none;">Quick Summary</a></li><li style="box-sizing: border-box;"><a href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#citation" aria-label="Citation" style="box-sizing: border-box; color: rgb(30, 30, 30); text-decoration: none;">Citation</a></li><li style="box-sizing: border-box;"><a href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#references" aria-label="References" style="box-sizing: border-box; color: rgb(30, 30, 30); text-decoration: none;">References</a></li></ul></div></details>
+
+<p>[Updated on 2021-09-19: Highly recommend this blog post on <a href="https://yang-song.github.io/blog/2021/score/">score-based generative modeling</a> by Yang Song (author of several key papers in the references)].<br>[Updated on 2022-08-27: Added <a href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#classifier-free-guidance">classifier-free guidance</a>, <a href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#glide">GLIDE</a>, <a href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#unclip">unCLIP</a> and <a href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#imagen">Imagen</a>.<br>[Updated on 2022-08-31: Added <a href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#ldm">latent diffusion model</a>.<br>[Updated on 2024-04-13: Added <a href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#prog-distll">progressive distillation</a>, <a href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#consistency">consistency models</a>, and the <a href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#model-architecture">Model Architecture section</a>.</p>
+<p>So far, I’ve written about three types of generative models, <a href="https://lilianweng.github.io/posts/2017-08-20-gan/">GAN</a>, <a href="https://lilianweng.github.io/posts/2018-08-12-vae/">VAE</a>, and <a href="https://lilianweng.github.io/posts/2018-10-13-flow-models/">Flow-based</a> models. They have shown great success in generating high-quality samples, but each has some limitations of its own. GAN models are known for potentially unstable training and less diversity in generation due to their adversarial training nature. VAE relies on a surrogate loss. Flow models have to use specialized architectures to construct reversible transform.<span id="more"></span> </p>
+<p>Diffusion models are inspired by non-equilibrium 热力学. They define a Markov chain of diffusion steps to slowly add random noise to data and then learn to reverse the diffusion process to construct desired data samples from the noise. Unlike VAE or flow models, diffusion models are learned with a fixed procedure and the latent variable has high dimensionality (same as the original data).</p>
+<p><img src="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/generative-overview.png" alt="img">Overview of different types of generative models.</p>
+<h1 id="What-are-Diffusion-Models-1"><a href="#What-are-Diffusion-Models-1" class="headerlink" title="What are Diffusion Models?"></a>What are Diffusion Models?</h1><p>Several diffusion-based generative models have been proposed with similar ideas underneath, including <em>diffusion probabilistic models</em> (<a href="https://arxiv.org/abs/1503.03585">Sohl-Dickstein et al., 2015</a>), <em>noise-conditioned score network</em> (<strong>NCSN</strong>; <a href="https://arxiv.org/abs/1907.05600">Yang &amp; Ermon, 2019</a>), and <em>denoising diffusion probabilistic models</em> (<strong>DDPM</strong>; <a href="https://arxiv.org/abs/2006.11239">Ho et al. 2020</a>).</p>
+<h2 id="Forward-diffusion-process"><a href="#Forward-diffusion-process" class="headerlink" title="Forward diffusion process"></a>Forward diffusion process</h2><p>Given a data point sampled from a real data distribution $\mathbf{x}_0 \sim q(\mathbf{x})$, let us define a <em>forward diffusion process</em> in which we add small amount of Gaussian noise to the sample in $T$ steps, producing a sequence of noisy samples $\mathbf{x}_1, \dots, \mathbf{x}<em>T$. The step sizes are controlled by a variance schedule ${\beta_t \in (0, 1)}</em>{t=1}^T$.</p>
+<p>$$ q(\mathbf{x}<em>t \vert \mathbf{x}</em>{t-1}) = \mathcal{N}(\mathbf{x}<em>t; \sqrt{1 - \beta_t} \mathbf{x}</em>{t-1}, \beta_t\mathbf{I}) \quad q(\mathbf{x}_{1:T} \vert \mathbf{x}<em>0) = \prod^T</em>{t=1} q(\mathbf{x}<em>t \vert \mathbf{x}</em>{t-1}) $$</p>
+<p>The data sample $\mathbf{x}_0$ gradually loses its distinguishable features as the step $t$ becomes larger. Eventually when $T \to \infty$, $\mathbf{x}_T$ is equivalent to an isotropic Gaussian distribution.</p>
+<p><img src="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/DDPM.png" alt="img">The Markov chain of forward (reverse) diffusion process of generating a sample by slowly adding (removing) noise. (Image source: <a href="https://arxiv.org/abs/2006.11239">Ho et al. 2020</a> with a few additional annotations)</p>
+<p>A nice property of the above process is that we can sample $\mathbf{x}_t$ at any arbitrary time step $t$ in a closed form using <a href="https://lilianweng.github.io/posts/2018-08-12-vae/#reparameterization-trick">reparameterization trick</a>. Let $\alpha_t = 1 - \beta_t$ and $\bar{\alpha}<em>t = \prod</em>{i=1}^t \alpha_i$:</p>
+<p>$$ \begin{aligned} \mathbf{x}<em>t &amp;= \sqrt{\alpha_t}\mathbf{x}</em>{t-1} + \sqrt{1 - \alpha_t}\boldsymbol{\epsilon}<em>{t-1} &amp; \text{ ;where } \boldsymbol{\epsilon}</em>{t-1}, \boldsymbol{\epsilon}<em>{t-2}, \dots \sim \mathcal{N}(\mathbf{0}, \mathbf{I}) \ &amp;= \sqrt{\alpha_t \alpha</em>{t-1}} \mathbf{x}<em>{t-2} + \sqrt{1 - \alpha_t \alpha</em>{t-1}} \bar{\boldsymbol{\epsilon}}<em>{t-2} &amp; \text{ ;where } \bar{\boldsymbol{\epsilon}}</em>{t-2} \text{ merges two Gaussians (*).} \ &amp;= \dots \ &amp;= \sqrt{\bar{\alpha}_t}\mathbf{x}_0 + \sqrt{1 - \bar{\alpha}_t}\boldsymbol{\epsilon} \ q(\mathbf{x}_t \vert \mathbf{x}_0) &amp;= \mathcal{N}(\mathbf{x}_t; \sqrt{\bar{\alpha}_t} \mathbf{x}_0, (1 - \bar{\alpha}_t)\mathbf{I}) \end{aligned} $$</p>
+<p>(*) Recall that when we merge two Gaussians with different variance, $\mathcal{N}(\mathbf{0}, \sigma_1^2\mathbf{I})$ and $\mathcal{N}(\mathbf{0}, \sigma_2^2\mathbf{I})$, the new distribution is $\mathcal{N}(\mathbf{0}, (\sigma_1^2 + \sigma_2^2)\mathbf{I})$. Here the merged standard deviation is $\sqrt{(1 - \alpha_t) + \alpha_t (1-\alpha_{t-1})} = \sqrt{1 - \alpha_t\alpha_{t-1}}$.</p>
+<p>Usually, we can afford a larger update step when the sample gets noisier, so $\beta_1 &lt; \beta_2 &lt; \dots &lt; \beta_T$ and therefore $\bar{\alpha}_1 &gt; \dots &gt; \bar{\alpha}_T$.</p>
+<h3 id="Connection-with-stochastic-gradient-Langevin-dynamics"><a href="#Connection-with-stochastic-gradient-Langevin-dynamics" class="headerlink" title="Connection with stochastic gradient Langevin dynamics"></a>Connection with stochastic gradient Langevin dynamics</h3><p>Langevin dynamics is a concept from physics, developed for statistically modeling molecular systems. Combined with stochastic gradient descent, <em>stochastic gradient Langevin dynamics</em> (<a href="https://www.stats.ox.ac.uk/~teh/research/compstats/WelTeh2011a.pdf">Welling &amp; Teh 2011</a>) can produce samples from a probability density $p(\mathbf{x})$ using only the gradients $\nabla_\mathbf{x} \log p(\mathbf{x})$ in a Markov chain of updates:</p>
+<p>$$ \mathbf{x}<em>t = \mathbf{x}</em>{t-1} + \frac{\delta}{2} \nabla_\mathbf{x} \log p(\mathbf{x}_{t-1}) + \sqrt{\delta} \boldsymbol{\epsilon}_t ,\quad\text{where } \boldsymbol{\epsilon}_t \sim \mathcal{N}(\mathbf{0}, \mathbf{I}) $$</p>
+<p>where $\delta$ is the step size. When $T \to \infty, \epsilon \to 0$, $\mathbf{x}_T$ equals to the true probability density $p(\mathbf{x})$.</p>
+<p>Compared to standard SGD, stochastic gradient Langevin dynamics injects Gaussian noise into the parameter updates to avoid collapses into local minima.</p>
+<h2 id="Reverse-diffusion-process"><a href="#Reverse-diffusion-process" class="headerlink" title="Reverse diffusion process"></a>Reverse diffusion process</h2><p>If we can reverse the above process and sample from $q(\mathbf{x}_{t-1} \vert \mathbf{x}_t)$, we will be able to recreate the true sample from a Gaussian noise input, $\mathbf{x}<em>T \sim \mathcal{N}(\mathbf{0}, \mathbf{I})$. Note that if $\beta_t$ is small enough, $q(\mathbf{x}</em>{t-1} \vert \mathbf{x}<em>t)$ will also be Gaussian. Unfortunately, we cannot easily estimate $q(\mathbf{x}</em>{t-1} \vert \mathbf{x}_t)$ because it needs to use the entire dataset and therefore we need to learn a model $p_\theta$ to approximate these conditional probabilities in order to run the <em>reverse diffusion process</em>.</p>
+<p>$$ p_\theta(\mathbf{x}<em>{0:T}) = p(\mathbf{x}<em>T) \prod^T</em>{t=1} p_\theta(\mathbf{x}</em>{t-1} \vert \mathbf{x}<em>t) \quad p_\theta(\mathbf{x}</em>{t-1} \vert \mathbf{x}<em>t) = \mathcal{N}(\mathbf{x}</em>{t-1}; \boldsymbol{\mu}_\theta(\mathbf{x}_t, t), \boldsymbol{\Sigma}_\theta(\mathbf{x}_t, t)) $$</p>
+<p><img src="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/diffusion-example.png" alt="img">An example of training a diffusion model for modeling a 2D swiss roll data. (Image source: <a href="https://arxiv.org/abs/1503.03585">Sohl-Dickstein et al., 2015</a>)</p>
+<p>It is noteworthy that the reverse conditional probability is tractable when conditioned on $\mathbf{x}_0$:</p>
+<p>$$ q(\mathbf{x}_{t-1} \vert \mathbf{x}_t, \mathbf{x}<em>0) = \mathcal{N}(\mathbf{x}</em>{t-1}; \color{blue}{\tilde{\boldsymbol{\mu}}}(\mathbf{x}_t, \mathbf{x}_0), \color{red}{\tilde{\beta}_t} \mathbf{I}) $$</p>
+<p>Using Bayes’ rule, we have:</p>
+<p>$$ \begin{aligned} q(\mathbf{x}_{t-1} \vert \mathbf{x}_t, \mathbf{x}_0) &amp;= q(\mathbf{x}<em>t \vert \mathbf{x}</em>{t-1}, \mathbf{x}<em>0) \frac{ q(\mathbf{x}</em>{t-1} \vert \mathbf{x}_0) }{ q(\mathbf{x}<em>t \vert \mathbf{x}<em>0) } \ &amp;\propto \exp \Big(-\frac{1}{2} \big(\frac{(\mathbf{x}<em>t - \sqrt{\alpha_t} \mathbf{x}</em>{t-1})^2}{\beta_t} + \frac{(\mathbf{x}</em>{t-1} - \sqrt{\bar{\alpha}</em>{t-1}} \mathbf{x}<em>0)^2}{1-\bar{\alpha}</em>{t-1}} - \frac{(\mathbf{x}_t - \sqrt{\bar{\alpha}<em>t} \mathbf{x}<em>0)^2}{1-\bar{\alpha}<em>t} \big) \Big) \ &amp;= \exp \Big(-\frac{1}{2} \big(\frac{\mathbf{x}<em>t^2 - 2\sqrt{\alpha_t} \mathbf{x}<em>t \color{blue}{\mathbf{x}</em>{t-1}} \color{black}{+ \alpha_t} \color{red}{\mathbf{x}</em>{t-1}^2} }{\beta_t} + \frac{ \color{red}{\mathbf{x}</em>{t-1}^2} \color{black}{- 2 \sqrt{\bar{\alpha}</em>{t-1}} \mathbf{x}<em>0} \color{blue}{\mathbf{x}</em>{t-1}} \color{black}{+ \bar{\alpha}</em>{t-1} \mathbf{x}<em>0^2} }{1-\bar{\alpha}</em>{t-1}} - \frac{(\mathbf{x}_t - \sqrt{\bar{\alpha}<em>t} \mathbf{x}<em>0)^2}{1-\bar{\alpha}<em>t} \big) \Big) \ &amp;= \exp\Big( -\frac{1}{2} \big( \color{red}{(\frac{\alpha_t}{\beta_t} + \frac{1}{1 - \bar{\alpha}</em>{t-1}})} \mathbf{x}</em>{t-1}^2 - \color{blue}{(\frac{2\sqrt{\alpha_t}}{\beta_t} \mathbf{x}<em>t + \frac{2\sqrt{\bar{\alpha}</em>{t-1}}}{1 - \bar{\alpha}</em>{t-1}} \mathbf{x}<em>0)} \mathbf{x}</em>{t-1} \color{black}{ + C(\mathbf{x}_t, \mathbf{x}_0) \big) \Big)} \end{aligned} $$</p>
+<p>where $C(\mathbf{x}_t, \mathbf{x}<em>0)$ is some function not involving $\mathbf{x}</em>{t-1}$ and details are omitted. Following the standard Gaussian density function, the mean and variance can be parameterized as follows (recall that $\alpha_t = 1 - \beta_t$ and $\bar{\alpha}<em>t = \prod</em>{i=1}^t \alpha_i$):</p>
+<p>$$ \begin{aligned} \tilde{\beta}<em>t &amp;= 1/(\frac{\alpha_t}{\beta_t} + \frac{1}{1 - \bar{\alpha}</em>{t-1}}) = 1/(\frac{\alpha_t - \bar{\alpha}<em>t + \beta_t}{\beta_t(1 - \bar{\alpha}</em>{t-1})}) = \color{green}{\frac{1 - \bar{\alpha}_{t-1}}{1 - \bar{\alpha}_t} \cdot \beta_t} \ \tilde{\boldsymbol{\mu}}_t (\mathbf{x}<em>t, \mathbf{x}<em>0) &amp;= (\frac{\sqrt{\alpha_t}}{\beta_t} \mathbf{x}<em>t + \frac{\sqrt{\bar{\alpha}</em>{t-1} }}{1 - \bar{\alpha}</em>{t-1}} \mathbf{x}<em>0)/(\frac{\alpha_t}{\beta_t} + \frac{1}{1 - \bar{\alpha}</em>{t-1}}) \ &amp;= (\frac{\sqrt{\alpha_t}}{\beta_t} \mathbf{x}<em>t + \frac{\sqrt{\bar{\alpha}</em>{t-1} }}{1 - \bar{\alpha}</em>{t-1}} \mathbf{x}<em>0) \color{green}{\frac{1 - \bar{\alpha}</em>{t-1}}{1 - \bar{\alpha}<em>t} \cdot \beta_t} \ &amp;= \frac{\sqrt{\alpha_t}(1 - \bar{\alpha}</em>{t-1})}{1 - \bar{\alpha}_t} \mathbf{x}<em>t + \frac{\sqrt{\bar{\alpha}</em>{t-1}}\beta_t}{1 - \bar{\alpha}_t} \mathbf{x}_0\ \end{aligned} $$</p>
+<p>Thanks to the <a href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#nice">nice property</a>, we can represent $\mathbf{x}_0 = \frac{1}{\sqrt{\bar{\alpha}_t}}(\mathbf{x}_t - \sqrt{1 - \bar{\alpha}_t}\boldsymbol{\epsilon}_t)$ and plug it into the above equation and obtain:</p>
+<p>这一步是为了得到均值的表达式，x0和xt以及方差的表达式，上一段直接就给出了。</p>
+<p>$$ \begin{aligned} \tilde{\boldsymbol{\mu}}<em>t &amp;= \frac{\sqrt{\alpha_t}(1 - \bar{\alpha}</em>{t-1})}{1 - \bar{\alpha}_t} \mathbf{x}<em>t + \frac{\sqrt{\bar{\alpha}</em>{t-1}}\beta_t}{1 - \bar{\alpha}_t} \frac{1}{\sqrt{\bar{\alpha}_t}}(\mathbf{x}_t - \sqrt{1 - \bar{\alpha}_t}\boldsymbol{\epsilon}_t) \ &amp;= \color{cyan}{\frac{1}{\sqrt{\alpha_t}} \Big( \mathbf{x}_t - \frac{1 - \alpha_t}{\sqrt{1 - \bar{\alpha}_t}} \boldsymbol{\epsilon}_t \Big)} \end{aligned} $$</p>
+<p>As demonstrated in Fig. 2., such a setup is very similar to <a href="https://lilianweng.github.io/posts/2018-08-12-vae/">VAE</a> and thus we can use the variational lower bound to optimize the negative log-likelihood.<strong>可以用变分下界优化负对数似然</strong></p>
+<p>$$ \begin{aligned} - \log p_\theta(\mathbf{x}<em>0) &amp;\leq - \log p_\theta(\mathbf{x}<em>0) + D_\text{KL}(q(\mathbf{x}</em>{1:T}\vert\mathbf{x}<em>0) | p_\theta(\mathbf{x}</em>{1:T}\vert\mathbf{x}<em>0) ) &amp; \small{\text{; KL is non-negative}}\ &amp;= - \log p_\theta(\mathbf{x}<em>0) + \mathbb{E}</em>{\mathbf{x}</em>{1:T}\sim q(\mathbf{x}</em>{1:T} \vert \mathbf{x}<em>0)} \Big[ \log\frac{q(\mathbf{x}</em>{1:T}\vert\mathbf{x}<em>0)}{p_\theta(\mathbf{x}</em>{0:T}) / p_\theta(\mathbf{x}<em>0)} \Big] \ &amp;= - \log p_\theta(\mathbf{x}<em>0) + \mathbb{E}<em>q \Big[ \log\frac{q(\mathbf{x}</em>{1:T}\vert\mathbf{x}<em>0)}{p_\theta(\mathbf{x}</em>{0:T})} + \log p_\theta(\mathbf{x}<em>0) \Big] \ &amp;= \mathbb{E}<em>q \Big[ \log \frac{q(\mathbf{x}</em>{1:T}\vert\mathbf{x}<em>0)}{p_\theta(\mathbf{x}</em>{0:T})} \Big] \ \text{Let }L_\text{VLB} &amp;= \mathbb{E}</em>{q(\mathbf{x}</em>{0:T})} \Big[ \log \frac{q(\mathbf{x}</em>{1:T}\vert\mathbf{x}<em>0)}{p_\theta(\mathbf{x}</em>{0:T})} \Big] \geq - \mathbb{E}_{q(\mathbf{x}_0)} \log p_\theta(\mathbf{x}_0) \end{aligned} $$</p>
+<p>It is also straightforward to get the same result using Jensen’s inequality. Say we want to minimize the cross entropy as the learning objective, 将交叉熵作为学习目标，发现交叉熵小于之前的变分下界</p>
+<p>$$ \begin{aligned} L_\text{CE} &amp;= - \mathbb{E}<em>{q(\mathbf{x}<em>0)} \log p_\theta(\mathbf{x}<em>0) \ &amp;= - \mathbb{E}</em>{q(\mathbf{x}<em>0)} \log \Big( \int p_\theta(\mathbf{x}</em>{0:T}) d\mathbf{x}</em>{1:T} \Big) \ &amp;= - \mathbb{E}</em>{q(\mathbf{x}<em>0)} \log \Big( \int q(\mathbf{x}</em>{1:T} \vert \mathbf{x}<em>0) \frac{p_\theta(\mathbf{x}</em>{0:T})}{q(\mathbf{x}<em>{1:T} \vert \mathbf{x}</em>{0})} d\mathbf{x}<em>{1:T} \Big) \ &amp;= - \mathbb{E}</em>{q(\mathbf{x}<em>0)} \log \Big( \mathbb{E}</em>{q(\mathbf{x}<em>{1:T} \vert \mathbf{x}<em>0)} \frac{p_\theta(\mathbf{x}</em>{0:T})}{q(\mathbf{x}</em>{1:T} \vert \mathbf{x}<em>{0})} \Big) \ &amp;\leq - \mathbb{E}</em>{q(\mathbf{x}<em>{0:T})} \log \frac{p_\theta(\mathbf{x}</em>{0:T})}{q(\mathbf{x}<em>{1:T} \vert \mathbf{x}</em>{0})} \ &amp;= \mathbb{E}<em>{q(\mathbf{x}</em>{0:T})}\Big[\log \frac{q(\mathbf{x}<em>{1:T} \vert \mathbf{x}</em>{0})}{p_\theta(\mathbf{x}_{0:T})} \Big] = L_\text{VLB} \end{aligned} $$</p>
+<p>To convert each term in the equation to be analytically computable, the objective can be further rewritten to be a combination of several KL-divergence and entropy terms (See the detailed step-by-step process in Appendix B in <a href="https://arxiv.org/abs/1503.03585">Sohl-Dickstein et al., 2015</a>):为了便于计算，将函数的一些项重写为KL散度以及熵</p>
+<p>$$ \begin{aligned} L_\text{VLB} &amp;= \mathbb{E}<em>{q(\mathbf{x}</em>{0:T})} \Big[ \log\frac{q(\mathbf{x}<em>{1:T}\vert\mathbf{x}<em>0)}{p_\theta(\mathbf{x}</em>{0:T})} \Big] \ &amp;= \mathbb{E}<em>q \Big[ \log\frac{\prod</em>{t=1}^T q(\mathbf{x}<em>t\vert\mathbf{x}</em>{t-1})}{ p_\theta(\mathbf{x}<em>T) \prod</em>{t=1}^T p_\theta(\mathbf{x}</em>{t-1} \vert\mathbf{x}_t) } \Big] \ &amp;= \mathbb{E}<em>q \Big[ -\log p_\theta(\mathbf{x}<em>T) + \sum</em>{t=1}^T \log \frac{q(\mathbf{x}<em>t\vert\mathbf{x}</em>{t-1})}{p_\theta(\mathbf{x}</em>{t-1} \vert\mathbf{x}_t)} \Big] \ &amp;= \mathbb{E}<em>q \Big[ -\log p_\theta(\mathbf{x}<em>T) + \sum</em>{t=2}^T \log \frac{q(\mathbf{x}<em>t\vert\mathbf{x}</em>{t-1})}{p_\theta(\mathbf{x}</em>{t-1} \vert\mathbf{x}_t)} + \log\frac{q(\mathbf{x}_1 \vert \mathbf{x}_0)}{p_\theta(\mathbf{x}_0 \vert \mathbf{x}_1)} \Big] \ &amp;= \mathbb{E}<em>q \Big[ -\log p_\theta(\mathbf{x}<em>T) + \sum</em>{t=2}^T \log \Big( \frac{q(\mathbf{x}</em>{t-1} \vert \mathbf{x}_t, \mathbf{x}<em>0)}{p_\theta(\mathbf{x}</em>{t-1} \vert\mathbf{x}_t)}\cdot \frac{q(\mathbf{x}_t \vert \mathbf{x}<em>0)}{q(\mathbf{x}</em>{t-1}\vert\mathbf{x}_0)} \Big) + \log \frac{q(\mathbf{x}_1 \vert \mathbf{x}_0)}{p_\theta(\mathbf{x}_0 \vert \mathbf{x}_1)} \Big] \ &amp;= \mathbb{E}<em>q \Big[ -\log p_\theta(\mathbf{x}<em>T) + \sum</em>{t=2}^T \log \frac{q(\mathbf{x}</em>{t-1} \vert \mathbf{x}_t, \mathbf{x}<em>0)}{p_\theta(\mathbf{x}</em>{t-1} \vert\mathbf{x}<em>t)} + \sum</em>{t=2}^T \log \frac{q(\mathbf{x}_t \vert \mathbf{x}<em>0)}{q(\mathbf{x}</em>{t-1} \vert \mathbf{x}_0)} + \log\frac{q(\mathbf{x}_1 \vert \mathbf{x}_0)}{p_\theta(\mathbf{x}_0 \vert \mathbf{x}_1)} \Big] \ &amp;= \mathbb{E}<em>q \Big[ -\log p_\theta(\mathbf{x}<em>T) + \sum</em>{t=2}^T \log \frac{q(\mathbf{x}</em>{t-1} \vert \mathbf{x}_t, \mathbf{x}<em>0)}{p_\theta(\mathbf{x}</em>{t-1} \vert\mathbf{x}_t)} + \log\frac{q(\mathbf{x}_T \vert \mathbf{x}_0)}{q(\mathbf{x}_1 \vert \mathbf{x}_0)} + \log \frac{q(\mathbf{x}_1 \vert \mathbf{x}_0)}{p_\theta(\mathbf{x}_0 \vert \mathbf{x}_1)} \Big]\ &amp;= \mathbb{E}_q \Big[ \log\frac{q(\mathbf{x}_T \vert \mathbf{x}<em>0)}{p_\theta(\mathbf{x}<em>T)} + \sum</em>{t=2}^T \log \frac{q(\mathbf{x}</em>{t-1} \vert \mathbf{x}_t, \mathbf{x}<em>0)}{p_\theta(\mathbf{x}</em>{t-1} \vert\mathbf{x}_t)} - \log p_\theta(\mathbf{x}_0 \vert \mathbf{x}_1) \Big] \ &amp;= \mathbb{E}_q [\underbrace{D_\text{KL}(q(\mathbf{x}<em>T \vert \mathbf{x}<em>0) \parallel p_\theta(\mathbf{x}<em>T))}</em>{L_T} + \sum</em>{t=2}^T \underbrace{D_\text{KL}(q(\mathbf{x}</em>{t-1} \vert \mathbf{x}<em>t, \mathbf{x}<em>0) \parallel p_\theta(\mathbf{x}</em>{t-1} \vert\mathbf{x}<em>t))}</em>{L</em>{t-1}} \underbrace{- \log p_\theta(\mathbf{x}_0 \vert \mathbf{x}<em>1)}</em>{L_0} ] \end{aligned} $$</p>
+<p>Let’s label each component in the variational lower bound loss separately:发现其中的每一项都是对比真实的高斯分布以及网络输出，其中LT无需计算，因为没有可优化的参数。</p>
+<p>$$ \begin{aligned} L_\text{VLB} &amp;= L_T + L_{T-1} + \dots + L_0 \ \text{where } L_T &amp;= D_\text{KL}(q(\mathbf{x}_T \vert \mathbf{x}_0) \parallel p_\theta(\mathbf{x}_T)) \ L_t &amp;= D_\text{KL}(q(\mathbf{x}<em>t \vert \mathbf{x}</em>{t+1}, \mathbf{x}_0) \parallel p_\theta(\mathbf{x}<em>t \vert\mathbf{x}</em>{t+1})) \text{ for }1 \leq t \leq T-1 \ L_0 &amp;= - \log p_\theta(\mathbf{x}_0 \vert \mathbf{x}_1) \end{aligned} $$</p>
+<p>Every KL term in $L_\text{VLB}$ (except for $L_0$) compares two Gaussian distributions and therefore they can be computed in <a href="https://en.wikipedia.org/wiki/Kullback%E2%80%93Leibler_divergence#Multivariate_normal_distributions">closed form</a>. $L_T$ is constant and can be ignored during training because $q$ has no learnable parameters and $\mathbf{x}_T$ is a Gaussian noise. <a href="https://arxiv.org/abs/2006.11239">Ho et al. 2020</a> models $L_0$ using a separate discrete decoder derived from $\mathcal{N}(\mathbf{x}_0; \boldsymbol{\mu}_\theta(\mathbf{x}_1, 1), \boldsymbol{\Sigma}_\theta(\mathbf{x}_1, 1))$.</p>
+<h2 id="Parameterization-of-L-t-for-Training-Loss"><a href="#Parameterization-of-L-t-for-Training-Loss" class="headerlink" title="Parameterization of $L_t$ for Training Loss"></a>Parameterization of $L_t$ for Training Loss</h2><p>Recall that we need to learn a neural network to approximate the conditioned probability distributions in the reverse diffusion process, $p_\theta(\mathbf{x}_{t-1} \vert \mathbf{x}<em>t) = \mathcal{N}(\mathbf{x}</em>{t-1}; \boldsymbol{\mu}_\theta(\mathbf{x}_t, t), \boldsymbol{\Sigma}_\theta(\mathbf{x}_t, t))$. We would like to train $\boldsymbol{\mu}_\theta$ to predict $\tilde{\boldsymbol{\mu}}_t = \frac{1}{\sqrt{\alpha_t}} \Big( \mathbf{x}_t - \frac{1 - \alpha_t}{\sqrt{1 - \bar{\alpha}_t}} \boldsymbol{\epsilon}_t \Big)$. Because $\mathbf{x}_t$ is available as input at training time, we can reparameterize the Gaussian noise term instead to make it predict $\boldsymbol{\epsilon}_t$ from the input $\mathbf{x}_t$ at time step $t$:</p>
+<p>$$ \begin{aligned} \boldsymbol{\mu}_\theta(\mathbf{x}_t, t) &amp;= \color{cyan}{\frac{1}{\sqrt{\alpha_t}} \Big( \mathbf{x}_t - \frac{1 - \alpha_t}{\sqrt{1 - \bar{\alpha}_t}} \boldsymbol{\epsilon}<em>\theta(\mathbf{x}<em>t, t) \Big)} \ \text{Thus }\mathbf{x}</em>{t-1} &amp;= \mathcal{N}(\mathbf{x}</em>{t-1}; \frac{1}{\sqrt{\alpha_t}} \Big( \mathbf{x}_t - \frac{1 - \alpha_t}{\sqrt{1 - \bar{\alpha}_t}} \boldsymbol{\epsilon}_\theta(\mathbf{x}_t, t) \Big), \boldsymbol{\Sigma}_\theta(\mathbf{x}_t, t)) \end{aligned} $$</p>
+<p>The loss term $L_t$ is parameterized to minimize the difference from $\tilde{\boldsymbol{\mu}}$ :</p>
+<p>$$ \begin{aligned} L_t &amp;= \mathbb{E}_{\mathbf{x}_0, \boldsymbol{\epsilon}} \Big[\frac{1}{2 | \boldsymbol{\Sigma}_\theta(\mathbf{x}_t, t) |^2_2} | \color{blue}{\tilde{\boldsymbol{\mu}}_t(\mathbf{x}_t, \mathbf{x}_0)} - \color{green}{\boldsymbol{\mu}_\theta(\mathbf{x}<em>t, t)} |^2 \Big] \ &amp;= \mathbb{E}</em>{\mathbf{x}_0, \boldsymbol{\epsilon}} \Big[\frac{1}{2 |\boldsymbol{\Sigma}_\theta |^2_2} | \color{blue}{\frac{1}{\sqrt{\alpha_t}} \Big( \mathbf{x}_t - \frac{1 - \alpha_t}{\sqrt{1 - \bar{\alpha}_t}} \boldsymbol{\epsilon}_t \Big)} - \color{green}{\frac{1}{\sqrt{\alpha_t}} \Big( \mathbf{x}_t - \frac{1 - \alpha_t}{\sqrt{1 - \bar{\alpha}_t}} \boldsymbol{\boldsymbol{\epsilon}}_\theta(\mathbf{x}<em>t, t) \Big)} |^2 \Big] \ &amp;= \mathbb{E}</em>{\mathbf{x}_0, \boldsymbol{\epsilon}} \Big[\frac{ (1 - \alpha_t)^2 }{2 \alpha_t (1 - \bar{\alpha}_t) | \boldsymbol{\Sigma}_\theta |^2_2} |\boldsymbol{\epsilon}_t - \boldsymbol{\epsilon}_\theta(\mathbf{x}<em>t, t)|^2 \Big] \ &amp;= \mathbb{E}</em>{\mathbf{x}_0, \boldsymbol{\epsilon}} \Big[\frac{ (1 - \alpha_t)^2 }{2 \alpha_t (1 - \bar{\alpha}_t) | \boldsymbol{\Sigma}_\theta |^2_2} |\boldsymbol{\epsilon}_t - \boldsymbol{\epsilon}_\theta(\sqrt{\bar{\alpha}_t}\mathbf{x}_0 + \sqrt{1 - \bar{\alpha}_t}\boldsymbol{\epsilon}_t, t)|^2 \Big] \end{aligned} $$</p>
+<p>可以看到实际上是比较实际的扰动以及预测的网络输出噪声之间的差距</p>
+<h3 id="Simplification"><a href="#Simplification" class="headerlink" title="Simplification"></a>Simplification</h3><p>Empirically, <a href="https://arxiv.org/abs/2006.11239">Ho et al. (2020)</a> found that training the diffusion model works better with a simplified objective that ignores the weighting term:</p>
+<p>$$ \begin{aligned} L_t^\text{simple} &amp;= \mathbb{E}_{t \sim [1, T], \mathbf{x}_0, \boldsymbol{\epsilon}_t} \Big[|\boldsymbol{\epsilon}_t - \boldsymbol{\epsilon}_\theta(\mathbf{x}<em>t, t)|^2 \Big] \ &amp;= \mathbb{E}</em>{t \sim [1, T], \mathbf{x}_0, \boldsymbol{\epsilon}_t} \Big[|\boldsymbol{\epsilon}_t - \boldsymbol{\epsilon}_\theta(\sqrt{\bar{\alpha}_t}\mathbf{x}_0 + \sqrt{1 - \bar{\alpha}_t}\boldsymbol{\epsilon}_t, t)|^2 \Big] \end{aligned} $$</p>
+<p>The final simple objective is:优化目标就是Lsimple</p>
+<p>$$ L_\text{simple} = L_t^\text{simple} + C $$</p>
+<p>where $C$ is a constant not depending on $\theta$.</p>
+<p><img src="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/DDPM-algo.png" alt="img">The training and sampling algorithms in DDPM (Image source: <a href="https://arxiv.org/abs/2006.11239">Ho et al. 2020</a>)</p>
+<h3 id="Connection-with-noise-conditioned-score-networks-NCSN"><a href="#Connection-with-noise-conditioned-score-networks-NCSN" class="headerlink" title="Connection with noise-conditioned score networks (NCSN)"></a>Connection with noise-conditioned score networks (NCSN)</h3><p><a href="https://arxiv.org/abs/1907.05600">Song &amp; Ermon (2019)</a> proposed a score-based generative modeling method where samples are produced via <a href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#connection-with-stochastic-gradient-langevin-dynamics">Langevin dynamics</a> using gradients of the data distribution estimated with score matching. The score of each sample $\mathbf{x}$’s density probability is defined as its gradient $\nabla_{\mathbf{x}} \log q(\mathbf{x})$. A score network $\mathbf{s}_\theta: \mathbb{R}^D \to \mathbb{R}^D$ is trained to estimate it, $\mathbf{s}<em>\theta(\mathbf{x}) \approx \nabla</em>{\mathbf{x}} \log q(\mathbf{x})$.</p>
+<p>To make it scalable with high-dimensional data in the deep learning setting, they proposed to use either <em>denoising score matching</em> (<a href="http://www.iro.umontreal.ca/~vincentp/Publications/smdae_techreport.pdf">Vincent, 2011</a>) or <em>sliced score matching</em> (use random projections; <a href="https://arxiv.org/abs/1905.07088">Song et al., 2019</a>). Denosing score matching adds a pre-specified small noise to the data $q(\tilde{\mathbf{x}} \vert \mathbf{x})$ and estimates $q(\tilde{\mathbf{x}})$ with score matching.</p>
+<p>Recall that Langevin dynamics can sample data points from a probability density distribution using only the score $\nabla_{\mathbf{x}} \log q(\mathbf{x})$ in an iterative process.</p>
+<p>However, according to the manifold hypothesis, most of the data is expected to concentrate in a low dimensional manifold, even though the observed data might look only arbitrarily high-dimensional. It brings a negative effect on score estimation since the data points cannot cover the whole space. In regions where data density is low, the score estimation is less reliable. After adding a small Gaussian noise to make the perturbed data distribution cover the full space $\mathbb{R}^D$, the training of the score estimator network becomes more stable. <a href="https://arxiv.org/abs/1907.05600">Song &amp; Ermon (2019)</a> improved it by perturbing the data with the noise of <em>different levels</em> and train a noise-conditioned score network to <em>jointly</em> estimate the scores of all the perturbed data at different noise levels.</p>
+<p>The schedule of increasing noise levels resembles the forward diffusion process. If we use the diffusion process annotation, the score approximates $\mathbf{s}_\theta(\mathbf{x}<em>t, t) \approx \nabla</em>{\mathbf{x}<em>t} \log q(\mathbf{x}<em>t)$. Given a Gaussian distribution $\mathbf{x} \sim \mathcal{N}(\mathbf{\mu}, \sigma^2 \mathbf{I})$, we can write the derivative of the logarithm of its density function as $\nabla</em>{\mathbf{x}}\log p(\mathbf{x}) = \nabla</em>{\mathbf{x}} \Big(-\frac{1}{2\sigma^2}(\mathbf{x} - \boldsymbol{\mu})^2 \Big) = - \frac{\mathbf{x} - \boldsymbol{\mu}}{\sigma^2} = - \frac{\boldsymbol{\epsilon}}{\sigma}$ where $\boldsymbol{\epsilon} \sim \mathcal{N}(\boldsymbol{0}, \mathbf{I})$. <a href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#nice">Recall</a> that $q(\mathbf{x}_t \vert \mathbf{x}_0) \sim \mathcal{N}(\sqrt{\bar{\alpha}_t} \mathbf{x}_0, (1 - \bar{\alpha}_t)\mathbf{I})$ and therefore,</p>
+<p>$$ \mathbf{s}_\theta(\mathbf{x}<em>t, t) \approx \nabla</em>{\mathbf{x}_t} \log q(\mathbf{x}<em>t) = \mathbb{E}</em>{q(\mathbf{x}<em>0)} [\nabla</em>{\mathbf{x}_t} \log q(\mathbf{x}_t \vert \mathbf{x}<em>0)] = \mathbb{E}</em>{q(\mathbf{x}_0)} \Big[ - \frac{\boldsymbol{\epsilon}_\theta(\mathbf{x}_t, t)}{\sqrt{1 - \bar{\alpha}_t}} \Big] = - \frac{\boldsymbol{\epsilon}_\theta(\mathbf{x}_t, t)}{\sqrt{1 - \bar{\alpha}_t}} $$</p>
+<h2 id="Parameterization-of-beta-t"><a href="#Parameterization-of-beta-t" class="headerlink" title="Parameterization of $\beta_t$"></a>Parameterization of $\beta_t$</h2><p>The forward variances （也就是beta，线性增加）are set to be a sequence of linearly increasing constants in <a href="https://arxiv.org/abs/2006.11239">Ho et al. (2020)</a>, from $\beta_1=10^{-4}$ to $\beta_T=0.02$. They are relatively small compared to the normalized image pixel values between $[-1, 1]$. Diffusion models in their experiments showed high-quality samples but still could not achieve competitive model log-likelihood as other generative models.</p>
+<p><a href="https://arxiv.org/abs/2102.09672">Nichol &amp; Dhariwal (2021)</a> proposed several improvement techniques to help diffusion models to obtain lower NLL.（负对数似然） （其他论文提出的一些改进，不适用线性的beta，而是正弦函数形式的）One of the improvements is to use a cosine-based variance schedule. The choice of the scheduling function can be arbitrary, as long as it provides a near-linear drop in the middle of the training process and subtle changes around $t=0$ and $t=T$.（只要求开始和结束部分，比较平稳就行了）</p>
+<p>$$ \beta_t = \text{clip}(1-\frac{\bar{\alpha}<em>t}{\bar{\alpha}</em>{t-1}}, 0.999) \quad\bar{\alpha}_t = \frac{f(t)}{f(0)}\quad\text{where }f(t)=\cos\Big(\frac{t/T+s}{1+s}\cdot\frac{\pi}{2}\Big)^2 $$</p>
+<p>where the small offset $s$ is to prevent $\beta_t$ from being too small when close to $t=0$.</p>
+<p><img src="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/diffusion-beta.png" alt="img">Comparison of linear and cosine-based scheduling of $\beta_t$ during training. (Image source: <a href="https://arxiv.org/abs/2102.09672">Nichol &amp; Dhariwal, 2021</a>)</p>
+<h2 id="Parameterization-of-reverse-process-variance-boldsymbol-Sigma-theta"><a href="#Parameterization-of-reverse-process-variance-boldsymbol-Sigma-theta" class="headerlink" title="Parameterization of reverse process variance $\boldsymbol{\Sigma}_\theta$"></a>Parameterization of reverse process variance $\boldsymbol{\Sigma}_\theta$</h2><p><a href="https://arxiv.org/abs/2006.11239">Ho et al. (2020)</a> chose to fix $\beta_t$ as constants instead of making them learnable and set $\boldsymbol{\Sigma}_\theta(\mathbf{x}_t, t) = \sigma^2_t \mathbf{I}$ , where $\sigma_t$ is not learned but set to $\beta_t$ or $\tilde{\beta}<em>t = \frac{1 - \bar{\alpha}</em>{t-1}}{1 - \bar{\alpha}_t} \cdot \beta_t$. Because they found that learning a diagonal variance $\boldsymbol{\Sigma}_\theta$ leads to unstable training and poorer sample quality.</p>
+<p><a href="https://arxiv.org/abs/2102.09672">Nichol &amp; Dhariwal (2021)</a> proposed to learn $\boldsymbol{\Sigma}_\theta(\mathbf{x}_t, t)$ as an interpolation between $\beta_t$ and $\tilde{\beta}_t$ by model predicting a mixing vector $\mathbf{v}$ :另一篇论文学习一个向量v，使得估计的方差矩阵在两个值$\beta_t$ and $\tilde{\beta}_t$ 之间</p>
+<p>$$ \boldsymbol{\Sigma}_\theta(\mathbf{x}_t, t) = \exp(\mathbf{v} \log \beta_t + (1-\mathbf{v}) \log \tilde{\beta}_t) $$</p>
+<p>为了引入这部分的影响，21年这个作者还额外引入了一个损失项</p>
+<p>However, the simple objective $L_\text{simple}$ does not depend on $\boldsymbol{\Sigma}_\theta$ . To add the dependency, they constructed a hybrid objective $L_\text{hybrid} = L_\text{simple} + \lambda L_\text{VLB}$ where $\lambda=0.001$ is small and stop gradient on $\boldsymbol{\mu}_\theta$ in the $L_\text{VLB}$ term such that $L_\text{VLB}$ only guides the learning of $\boldsymbol{\Sigma}_\theta$. Empirically they observed that $L_\text{VLB}$ is pretty challenging to optimize likely due to noisy gradients, so they proposed to use a time-averaging smoothed version of $L_\text{VLB}$ with importance sampling.发现还是很难优化，</p>
+<p><img src="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/improved-DDPM-nll.png" alt="img">Comparison of negative log-likelihood of improved DDPM with other likelihood-based generative models. NLL is reported in the unit of bits/dim. (Image source: <a href="https://arxiv.org/abs/2102.09672">Nichol &amp; Dhariwal, 2021</a>)</p>
+<h1 id="Conditioned-Generation"><a href="#Conditioned-Generation" class="headerlink" title="Conditioned Generation"></a>Conditioned Generation</h1><p>While training generative models on images with conditioning information such as ImageNet dataset, it is common to generate samples conditioned on class labels or a piece of descriptive text.</p>
+<h2 id="Classifier-Guided-Diffusion"><a href="#Classifier-Guided-Diffusion" class="headerlink" title="Classifier Guided Diffusion"></a>Classifier Guided Diffusion</h2><p>To explicit incorporate class information into the diffusion process, <a href="https://arxiv.org/abs/2105.05233">Dhariwal &amp; Nichol (2021)</a> trained a classifier $f_\phi(y \vert \mathbf{x}_t, t)$ on noisy image $\mathbf{x}_t$ and use gradients $\nabla_\mathbf{x} \log f_\phi(y \vert \mathbf{x}<em>t)$ to guide the diffusion sampling process toward the conditioning information $y$ (e.g. a target class label) by altering the noise prediction. <a href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#score">Recall</a> that $\nabla</em>{\mathbf{x}_t} \log q(\mathbf{x}_t) = - \frac{1}{\sqrt{1 - \bar{\alpha}_t}} \boldsymbol{\epsilon}_\theta(\mathbf{x}_t, t)$ and we can write the score function for the joint distribution $q(\mathbf{x}_t, y)$ as following,</p>
+<p>$$ \begin{aligned} \nabla_{\mathbf{x}_t} \log q(\mathbf{x}<em>t, y) &amp;= \nabla</em>{\mathbf{x}_t} \log q(\mathbf{x}<em>t) + \nabla</em>{\mathbf{x}_t} \log q(y \vert \mathbf{x}_t) \ &amp;\approx - \frac{1}{\sqrt{1 - \bar{\alpha}_t}} \boldsymbol{\epsilon}_\theta(\mathbf{x}<em>t, t) + \nabla</em>{\mathbf{x}_t} \log f_\phi(y \vert \mathbf{x}_t) \ &amp;= - \frac{1}{\sqrt{1 - \bar{\alpha}_t}} (\boldsymbol{\epsilon}_\theta(\mathbf{x}_t, t) - \sqrt{1 - \bar{\alpha}<em>t} \nabla</em>{\mathbf{x}_t} \log f_\phi(y \vert \mathbf{x}_t)) \end{aligned} $$</p>
+<p>Thus, a new classifier-guided predictor $\bar{\boldsymbol{\epsilon}}_\theta$ would take the form as following,</p>
+<p>$$ \bar{\boldsymbol{\epsilon}}_\theta(\mathbf{x}_t, t) = \boldsymbol{\epsilon}_\theta(x_t, t) - \sqrt{1 - \bar{\alpha}<em>t} \nabla</em>{\mathbf{x}_t} \log f_\phi(y \vert \mathbf{x}_t) $$</p>
+<p>To control the strength of the classifier guidance, we can add a weight $w$ to the delta part,</p>
+<p>$$ \bar{\boldsymbol{\epsilon}}_\theta(\mathbf{x}_t, t) = \boldsymbol{\epsilon}_\theta(x_t, t) - \sqrt{1 - \bar{\alpha}<em>t} ; w \nabla</em>{\mathbf{x}_t} \log f_\phi(y \vert \mathbf{x}_t) $$</p>
+<p>The resulting <em>ablated diffusion model</em> (<strong>ADM</strong>) and the one with additional classifier guidance (<strong>ADM-G</strong>) are able to achieve better results than SOTA generative models (e.g. BigGAN).</p>
+<p><img src="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/conditioned-DDPM.png" alt="img">The algorithms use guidance from a classifier to run conditioned generation with DDPM and DDIM. (Image source: <a href="https://arxiv.org/abs/2105.05233">Dhariwal &amp; Nichol, 2021</a>])</p>
+<p>Additionally with some modifications on the U-Net architecture, <a href="https://arxiv.org/abs/2105.05233">Dhariwal &amp; Nichol (2021)</a> showed performance better than GAN with diffusion models. The architecture modifications include larger model depth/width, more attention heads, multi-resolution attention, BigGAN residual blocks for up/downsampling, residual connection rescale by $1/\sqrt{2}$ and adaptive group normalization (AdaGN).</p>
+<h2 id="Classifier-Free-Guidance"><a href="#Classifier-Free-Guidance" class="headerlink" title="Classifier-Free Guidance"></a>Classifier-Free Guidance</h2><p>Without an independent classifier $f_\phi$, it is still possible to run conditional diffusion steps by incorporating the scores from a conditional and an unconditional diffusion model (<a href="https://openreview.net/forum?id=qw8AKxfYbI">Ho &amp; Salimans, 2021</a>). Let unconditional denoising diffusion model $p_\theta(\mathbf{x})$ parameterized through a score estimator $\boldsymbol{\epsilon}_\theta(\mathbf{x}_t, t)$ and the conditional model $p_\theta(\mathbf{x} \vert y)$ parameterized through $\boldsymbol{\epsilon}_\theta(\mathbf{x}_t, t, y)$. These two models can be learned via a single neural network. Precisely, a conditional diffusion model $p_\theta(\mathbf{x} \vert y)$ is trained on paired data $(\mathbf{x}, y)$, where the conditioning information $y$ gets discarded periodically at random such that the model knows how to generate images unconditionally as well, i.e. $\boldsymbol{\epsilon}_\theta(\mathbf{x}_t, t) = \boldsymbol{\epsilon}_\theta(\mathbf{x}_t, t, y=\varnothing)$.</p>
+<p>The gradient of an implicit classifier can be represented with conditional and unconditional score estimators. Once plugged into the classifier-guided modified score, the score contains no dependency on a separate classifier.</p>
+<p>$$ \begin{aligned} \nabla_{\mathbf{x}_t} \log p(y \vert \mathbf{x}<em>t) &amp;= \nabla</em>{\mathbf{x}_t} \log p(\mathbf{x}<em>t \vert y) - \nabla</em>{\mathbf{x}_t} \log p(\mathbf{x}_t) \ &amp;= - \frac{1}{\sqrt{1 - \bar{\alpha}_t}}\Big( \boldsymbol{\epsilon}_\theta(\mathbf{x}_t, t, y) - \boldsymbol{\epsilon}_\theta(\mathbf{x}_t, t) \Big) \ \bar{\boldsymbol{\epsilon}}_\theta(\mathbf{x}_t, t, y) &amp;= \boldsymbol{\epsilon}_\theta(\mathbf{x}_t, t, y) - \sqrt{1 - \bar{\alpha}<em>t} ; w \nabla</em>{\mathbf{x}_t} \log p(y \vert \mathbf{x}_t) \ &amp;= \boldsymbol{\epsilon}_\theta(\mathbf{x}_t, t, y) + w \big(\boldsymbol{\epsilon}_\theta(\mathbf{x}_t, t, y) - \boldsymbol{\epsilon}_\theta(\mathbf{x}_t, t) \big) \ &amp;= (w+1) \boldsymbol{\epsilon}_\theta(\mathbf{x}_t, t, y) - w \boldsymbol{\epsilon}_\theta(\mathbf{x}_t, t) \end{aligned} $$</p>
+<p>Their experiments showed that classifier-free guidance can achieve a good balance between FID (distinguish between synthetic and generated images) and IS (quality and diversity).</p>
+<p>The guided diffusion model, GLIDE (<a href="https://arxiv.org/abs/2112.10741">Nichol, Dhariwal &amp; Ramesh, et al. 2022</a>), explored both guiding strategies, CLIP guidance and classifier-free guidance, and found that the latter is more preferred. They hypothesized that it is because CLIP guidance exploits the model with adversarial examples towards the CLIP model, rather than optimize the better matched images generation.</p>
+<h1 id="Speed-up-Diffusion-Models加速"><a href="#Speed-up-Diffusion-Models加速" class="headerlink" title="Speed up Diffusion Models加速"></a>Speed up Diffusion Models加速</h1><p>It is very slow to generate a sample from DDPM by following the Markov chain of the reverse diffusion process, as $T$ can be up to one or a few thousand steps. One data point from <a href="https://arxiv.org/abs/2010.02502">Song et al. (2020)</a>: “For example, it takes around 20 hours to sample 50k images of size 32 × 32 from a DDPM, but less than a minute to do so from a GAN on an Nvidia 2080 Ti GPU.” 速度很慢，同样的图像生成需要20小时，gan只需要不到一分钟</p>
+<h2 id="Fewer-Sampling-Steps-amp-Distillation"><a href="#Fewer-Sampling-Steps-amp-Distillation" class="headerlink" title="Fewer Sampling Steps &amp; Distillation"></a>Fewer Sampling Steps &amp; Distillation</h2><p>One simple way is to run a strided sampling schedule (<a href="https://arxiv.org/abs/2102.09672">Nichol &amp; Dhariwal, 2021</a>) by taking the sampling update every $\lceil T/S \rceil$ steps to reduce the process from $T$ to $S$ steps. The new sampling schedule for generation is ${\tau_1, \dots, \tau_S}$ where $\tau_1 &lt; \tau_2 &lt; \dots &lt;\tau_S \in [1, T]$ and $S &lt; T$.</p>
+<p>For another approach, let’s rewrite $q_\sigma(\mathbf{x}_{t-1} \vert \mathbf{x}_t, \mathbf{x}_0)$ to be parameterized by a desired standard deviation $\sigma_t$ according to the <a href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#nice">nice property</a>:</p>
+<p>$$ \begin{aligned} \mathbf{x}<em>{t-1} &amp;= \sqrt{\bar{\alpha}</em>{t-1}}\mathbf{x}<em>0 + \sqrt{1 - \bar{\alpha}</em>{t-1}}\boldsymbol{\epsilon}<em>{t-1} &amp; \ &amp;= \sqrt{\bar{\alpha}</em>{t-1}}\mathbf{x}<em>0 + \sqrt{1 - \bar{\alpha}</em>{t-1} - \sigma_t^2} \boldsymbol{\epsilon}<em>t + \sigma_t\boldsymbol{\epsilon} &amp; \ &amp;= \sqrt{\bar{\alpha}</em>{t-1}} \Big( \frac{\mathbf{x}_t - \sqrt{1 - \bar{\alpha}_t} \epsilon^{(t)}_\theta(\mathbf{x}_t)}{\sqrt{\bar{\alpha}<em>t}} \Big) + \sqrt{1 - \bar{\alpha}</em>{t-1} - \sigma_t^2} \epsilon^{(t)}_\theta(\mathbf{x}<em>t) + \sigma_t\boldsymbol{\epsilon} \ q_\sigma(\mathbf{x}</em>{t-1} \vert \mathbf{x}<em>t, \mathbf{x}<em>0) &amp;= \mathcal{N}(\mathbf{x}</em>{t-1}; \sqrt{\bar{\alpha}</em>{t-1}} \Big( \frac{\mathbf{x}_t - \sqrt{1 - \bar{\alpha}_t} \epsilon^{(t)}_\theta(\mathbf{x}_t)}{\sqrt{\bar{\alpha}<em>t}} \Big) + \sqrt{1 - \bar{\alpha}</em>{t-1} - \sigma_t^2} \epsilon^{(t)}_\theta(\mathbf{x}_t), \sigma_t^2 \mathbf{I}) \end{aligned} $$</p>
+<p>where the model $\epsilon^{(t)}_\theta(.)$ predicts the $\epsilon_t$ from $\mathbf{x}_t$.</p>
+<p>Recall that in $q(\mathbf{x}_{t-1} \vert \mathbf{x}_t, \mathbf{x}<em>0) = \mathcal{N}(\mathbf{x}</em>{t-1}; \tilde{\boldsymbol{\mu}}(\mathbf{x}_t, \mathbf{x}_0), \tilde{\beta}_t \mathbf{I})$, therefore we have:</p>
+<p>$$ \tilde{\beta}<em>t = \sigma_t^2 = \frac{1 - \bar{\alpha}</em>{t-1}}{1 - \bar{\alpha}_t} \cdot \beta_t $$</p>
+<p>Let $\sigma_t^2 = \eta \cdot \tilde{\beta}_t$ such that we can adjust $\eta \in \mathbb{R}^+$ as a hyperparameter to control the sampling stochasticity. The special case of $\eta = 0$ makes the sampling process <em>deterministic</em>. Such a model is named the <em>denoising diffusion implicit model</em> (<strong>DDIM</strong>; <a href="https://arxiv.org/abs/2010.02502">Song et al., 2020</a>). DDIM has the same marginal noise distribution but deterministically maps noise back to the original data samples.</p>
+<p>During generation, we don’t have to follow the whole chain $t=1,\dots,T$, but rather a subset of steps. Let’s denote $s &lt; t$ as two steps in this accelerated trajectory. The DDIM update step is:</p>
+<p>$$ q_{\sigma, s &lt; t}(\mathbf{x}_s \vert \mathbf{x}_t, \mathbf{x}_0) = \mathcal{N}(\mathbf{x}_s; \sqrt{\bar{\alpha}_s} \Big( \frac{\mathbf{x}_t - \sqrt{1 - \bar{\alpha}_t} \epsilon^{(t)}_\theta(\mathbf{x}_t)}{\sqrt{\bar{\alpha}_t}} \Big) + \sqrt{1 - \bar{\alpha}_s - \sigma_t^2} \epsilon^{(t)}_\theta(\mathbf{x}_t), \sigma_t^2 \mathbf{I}) $$</p>
+<p>While all the models are trained with $T=1000$ diffusion steps in the experiments, they observed that DDIM ($\eta=0$) can produce the best quality samples when $S$ is small, while DDPM ($\eta=1$) performs much worse on small $S$. DDPM does perform better when we can afford to run the full reverse Markov diffusion steps ($S=T=1000$). With DDIM, it is possible to train the diffusion model up to any arbitrary number of forward steps but only sample from a subset of steps in the generative process.</p>
+<p><img src="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/DDIM-results.png" alt="img">FID scores on CIFAR10 and CelebA datasets by diffusion models of different settings, including $\color{cyan}{\text{DDIM}}$ ($\eta=0$) and $\color{orange}{\text{DDPM}}$ ($\hat{\sigma}$). (Image source: <a href="https://arxiv.org/abs/2010.02502">Song et al., 2020</a>)</p>
+<p>Compared to DDPM, DDIM is able to:</p>
+<ol>
+<li>Generate higher-quality samples using a much fewer number of steps.</li>
+<li>Have “consistency” property since the generative process is deterministic, meaning that multiple samples conditioned on the same latent variable should have similar high-level features.</li>
+<li>Because of the consistency, DDIM can do semantically meaningful interpolation in the latent variable.</li>
+</ol>
+<p><img src="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/progressive-distillation.png" alt="img">Progressive distillation can reduce the diffusion sampling steps by half in each iteration. (Image source: <a href="https://arxiv.org/abs/2202.00512">Salimans &amp; Ho, 2022</a>)</p>
+<p><strong>Progressive Distillation</strong> (<a href="https://arxiv.org/abs/2202.00512">Salimans &amp; Ho, 2022</a>) is a method for distilling trained deterministic samplers into new models of halved sampling steps. The student model is initialized from the teacher model and denoises towards a target where one student DDIM step matches 2 teacher steps, instead of using the original sample $\mathbf{x}_0$ as the denoise target. In every progressive distillation iteration, we can half the sampling steps.</p>
+<p><img src="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/progressive-distillation-algo.png" alt="img">Comparison of Algorithm 1 (diffusion model training) and Algorithm 2 (progressive distillation) side-by-side, where the relative changes in progressive distillation are highlighted in green.<br>(Image source: <a href="https://arxiv.org/abs/2202.00512">Salimans &amp; Ho, 2022</a>)</p>
+<p><strong>Consistency Models</strong> (<a href="https://arxiv.org/abs/2303.01469">Song et al. 2023</a>) learns to map any intermediate noisy data points $\mathbf{x}_t, t &gt; 0$ on the diffusion sampling trajectory back to its origin $\mathbf{x}_0$ directly. It is named as <em>consistency</em> model because of its <em>self-consistency</em> property as any data points on the same trajectory is mapped to the same origin.</p>
+<p><img src="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/consistency-models.png" alt="img">Consistency models learn to map any data point on the trajectory back to its origin. (Image source: <a href="https://arxiv.org/abs/2303.01469">Song et al., 2023</a>)</p>
+<p>Given a trajectory ${\mathbf{x}_t \vert t \in [\epsilon, T]}$ , the <em>consistency function</em> $f$ is defined as $f: (\mathbf{x}_t, t) \mapsto \mathbf{x}_\epsilon$ and the equation $f(\mathbf{x}<em>t, t) = f(\mathbf{x}</em>{t’}, t’) = \mathbf{x}_\epsilon$ holds true for all $t, t’ \in [\epsilon, T]$. When $t=\epsilon$, $f$ is an identify function. The model can be parameterized as follows, where $c_\text{skip}(t)$ and $c_\text{out}(t)$ functions are designed in a way that $c_\text{skip}(\epsilon) = 1, c_\text{out}(\epsilon) = 0$:</p>
+<p>$$ f_\theta(\mathbf{x}, t) = c_\text{skip}(t)\mathbf{x} + c_\text{out}(t) F_\theta(\mathbf{x}, t) $$</p>
+<p>It is possible for the consistency model to generate samples in a single step, while still maintaining the flexibility of trading computation for better quality following a multi-step sampling process.</p>
+<p>The paper introduced two ways to train consistency models:</p>
+<ol>
+<li><p><strong>Consistency Distillation (CD)</strong>: Distill a diffusion model into a consistency model by minimizing the difference between model outputs for pairs generated out of the same trajectory. This enables a much cheaper sampling evaluation. The consistency distillation loss is:</p>
+<p>$$ \begin{aligned} \mathcal{L}^N_\text{CD} (\theta, \theta^-; \phi) &amp;= \mathbb{E} [\lambda(t_n)d(f_\theta(\mathbf{x}<em>{t</em>{n+1}}, t_{n+1}), f_{\theta^-}(\hat{\mathbf{x}}^\phi_{t_n}, t_n)] \ \hat{\mathbf{x}}^\phi_{t_n} &amp;= \mathbf{x}<em>{t</em>{n+1}} - (t_n - t_{n+1}) \Phi(\mathbf{x}<em>{t</em>{n+1}}, t_{n+1}; \phi) \end{aligned} $$</p>
+<p>where</p>
+<ul>
+<li>$\Phi(.;\phi)$ is the update function of a one-step <a href="https://en.wikipedia.org/wiki/Ordinary_differential_equation">ODE</a> solver;</li>
+<li>$n \sim \mathcal{U}[1, N-1]$, has an uniform distribution over $1, \dots, N-1$;</li>
+<li>The network parameters $\theta^-$ is EMA version of $\theta$ which greatly stabilizes the training (just like in <a href="https://lilianweng.github.io/posts/2018-02-19-rl-overview/#deep-q-network">DQN</a> or <a href="https://lilianweng.github.io/posts/2021-05-31-contrastive/#moco--moco-v2">momentum</a> contrastive learning);</li>
+<li>$d(.,.)$ is a positive distance metric function that satisfies $\forall \mathbf{x}, \mathbf{y}: d(\mathbf{x}, \mathbf{y}) \geq 0$ and $d(\mathbf{x}, \mathbf{y}) = 0$ if and only if $\mathbf{x} = \mathbf{y}$ such as $\ell_2$, $\ell_1$ or <a href="https://arxiv.org/abs/1801.03924">LPIPS</a> (learned perceptual image patch similarity) distance;</li>
+<li>$\lambda(.) \in \mathbb{R}^+$ is a positive weighting function and the paper sets $\lambda(t_n)=1$.</li>
+</ul>
+</li>
+<li><p><strong>Consistency Training (CT)</strong>: The other option is to train a consistency model independently. Note that in CD, a pre-trained score model $s_\phi(\mathbf{x}, t)$ is used to approximate the ground truth score $\nabla\log p_t(\mathbf{x})$ but in CT we need a way to estimate this score function and it turns out an unbiased estimator of $\nabla\log p_t(\mathbf{x})$ exists as $-\frac{\mathbf{x}_t - \mathbf{x}}{t^2}$. The CT loss is defined as follows:</p>
+</li>
+</ol>
+<p>$$ \mathcal{L}^N_\text{CT} (\theta, \theta^-; \phi) = \mathbb{E} [\lambda(t_n)d(f_\theta(\mathbf{x} + t_{n+1} \mathbf{z},;t_{n+1}), f_{\theta^-}(\mathbf{x} + t_n \mathbf{z},;t_n)] \text{ where }\mathbf{z} \in \mathcal{N}(\mathbf{0}, \mathbf{I}) $$</p>
+<p>According to the experiments in the paper, they found,</p>
+<ul>
+<li>Heun ODE solver works better than Euler’s first-order solver, since higher order ODE solvers have smaller estimation errors with the same $N$.</li>
+<li>Among different options of the distance metric function $d(.)$, the LPIPS metric works better than $\ell_1$ and $\ell_2$ distance.</li>
+<li>Smaller $N$ leads to faster convergence but worse samples, whereas larger $N$ leads to slower convergence but better samples upon convergence.</li>
+</ul>
+<p><img src="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/consistency-models-exp.png" alt="img">Comparison of consistency models’ performance under different configurations. The best configuration for CD is LPIPS distance metric, Heun ODE solver, and $N=18$. (Image source: <a href="https://arxiv.org/abs/2303.01469">Song et al., 2023</a>)</p>
+<h2 id="Latent-Variable-Space"><a href="#Latent-Variable-Space" class="headerlink" title="Latent Variable Space"></a>Latent Variable Space</h2><p><em>Latent diffusion model</em> (<strong>LDM</strong>; <a href="https://arxiv.org/abs/2112.10752">Rombach &amp; Blattmann, et al. 2022</a>) runs the diffusion process in the latent space instead of pixel space, making training cost lower and inference speed faster. It is motivated by the observation that most bits of an image contribute to perceptual details and the semantic and conceptual composition still remains after aggressive compression. LDM loosely decomposes the perceptual compression and semantic compression with generative modeling learning by first trimming off pixel-level redundancy with autoencoder and then manipulating / generating semantic concepts with diffusion process on learned latent.</p>
+<p><img src="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/image-distortion-rate.png" alt="img">The plot for tradeoff between compression rate and distortion, illustrating two-stage compressions - perceptual and semantic compression. (Image source: <a href="https://arxiv.org/abs/2112.10752">Rombach &amp; Blattmann, et al. 2022</a>)</p>
+<p>The perceptual compression process relies on an autoencoder model. An encoder $\mathcal{E}$ is used to compress the input image $\mathbf{x} \in \mathbb{R}^{H \times W \times 3}$ to a smaller 2D latent vector $\mathbf{z} = \mathcal{E}(\mathbf{x}) \in \mathbb{R}^{h \times w \times c}$ , where the downsampling rate $f=H/h=W/w=2^m, m \in \mathbb{N}$. Then an decoder $\mathcal{D}$ reconstructs the images from the latent vector, $\tilde{\mathbf{x}} = \mathcal{D}(\mathbf{z})$. The paper explored two types of regularization in autoencoder training to avoid arbitrarily high-variance in the latent spaces.</p>
+<ul>
+<li><em>KL-reg</em>: A small KL penalty towards a standard normal distribution over the learned latent, similar to <a href="https://lilianweng.github.io/posts/2018-08-12-vae/">VAE</a>.</li>
+<li><em>VQ-reg</em>: Uses a vector quantization layer within the decoder, like <a href="https://lilianweng.github.io/posts/2018-08-12-vae/#vq-vae-and-vq-vae-2">VQVAE</a> but the quantization layer is absorbed by the decoder.</li>
+</ul>
+<p>The diffusion and denoising processes happen on the latent vector $\mathbf{z}$. The denoising model is a time-conditioned U-Net, augmented with the cross-attention mechanism to handle flexible conditioning information for image generation (e.g. class labels, semantic maps, blurred variants of an image). The design is equivalent to fuse representation of different modality into the model with a cross-attention mechanism. Each type of conditioning information is paired with a domain-specific encoder $\tau_\theta$ to project the conditioning input $y$ to an intermediate representation that can be mapped into cross-attention component, $\tau_\theta(y) \in \mathbb{R}^{M \times d_\tau}$:</p>
+<p>$$ \begin{aligned} &amp;\text{Attention}(\mathbf{Q}, \mathbf{K}, \mathbf{V}) = \text{softmax}\Big(\frac{\mathbf{Q}\mathbf{K}^\top}{\sqrt{d}}\Big) \cdot \mathbf{V} \ &amp;\text{where }\mathbf{Q} = \mathbf{W}^{(i)}_Q \cdot \varphi_i(\mathbf{z}_i),; \mathbf{K} = \mathbf{W}^{(i)}_K \cdot \tau_\theta(y),; \mathbf{V} = \mathbf{W}^{(i)}_V \cdot \tau_\theta(y) \ &amp;\text{and } \mathbf{W}^{(i)}_Q \in \mathbb{R}^{d \times d^i_\epsilon},; \mathbf{W}^{(i)}_K, \mathbf{W}^{(i)}_V \in \mathbb{R}^{d \times d_\tau},; \varphi_i(\mathbf{z}_i) \in \mathbb{R}^{N \times d^i_\epsilon},; \tau_\theta(y) \in \mathbb{R}^{M \times d_\tau} \end{aligned} $$</p>
+<p><img src="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/latent-diffusion-arch.png" alt="img">The architecture of the latent diffusion model (LDM). (Image source: <a href="https://arxiv.org/abs/2112.10752">Rombach &amp; Blattmann, et al. 2022</a>)</p>
+<h1 id="Scale-up-Generation-Resolution-and-Quality"><a href="#Scale-up-Generation-Resolution-and-Quality" class="headerlink" title="Scale up Generation Resolution and Quality"></a>Scale up Generation Resolution and Quality</h1><p>To generate high-quality images at high resolution, <a href="https://arxiv.org/abs/2106.15282">Ho et al. (2021)</a> proposed to use a pipeline of multiple diffusion models at increasing resolutions. <em>Noise conditioning augmentation</em> between pipeline models is crucial to the final image quality, which is to apply strong data augmentation to the conditioning input $\mathbf{z}$ of each super-resolution model $p_\theta(\mathbf{x} \vert \mathbf{z})$. The conditioning noise helps reduce compounding error in the pipeline setup. <em>U-net</em> is a common choice of model architecture in diffusion modeling for high-resolution image generation.</p>
+<p><img src="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/cascaded-diffusion.png" alt="img">A cascaded pipeline of multiple diffusion models at increasing resolutions. (Image source: <a href="https://arxiv.org/abs/2106.15282">Ho et al. 2021</a>])</p>
+<p>They found the most effective noise is to apply Gaussian noise at low resolution and Gaussian blur at high resolution. In addition, they also explored two forms of conditioning augmentation that require small modification to the training process. Note that conditioning noise is only applied to training but not at inference.</p>
+<ul>
+<li>Truncated conditioning augmentation stops the diffusion process early at step $t &gt; 0$ for low resolution.</li>
+<li>Non-truncated conditioning augmentation runs the full low resolution reverse process until step 0 but then corrupt it by $\mathbf{z}_t \sim q(\mathbf{x}_t \vert \mathbf{x}_0)$ and then feeds the corrupted $\mathbf{z}_t$ s into the super-resolution model.</li>
+</ul>
+<p>The two-stage diffusion model <strong>unCLIP</strong> (<a href="https://arxiv.org/abs/2204.06125">Ramesh et al. 2022</a>) heavily utilizes the CLIP text encoder to produce text-guided images at high quality. Given a pretrained CLIP model $\mathbf{c}$ and paired training data for the diffusion model, $(\mathbf{x}, y)$, where $x$ is an image and $y$ is the corresponding caption, we can compute the CLIP text and image embedding, $\mathbf{c}^t(y)$ and $\mathbf{c}^i(\mathbf{x})$, respectively. The unCLIP learns two models in parallel:</p>
+<ul>
+<li>A prior model $P(\mathbf{c}^i \vert y)$: outputs CLIP image embedding $\mathbf{c}^i$ given the text $y$.</li>
+<li>A decoder $P(\mathbf{x} \vert \mathbf{c}^i, [y])$: generates the image $\mathbf{x}$ given CLIP image embedding $\mathbf{c}^i$ and optionally the original text $y$.</li>
+</ul>
+<p>These two models enable conditional generation, because</p>
+<p>$$ \underbrace{P(\mathbf{x} \vert y) = P(\mathbf{x}, \mathbf{c}^i \vert y)}_{\mathbf{c}^i\text{ is deterministic given }\mathbf{x}} = P(\mathbf{x} \vert \mathbf{c}^i, y)P(\mathbf{c}^i \vert y) $$</p>
+<p><img src="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/unCLIP.png" alt="img">The architecture of unCLIP. (Image source: <a href="https://arxiv.org/abs/2204.06125">Ramesh et al. 2022</a>])</p>
+<p>unCLIP follows a two-stage image generation process:</p>
+<ol>
+<li>Given a text $y$, a CLIP model is first used to generate a text embedding $\mathbf{c}^t(y)$. Using CLIP latent space enables zero-shot image manipulation via text.</li>
+<li>A diffusion or autoregressive prior $P(\mathbf{c}^i \vert y)$ processes this CLIP text embedding to construct an image prior and then a diffusion decoder $P(\mathbf{x} \vert \mathbf{c}^i, [y])$ generates an image, conditioned on the prior. This decoder can also generate image variations conditioned on an image input, preserving its style and semantics.</li>
+</ol>
+<p>Instead of CLIP model, <strong>Imagen</strong> (<a href="https://arxiv.org/abs/2205.11487">Saharia et al. 2022</a>) uses a pre-trained large LM (i.e. a frozen T5-XXL text encoder) to encode text for image generation. There is a general trend that larger model size can lead to better image quality and text-image alignment. They found that T5-XXL and CLIP text encoder achieve similar performance on MS-COCO, but human evaluation prefers T5-XXL on DrawBench (a collection of prompts covering 11 categories).</p>
+<p>When applying classifier-free guidance, increasing $w$ may lead to better image-text alignment but worse image fidelity. They found that it is due to train-test mismatch, that is to say, because training data $\mathbf{x}$ stays within the range $[-1, 1]$, the test data should be so too. Two thresholding strategies are introduced:</p>
+<ul>
+<li>Static thresholding: clip $\mathbf{x}$ prediction to $[-1, 1]$</li>
+<li>Dynamic thresholding: at each sampling step, compute $s$ as a certain percentile absolute pixel value; if $s &gt; 1$, clip the prediction to $[-s, s]$ and divide by $s$.</li>
+</ul>
+<p>Imagen modifies several designs in U-net to make it <em>efficient U-Net</em>.</p>
+<ul>
+<li>Shift model parameters from high resolution blocks to low resolution by adding more residual locks for the lower resolutions;</li>
+<li>Scale the skip connections by $1/\sqrt{2}$</li>
+<li>Reverse the order of downsampling (move it before convolutions) and upsampling operations (move it after convolution) in order to improve the speed of forward pass.</li>
+</ul>
+<p>They found that noise conditioning augmentation, dynamic thresholding and efficient U-Net are critical for image quality, but scaling text encoder size is more important than U-Net size.</p>
+<h1 id="Model-Architecture"><a href="#Model-Architecture" class="headerlink" title="Model Architecture"></a>Model Architecture</h1><p>There are two common backbone architecture choices for diffusion models: U-Net and Transformer.</p>
+<p><strong>U-Net</strong> (<a href="https://arxiv.org/abs/1505.04597">Ronneberger, et al. 2015</a>) consists of a downsampling stack and an upsampling stack.</p>
+<ul>
+<li><em>Downsampling</em>: Each step consists of the repeated application of two 3x3 convolutions (unpadded convolutions), each followed by a ReLU and a 2x2 max pooling with stride 2. At each downsampling step, the number of feature channels is doubled.</li>
+<li><em>Upsampling</em>: Each step consists of an upsampling of the feature map followed by a 2x2 convolution and each halves the number of feature channels.</li>
+<li><em>Shortcuts</em>: Shortcut connections result in a concatenation with the corresponding layers of the downsampling stack and provide the essential high-resolution features to the upsampling process.</li>
+</ul>
+<p><img src="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/U-net.png" alt="img">The U-net architecture. Each blue square is a feature map with the number of channels labeled on top and the height x width dimension labeled on the left bottom side. The gray arrows mark the shortcut connections. (Image source: <a href="https://arxiv.org/abs/1505.04597">Ronneberger, 2015</a>)</p>
+<p>To enable image generation conditioned on additional images for composition info like Canny edges, Hough lines, user scribbles, human post skeletons, segmentation maps, depths and normals, <strong>ControlNet</strong> (<a href="https://arxiv.org/abs/2302.05543">Zhang et al. 2023</a> introduces architectural changes via adding a “sandwiched” zero convolution layers of a trainable copy of the original model weights into each encoder layer of the U-Net. Precisely, given a neural network block $\mathcal{F}_\theta(.)$, ControlNet does the following:</p>
+<ol>
+<li>First, freeze the original parameters $\theta$ of the original block</li>
+<li>Clone it to be a copy with trainable parameters $\theta_c$ and an additional conditioning vector $\mathbf{c}$.</li>
+<li>Use two zero convolution layers, denoted as $\mathcal{Z}<em>{\theta</em>{z1}}(.;.)$ and $\mathcal{Z}<em>{\theta</em>{z2}}(.;.)$, which is 1x1 convo layers with both weights and biases initialized to be zeros, to connect these two blocks. Zero convolutions protect this back-bone by eliminating random noise as gradients in the initial training steps.</li>
+<li>The final output is: $\mathbf{y}<em>c = \mathcal{F}<em>\theta(\mathbf{x}) + \mathcal{Z}</em>{\theta</em>{z2}}(\mathcal{F}<em>{\theta_c}(\mathbf{x} + \mathcal{Z}</em>{\theta_{z1}}(\mathbf{c})))$</li>
+</ol>
+<p><img src="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/ControlNet.png" alt="img">The ControlNet architecture. (Image source: <a href="https://arxiv.org/abs/2302.05543">Zhang et al. 2023</a>)</p>
+<p><strong>Diffusion Transformer</strong> (<strong>DiT</strong>; <a href="https://arxiv.org/abs/2212.09748">Peebles &amp; Xie, 2023</a>) for diffusion modeling operates on latent patches, using the same design space of <a href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#ldm">LDM</a> (Latent Diffusion Model)]. DiT has the following setup:</p>
+<ol>
+<li>Take the latent representation of an input $\mathbf{z}$ as input to DiT.</li>
+<li>“Patchify” the noise latent of size $I \times I \times C$ into patches of size $p$ and convert it into a sequence of patches of size $(I/p)^2$.</li>
+<li>Then this sequence of tokens go through Transformer blocks. They are exploring three different designs for how to do generation conditioned on contextual information like timestep $t$ or class label $c$. Among three designs, <em>adaLN (Adaptive layer norm)-Zero</em> works out the best, better than in-context conditioning and cross-attention block. The scale and shift parameters, $\gamma$ and $\beta$, are regressed from the sum of the embedding vectors of $t$ and $c$. The dimension-wise scaling parameters $\alpha$ is also regressed and applied immediately prior to any residual connections within the DiT block.</li>
+<li>The transformer decoder outputs noise predictions and an output diagonal covariance prediction.</li>
+</ol>
+<p><img src="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/DiT.png" alt="img">The Diffusion Transformer (DiT) architecture.<br>(Image source: <a href="https://arxiv.org/abs/2212.09748">Peebles &amp; Xie, 2023</a>)</p>
+<p>Transformer architecture can be easily scaled up and it is well known for that. This is one of the biggest benefits of DiT as its performance scales up with more compute and larger DiT models are more compute efficient according to the experiments.</p>
+<h1 id="Quick-Summary"><a href="#Quick-Summary" class="headerlink" title="Quick Summary"></a>Quick Summary</h1><ul>
+<li><strong>Pros</strong>: Tractability and flexibility are two conflicting objectives in generative modeling. Tractable models can be analytically evaluated and cheaply fit data (e.g. via a Gaussian or Laplace), but they cannot easily describe the structure in rich datasets. Flexible models can fit arbitrary structures in data, but evaluating, training, or sampling from these models is usually expensive. Diffusion models are both analytically tractable and flexible</li>
+<li><strong>Cons</strong>: Diffusion models rely on a long Markov chain of diffusion steps to generate samples, so it can be quite expensive in terms of time and compute. New methods have been proposed to make the process much faster, but the sampling is still slower than GAN.</li>
+</ul>
+]]></content>
+      <categories>
+        <category>笔记</category>
+      </categories>
+      <tags>
+        <tag>Note</tag>
+        <tag>Diffusion Model</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Overview of DexVLA Content</title>
+    <url>/2025/06/24/20250624-DexVLA%20%E8%AE%BA%E6%96%87/</url>
+    <content><![CDATA[<p>[TOC]</p>
+<h2 id="本周进度"><a href="#本周进度" class="headerlink" title="本周进度"></a>本周进度</h2><p>阅读文献DexVLA-Vision-Language Model with Plug-In Diffusion Expert for General Robot Control【arxiv 2502  Midea Group】以及代码，了解具身智能控制方法的发展进程以及其组件原理。</p>
+<h2 id="Overview-of-DexVLA-Content"><a href="#Overview-of-DexVLA-Content" class="headerlink" title="Overview of DexVLA Content"></a>Overview of DexVLA Content</h2><h3 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h3><p>OpenVLA训练需要大规模的机器人数据（这一缺点实际上对使用而言，并不是缺点，因为作者提供了训练好的参数），该方法存在如下问题：</p>
+<ul>
+<li>理解能力差，大预言模型存在<strong>虚假遗忘</strong>问题，这一点可以通过简单的训练重新进行激活；</li>
+<li>数据稀缺（这一点对于提供预训练好的模型而言，其实没有影响）</li>
+<li>架构不平衡。VLAs中的组件例如image encoder或者语言大模型，都经过大量数据学习优化，但相比而言，控制相关的数据数量少了非常多。这导致这些组件模块之间，缺少和控制的紧密联系。</li>
+<li>没有针对一些更复杂的任务做调整，比如折衣服，打包盒子。以往通常以来SayCan模型，将prompt拆分为更简单的子任务，针对这一点，本文希望实现更为端到端的设计，让VLM自动学会拆分任务；尤其是时间跨度比较长的任务，或者精细操控任务，简单的prompt经常会让机器人遗忘重要步骤。</li>
+</ul>
+<h3 id="Contribution"><a href="#Contribution" class="headerlink" title="Contribution"></a>Contribution</h3><p>本文的贡献主要有以下几点：</p>
+<ul>
+<li>分离VLM（QWen2-VL 2B模型）与控制空间的设计，利用10亿参数的模仿学习（扩散策略），实现动作的预训练；</li>
+<li>将扩散模型参数量增加到10亿（这一点实际上贡献并不大）</li>
+<li>设计<strong>三步骤</strong>训练方法，逐步增加训练难度，模仿人的学习过程；</li>
+<li>采用扩散策略，输出是一段轨迹，控制起来会更为连续，而不是像OpenVLA这样输出单次的控制量，缺少连续性；</li>
+</ul>
+<h3 id="Model-structure"><a href="#Model-structure" class="headerlink" title="Model structure"></a>Model structure</h3><p align="center">
+  <img src="../images/16.png" alt="" width="100%">
+</p>
+
+
+
+<p>模型主要由<strong>两部分</strong>组成</p>
+<ul>
+<li><strong>VLMs</strong>：本文采用<strong>QWen2-VL 2B</strong>模型，参数量上比OpenVLA更小一些，参数采用原始发布的Qwen2-VL参数；允许多视角图像输入，image encoder映射到向量空间之后，通过concatenated直接连接；输出两个Token: reasoning tokens 以及action tokens。<ul>
+<li><strong>动作token</strong>通过一个三层的MLP以及层归一化，输出给扩散策略网络</li>
+<li><strong>推理 token</strong> 通过一个FiLM模块，输出scale以及shift参数，去调整动作token的三层MLP网络（也可能修改了扩散策略内部，文中表述比较含糊）；这一步类似通过对于图像以及语言的理解，去调整动作；</li>
+</ul>
+</li>
+<li><strong>ScaleDP</strong>：第二部分是一个模型学习训练的扩散策略Scale Diffusion Policy (<strong>ScaleDP</strong> )，本文较其他论文，大幅度提升了扩散模型参数，希望更好的学到动作表示；参考Octo的方法，对于多个形态的机器人设置多个输出头。</li>
+</ul>
+<p>三步骤训练方法如下：</p>
+<ul>
+<li><p>首先，在<strong>跨体态数据</strong>上对扩散专家进行预训练。该步骤希望学会一些与机器人具体型号无关的动作。这一步骤仅仅训练一个扩散模型ScaleDP，训练的过程<strong>不修改VLM任何参数</strong>，利用一个预训练好的ResNet-50作为image encoder，以及DistilBERT，DP去训练本文的<strong>ScaleDP</strong>。此处的损失函数没有单独说明，但应该只包含扩散损失。本文做法不是很理解，为什么要额外加一些网络作为image encoder以及语言大模型，直接冻结QWen2-VL 模型，利用其输出，一样可以得到比较好的文本以及图像特征向量。</p>
+</li>
+<li><p>其次，将 VLA 模型对齐到特定的机器人形态（embodiments），文中说的比较含糊，我理解的是对于多个输出头，有多组训练数据，每个头在自己的训练数据上进行任务的训练以及参数梯度下降（这一过程中视觉编码器是冻结的）。考虑到prompt理解问题，文中对于训练数据单独处理。损失分为两部分<br>$$<br>L = L_{diff}+\alpha L_{ntp}<br>$$<br><strong>第一部分</strong>就是扩散损失，对应的就是输出的动作是否符合预期；<strong>第二部分</strong>是next token prediction 损失，文中对于prompt，例如“Folding all shirts in the basket.”， 利用其他模型，例如gemin2得到拆分后的子步骤如下图黄色框图所示，对应的就希望模型去预测下一个token，也就是将拆分后的子步骤描述作为目标语句进行预测，希望VLM自动的学到拆解复杂指令的能力（实现SayCan的效果）。这一步是对于训练数据的调整，对于训练优化目标也做了相应的调整，在训练过程中不仅仅只关注控制拟合情况，也关注其语言，图像理解的能力。（这一部分gemini2分解任务是手动实现的，劳动密集）</p>
+<p align="center">
+  <img src="../images/17.png" alt="" width="100%">
+</p></li>
+<li><p>最好，针对长时间跨度，精细任务，进一步训练。训练方法以及数据格式，与第二步实际上完全相同，只是任务更为复杂，例如叠衣服，打包快递；第二步训练后实际上已经可以在很多任务上得到比较好的表现，第三步的训练更像是为了特定的复杂任务进一步的微调，目标任务主要是长时间跨度的复杂任务，一些简单的任务的演示，在第三步中就不再继续训练了，因为已经取得了很好的训练效果。</p>
+</li>
+</ul>
+<h3 id="Experiment"><a href="#Experiment" class="headerlink" title="Experiment"></a>Experiment</h3><p>其他的一些实验文本数据，分解prompt</p>
+<p align="center">
+  <img src="../images/18.png" alt="" width="100%">
+</p>
+
+
+
+<p><strong>第一个实验</strong>：DexVLA只经过两阶段训练，同样的其他对比模型也用数据进行了微调，保证公平。实验对比有些夸张，叠衣服这样的复杂任务完成率低是可以理解的，但其他模型的成功率即使是在简单的pick任务上，得分也就只有0.2不到，感觉和作者的微调设置有关系。</p>
+<p align="center">
+  <img src="../images/19.png" alt="" width="100%">
+</p>
+
+
+<p><strong>第二个实验</strong>：两个非常复杂的任务，在两个全新的双臂机器人平台进行训练，比较迁移能力，只使用了100 demonstrations，本文的模型也取得了很高的成绩</p>
+<p align="center">
+  <img src="../images/20.png" alt="" width="100%">
+</p>
+
+
+
+<p>后续<strong>消融实验</strong>，也验证了第三阶段的训练的有效性以及更大的扩散策略（1B）的必要性。</p>
+<h3 id="Github-code"><a href="#Github-code" class="headerlink" title="Github code"></a>Github code</h3><p>由两部分组成，QWen2-VL以及一个扩散模型指导动作。训练分为三阶段，作者只提供了<strong>一阶段</strong>得到的扩散模型参数以及QWen-VL参数（一阶段Qwen就是原始参数），后续的二阶段，三阶段需要自己微调才可以实现使用。只提供了训练脚本sh文件。</p>
+<p>作为在双臂机器人的实验而言，二阶段已经可以做实验验证，简单的抓取动作都可以完成。</p>
+<p>第三阶段主要是作为更精细任务的进一步训练，本质上和第二阶段训练没有差别。区别主要在于训练的数据集任务更为复杂。</p>
+<h3 id="Question"><a href="#Question" class="headerlink" title="Question"></a>Question</h3><ul>
+<li>多输出头的代价函数如何设置，不同阶段的代价函数。对于新增的机器人需要新增一个head吗？对于新的双臂机器人，是否可以直接在已有的双头机器人输出头进行微调。</li>
+<li>第1阶段的训练过程，额外添加的ResNet50以及Distilbert是否也要参与训练，文中说道ResNet50是随机初始化的，作为image encoder而言，参数这样设置很不合理。</li>
+<li>我们的模型训练的时候，是否需要实现SayCan这样的功能呢？这个性质是好的，但是对训练数据提出了很高的要求。文中是通过将视频输入给Google Gemini2.0利用其视频理解功能，5s间隔自动生成每段视频的内容动作概述，作为训练label，时间成本会比较高。</li>
+<li>是否有足够的实验数据使我们可以在简单的任务上进行微调，推动后续任务。</li>
+</ul>
+<h3 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h3><p>本文的方法而言，虽然不是很端到端，因为需要加一个扩散策略，然后扩散策略还需要单独的训练，用了很多其他的网络，但确实可以提升数据的利用度，提高训练效率。这也是模仿学习相比于大数据训练的高效性体现，作者实际上在对比的每个任务上，都单独进行了微调，所以才能实现一个比较好的效果。</p>
+<p>本文在模型上没有特别的创新，但是在代价函数上给了一些启发，如何在训练动作的时候，额外的考虑语言以及图像理解能力不被弱化。这一点实际上很重要，有些模型例如Dino，宣称不需要微调，但实际上会发现简单的微调会使得性能下降的很严重。将这些VLM模型利用到控制相关任务中，训练过程引起的特征提取能力下降是</p>
+<h2 id="后续安排"><a href="#后续安排" class="headerlink" title="后续安排"></a>后续安排</h2><p>之前提到除了控制以外，还希望提供对于任务的分析，例如该任务可不可行这样的判断。但这一步前提实际上还是需要在双臂机器人上先实现基础的控制。这一步的实现，在我看来实际上可以直接提取reasoning token 去进行考虑，例如后续加MLP层进行判断，因为这个token本身就包含了对于任务以及场景的理解。</p>
+<p>针对我们的机器人微调，数据量照作者所说，需要至少100 demonstrations。用这个模型去做实验，包括在自己的机器人上部署，或者后续添加新的功能，相对来说调整会比较多。</p>
+<p align="center">
+  <img src="../images/21.png" alt="" width="100%">
+</p>
+
+
+
+<p>另一个模型，chatVLA似乎是提供了完整的训练好的开箱即用模型参数，但是模型是针对单臂训练的，将其应用到双臂机器人。</p>
+<p>此外还有清华大学开源的双臂机器人项目：<strong>RDT-1B</strong>: a Diffusion Foundation Model for Bimanual Manipulation，提供了初始训练的结果，可以进一步微调（作者也提供了他们的微调数据），但在一些简单任务上可以实现开箱即用。但只有Diffusion Transformer结构，没有VLA。</p>
+<p align="center">
+  <img src="../images/RDT.png" alt="" width="100%">
+</p>
+
+
+
+<p>此外还有英伟达GR00T N1.5，采用了与本文相同的模型结构，但控制是针对整个机器人而不是针对机械臂：</p>
+<p align="center">
+  <img src=".assets/Nvida.png" alt="" width="100%">
+</p>
+
+
+<h2 id="Appendix"><a href="#Appendix" class="headerlink" title="Appendix"></a>Appendix</h2><h3 id="M-RoPE：QWen2-VL多模态旋转编码"><a href="#M-RoPE：QWen2-VL多模态旋转编码" class="headerlink" title="M-RoPE：QWen2-VL多模态旋转编码"></a>M-RoPE：QWen2-VL多模态旋转编码</h3><blockquote>
+<p><a href="https://www.zhihu.com/tardis/bd/art/647109286">十分钟读懂旋转编码（RoPE）</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/719388479">Qwen2-VL技术解析（二）- M-ROPE - 知乎</a></p>
+</blockquote>
+<p>旋转编码本质上，是将每个token，例如第$m$个token嵌入到512维度后，$x\in R^{512}$​，然后两两一组，例如x[0]与x[1]一组，进行一个旋转操作，操作的旋转矩阵<br>$$<br>\mathbf{R}(\theta) =<br>\begin{bmatrix}<br>\cos m\theta &amp; -\sin m\theta \<br>\sin m\theta &amp; \cos m\theta<br>\end{bmatrix}\quad<br>\theta = 10000^{-2(i-1)/d},i\in[1,2,…,d/2]<br>$$</p>
+<p>$$<br>\begin{bmatrix}<br>x_1’ \<br>x_2’<br>\end{bmatrix}<br>=<br>\begin{bmatrix}<br>\cos m\theta &amp; -\sin m \theta \<br>\sin m \theta &amp; \cos m \theta<br>\end{bmatrix}<br>\begin{bmatrix}<br>x_1 \<br>x_2<br>\end{bmatrix}<br>=<br>\begin{bmatrix}<br>x_1 \cos m\theta - x_2 \sin m\theta \<br>x_1 \sin m\theta + x_2 \cos m\theta<br>\end{bmatrix}<br>$$</p>
+<p>具体的示意图如下所示：，每个token两两分组，由于不同的token的m不一样，同一个token的不同位置i不一样，所以实现了不同位置的不同程度旋转。虽然这个是类似正弦形式的绝对位置编码，但由于其用在attention相乘中，自动的在m，n两个位置的token相乘过程中，构造了m-n的旋转角度，达到相对位置编码的目的。</p>
+<p align="center">
+  <img src="../images/23.jpg" alt="" width="80%">
+</p>
+
+<p align="center">
+  <img src="../images/25.svg" alt="" width="80%">
+</p>
+
+
+<p>对于2d旋转位置编码，与1d旋转位置编码，其实就是对角从2<em>2的旋转矩阵，变成了4</em>4的旋转矩阵：</p>
+<p align="center">
+  <img src="../images/24.jpg" alt="" width="80%">
+</p>
+
+
+<p>同理，QWen2.5中将时间，宽，高三个维度分离，实际上就是构造了6*6的旋转子空间。</p>
+<p align="center">
+  <img src="../images/22.png" alt="" width="80%">
+</p>
+
+
+<h3 id="Scable-Difussion-Policy（ScableDP）"><a href="#Scable-Difussion-Policy（ScableDP）" class="headerlink" title="Scable Difussion Policy（ScableDP）"></a>Scable Difussion Policy（ScableDP）</h3><blockquote>
+<p><a href="https://zhuanlan.zhihu.com/p/670555655">(8 条消息) Diffusion Policy—基于扩散模型的机器人动作生成策略 - 知乎</a></p>
+</blockquote>
+<p>扩散模型输出实际上是一系列的动作序列，这也是为什么扩散模型控制更为稳定的原因。对比BET与DP可以发现，输出多步动作。</p>
+<p align="center">
+  <img src="../images/25.jpg" alt="" width="80%">
+</p>
+
+
+<p>关于Action Space Scalabiltiy或者sequential correlation问题，就是机器人对未来动作的预测不应该只局限于眼前的一步两步动作，而应该更有前瞻性，可以往前预测数十步动作。针对这个问题，<strong>迟宬</strong>给了非常清晰的解释：数据预测有两种方法：</p>
+<ul>
+<li><strong>一</strong>是直接输出一个数值；</li>
+<li><strong>二</strong>是将可能的数值分成几个区间，进行离散预测。</li>
+</ul>
+<p>在预测Multi-Modal Action的时候，人们倾向于采用离散预测，将连续值问题转化为分类问题（OpenVLA） ，但这样做涉及的算力成本很高，尤其在处理高维空间时。此外，针对机器人控制问题，如果采用分类方法，每一步都需要预测下一步要执行的动作，而实际需求是希望一次性预测多步动作，这就涉及到了连续控制中的动作一致性问题。解决这个问题的挑战在于平衡成本和对高维连续控制的需求。假如一个动作化为7个自由度，一个自由度100个区间，就对应着100^7。如果采用这种方法，成本将会非常非常高。随着维度的增加，成本会呈指数级增长</p>
+<p>由于只能预测一步，所以OpenVLA的方法会出现不确定性，导致抖动（Action Inconsistent）。例如方向一下子左边，一下子右边。</p>
+<p>在Robot Learning领域，机器人动作执行主要有三种方法：</p>
+<ul>
+<li>直接回归：就是RL的方法，给图片输出动作</li>
+<li>分类预测：就是OpenVLA的方法</li>
+<li>生成式模型：扩散策略属于其中一种非常稳定的方法，也是扩散模型的一个非常重要的优势。远远强于gan这样的网络，不需要非常精细的调参。同时，这也解释了为什么像Stable Diffusion这样的方法，以及现在各种图像生成模型能够在如此庞大的数据集上进行训练，这是因为它们的训练非常稳定。</li>
+</ul>
+<p>首先回到最基础的扩散模型，Diffusion Models：</p>
+<blockquote>
+<p><a href="https://zhuanlan.zhihu.com/p/563661713">扩散模型之DDPM - 知乎</a>：该文章重点看</p>
+<p><a href="https://zhuanlan.zhihu.com/p/624221952">超详细的扩散模型（Diffusion Models）原理+代码 - 知乎</a></p>
+<p><a href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#forward-diffusion-process">What are Diffusion Models? | Lil’Log</a></p>
+</blockquote>
+<p>2020年，<strong>DDPM</strong>（Denoising Diffusion Probabilistic Model）被提出，被称为<a href="https://zhida.zhihu.com/search?content_id=226847260&content_type=Article&match_order=1&q=%E6%89%A9%E6%95%A3%E6%A8%A1%E5%9E%8B&zhida_source=entity">扩散模型</a>（Diffusion Model）。扩散模型分为两部分，前向过程与反向过程。前向过程又称为扩散，反向过程就是去噪。无论是前向过程还是反向过程都是一个参数化的<a href="https://zhida.zhihu.com/search?content_id=226847260&content_type=Article&match_order=1&q=%E9%A9%AC%E5%B0%94%E5%8F%AF%E5%A4%AB%E9%93%BE&zhida_source=entity">马尔可夫链</a>（Markov chain），其中反向过程可用于生成数据样本（它的作用类似GAN中的生成器）。实际上扩散模型的概念更广义的，DDPM是其提出的最原始标准形式。</p>
+<p align="center">
+  <img src="../images/26.jpg" alt="" width="80%">
+</p>
+
+
+<p>正向过程通过人为的β参数对图像添加噪声。</p>
+<p>逆向过程，希望通过网络进行拟合。q表示的实际的逆向过程，已知道xt和x0,倒推$x_{t-1}$。但实际拟合一个网络，网络输出是$x_t$以及时间步$t$，去拟合均值和方差然后得到$x_{t-1}$。假设$x_{t-1}$符合均值方差为$\mu_\theta,\Sigma_\theta$ 的分布。而$\mu_\theta,\Sigma_\theta$是用网络拟合得到的数值，网络的输入是$t$以及$x_t$</p>
+<p align="center">
+  <img src="../images/23.png" alt="" width="80%">
+</p>
+
+
+<p>实际网络只拟合均值，方差固定。反向过程中，方差通常是固定的（应该是简化）。论文通常不拟合均值，而是拟合噪声，然后用下面的公式，就得到了均值的值：</p>
+<p align="center">
+  <img src="../images/24.png" alt="" width="40%">
+</p>
+
+
+<p>因为 $t $和$ x_t$ 已知(实际上$\alpha$应该也是认为已知的，$\alpha$与前向过程的$\beta$有关系，$\beta$也认为已知)，只需使用神经网络拟合$ ϵ_θ(x_t,t)$ 。整个框图如下所示，Gaussian Diffusian 模块主要是生成随机噪声然后加到图片上。Unet就是预测反向的噪声，传给Gaussian Diffusion让他从图片中减去预测的噪声。</p>
+<p align="center">
+  <img src="../images/27.jpg" alt="" width="100%">
+</p>
+
+
+<p>Unet输入是时间t以及加噪声后的数据x_t，预测x_T回到x_0的噪声值。损失就是真实噪声与预测噪声之间的二范数差值。时间t使用正线位置编码，统一量化尺度。</p>
+]]></content>
+      <categories>
+        <category>笔记</category>
+      </categories>
+      <tags>
+        <tag>VLA</tag>
         <tag>Note</tag>
       </tags>
   </entry>

@@ -8,7 +8,7 @@ img_dir = r"F:\Hexo\source\images\daily"
 img_dir = r"F:\Hexo\source\images\pet"
 img_dir = r"F:\Hexo\source\images\food"
 '''
-img_dir = r"F:\Hexo\source\images\gallery"
+img_dir = r"F:\Hexo\source\images\pet"
 
 max_side = 2000   # 最大边长
 quality = 85      # 压缩质量
